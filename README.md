@@ -12,7 +12,7 @@ Quickly set up your scene, including:
 _Scene Builder is specifically optimized for EEVEE, but many aspects still work outside of EEVEE._
 
 # 2. Fuzzy Viewport
-
+...
 
 # 3. Camera Control
 Quick access to more important camera properties, including:
@@ -20,7 +20,7 @@ Quick access to more important camera properties, including:
 - Camera Clipping
 - DoF
 
-As a new Tool:
+New Tool:
 - Animate Motion Blur
 #
 If you enjoy Fuzzy Tools, please consider supporting me on PayPal:
