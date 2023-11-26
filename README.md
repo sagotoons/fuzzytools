@@ -1,4 +1,4 @@
-# fuzzytools
+# Fuzzy Tools 1.0
 
 The Fuzzy Tools add-on is a collection of tools, as demonstrated during my presentation 'Journey Towards an Efficient 1-Person Pipeline' at BCON23, which you can see here: www.youtube.com/watch?v=W01lQrcCz9s
 
