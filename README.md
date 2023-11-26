@@ -22,8 +22,3 @@ Easy access to the more important camera properties.
 If you enjoy Fuzzy Tools, please consider supporting me on PayPal:
 
 https://www.paypal.me/sagotoons
-
-
-For any questions, please find me at: sagotoons@gmail.com
-
-Sacha
