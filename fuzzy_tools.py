@@ -959,13 +959,18 @@ class OBJECT_OT_hair_show(Operator):
     bl_label = "Show Hair"
 
     def execute(self, context):
-        objs = [obj for obj in bpy.data.objects if any(mod.type == 'PARTICLE_SYSTEM' and 
-                mod.particle_system.particles.data.settings.type == 'HAIR' for mod in obj.modifiers)]
-
-        for obj in objs:
+        # particle system modifiers
+        for obj in bpy.data.objects:
             for modifier in obj.modifiers:
-                if modifier.type == 'PARTICLE_SYSTEM' and modifier.particle_system.particles.data.settings.type == 'HAIR':
+                if (modifier.type == 'PARTICLE_SYSTEM' and 
+                        modifier.particle_system.particles.data.settings.type == 'HAIR'):
                     modifier.show_viewport = True
+                            
+        # new CURVES hair 
+        objs_curves = [obj for obj in bpy.data.objects if obj.type == 'CURVES']
+        
+        for obj in objs_curves:
+            obj.hide_viewport = False
 
         return {'FINISHED'}
 
@@ -980,11 +985,18 @@ class OBJECT_OT_hair_hide(Operator):
     bl_label = "Hide Hair"
 
     def execute(self, context):
+        # particle system modifiers
         for obj in bpy.data.objects:
             for modifier in obj.modifiers:
                 if (modifier.type == 'PARTICLE_SYSTEM' and 
                         modifier.particle_system.particles.data.settings.type == 'HAIR'):
                     modifier.show_viewport = False
+        
+        # new CURVES hair 
+        objs_curves = [obj for obj in bpy.data.objects if obj.type == 'CURVES']
+
+        for obj in objs_curves:
+            obj.hide_viewport = True
 
         return {'FINISHED'}
 
