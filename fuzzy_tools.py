@@ -4,7 +4,7 @@ bl_info = {
     "name" : "Fuzzy Tools",
     "author" : "Sacha Goedegebure",
     "version" : (1,0),
-    "blender" : (3,6,5),
+    "blender" : (3,6,0),
     "location" : "View3d > Sidebar > Fuzzy. Alt+M to move keyframes and markers",
     "description" : "A collection of tools for the Fuzzy Project or anything else",
     "wiki_url" : "",
