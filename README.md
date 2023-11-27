@@ -17,7 +17,7 @@ _Scene Builder is specifically created for an EEVEE pipeline, but many aspects s
 # 2. Fuzzy Viewport
 Quick access to several settings, including:
 - Use Simplify
-- Hide/Unhide All Hair (Particle System hair only)
+- Hide/Unhide all Hair
 
 # 3. Camera Control
 Quick access to several camera settings and operators, including:
