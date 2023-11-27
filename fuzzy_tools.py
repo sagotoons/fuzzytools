@@ -367,8 +367,8 @@ class OBJECT_OT_fuzzy_camera(Operator):
         # optimize camera settings
         data.show_limits = False
         data.show_name = True
-        data.clip_start = 4
-        data.clip_end = 80
+        data.clip_start = 1
+        data.clip_end = 100
         data.lens = 110
         data.passepartout_alpha = 0.95
         data.dof.focus_distance = 35
