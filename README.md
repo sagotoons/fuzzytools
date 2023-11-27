@@ -2,7 +2,7 @@
 
 The Fuzzy Tools add-on is a collection of tools, as some were demonstrated during my presentation 'Journey Towards an Efficient 1-Person Pipeline' at BCON23, which you can see here: www.youtube.com/watch?v=W01lQrcCz9s
 
-Fuzzy Tools includes the following:
+Fuzzy Tools includes the following panels in the sidebar:
 
 # 1. Scene Builder
 Quickly set up your scene, including:
@@ -25,7 +25,10 @@ Quick access to several camera settings and operators, including:
 - Camera Clipping
 - DoF
 - Bind Camera to Marker
-- Animate Motion Blur **(NEW TOOL)**
+- Animate Motion Blur **- NEW TOOL!**
+
+# And more...
+Alt+M to Move Keyframes and Markers
 #
 If you enjoy Fuzzy Tools, please consider supporting me on PayPal:
 
