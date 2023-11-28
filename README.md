@@ -2,7 +2,7 @@
 
 The Fuzzy Tools add-on is a collection of tools, as some were demonstrated during my presentation 'Journey Towards an Efficient 1-Person Pipeline' at BCON23, which you can see here: www.youtube.com/watch?v=W01lQrcCz9s
 
-Fuzzy Tools includes the following panels in the sidebar:
+Fuzzy Tools places the following panels in the sidebar (N) under tab 'Fuzzy':
 
 # 1. Scene Builder
 Quickly set up your scene, including:
@@ -29,9 +29,17 @@ Quick access to several camera settings and operators, including:
 
 # And more...
 Alt+M to Move Keyframes and Markers
+
+# To install
+- download the fuzzy_tools.py file
+- in Blender, go to Preferences -> Add-ons. Click on 'Install' and find the .py file. Select file and click 'Install Add-on'
+- after successful installation, the add-on should appear in the add-ons list. Click the checkbox beside the add-on to enable it
+- to enable/disable Fuzzy Tools afterwards, go to Preferences -> Add-ons. Make sure 'Community' is enabled, then search for 'fuzzy' in the search bar to find the add-on
+
+#
+_Fuzzy Tools should work for blender 3.6 and 4.0_
+
 #
 If you enjoy Fuzzy Tools, please consider supporting me on PayPal:
 
 https://www.paypal.me/sagotoons
-#
-_Fuzzy Tools should work for blender 3.6 and 4.0_
