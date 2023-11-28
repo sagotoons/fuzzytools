@@ -2,7 +2,7 @@
 
 The Fuzzy Tools add-on is a collection of tools, as some were demonstrated during my presentation 'Journey Towards an Efficient 1-Person Pipeline' at BCON23, which you can see here: www.youtube.com/watch?v=W01lQrcCz9s
 
-Fuzzy Tools places the following panels in the sidebar (N) under tab 'Fuzzy':
+Fuzzy Tools places the following panels in the sidebar (N) in tab 'Fuzzy':
 
 # 1. Scene Builder
 Quickly set up your scene, including:
