@@ -825,7 +825,6 @@ Delete the default light"""
         ob.data.energy = 1.5
         ob.data.angle = radians(15)
         ob.data.use_contact_shadow = True
-        ob.data.contact_shadow_distance = 0.6
         
         # make new Sun active
         objects = context.view_layer.objects
@@ -892,7 +891,6 @@ class OBJECT_OT_fuzzy_backlight(Operator):
 
         ob.data.angle = radians(10)
         ob.data.use_contact_shadow = True
-        ob.data.contact_shadow_distance = 0.6
 
         # make new Backlight active
         objects = context.view_layer.objects
