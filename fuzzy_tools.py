@@ -139,12 +139,17 @@ def check(self):
     frame = scene.frame_current
     markers = scene.timeline_markers
    
-    if any(marker.name in {'mblur_on', 'mblur_off'} for marker in markers):
+    if any(marker.name.startswith('mblur') for marker in markers):
         mblur = False
         # check mblur markers in reversed order
         for k, v in reversed(sorted(markers.items(), key=lambda it: it[1].frame)):
-            if v.frame <= frame and v.name == 'mblur_on':
+            if v.frame <= frame and v.name.startswith('mblur_on'):
                 scene.eevee.use_motion_blur = True
+                val = v.name.strip('mblur_on')
+                try:
+                    scene.eevee.motion_blur_shutter = float(val)
+                except ValueError:
+                    pass
                 mblur = True
                 break
             elif v.frame <= frame and v.name == 'mblur_off':
@@ -154,8 +159,13 @@ def check(self):
         # check for first mblur marker
         if not mblur:
             for k, v in sorted(markers.items(), key=lambda it: it[1].frame):
-                if v.frame >= frame and v.name == 'mblur_on':
+                if v.frame >= frame and v.name.startswith('mblur_on'):
                     scene.eevee.use_motion_blur = True
+                    val = v.name.strip('mblur_on')
+                    try:
+                        scene.eevee.motion_blur_shutter = float(val)
+                    except ValueError:
+                        pass
                     break
                 elif v.frame >= frame and v.name == 'mblur_off':
                     scene.eevee.use_motion_blur = False
