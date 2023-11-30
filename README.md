@@ -8,9 +8,9 @@ Fuzzy Tools creates the following panels in the sidebar (N):
 Quickly set up your scene, including:
 - optimized camera(s)
 - floor with shadow only
-- world shader with stylized sky/background
+- world shader with stylized sky
 - sunlight and backlight
-- enable and optimize EEVEE settings like AO, Bloom and Color Management
+- optimized EEVEE settings like AO and Bloom
 
 _Scene Builder is specifically created for an EEVEE pipeline, but many aspects still work outside of EEVEE._
 
