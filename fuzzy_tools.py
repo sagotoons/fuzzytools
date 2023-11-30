@@ -494,6 +494,7 @@ Delete the default cube"""
 
         matoutput = nodes.get("Material Output")
         matoutput.location = (400, 80)
+        matoutput.target = 'EEVEE'
 
         mixshader = nodes.new("ShaderNodeMixShader")
         mixshader.location = (200, 60)
@@ -507,8 +508,6 @@ Delete the default cube"""
 
         clamp_shadow = nodes.new("ShaderNodeClamp")
         clamp_shadow.location = (0, 160)
-        # floor clamp value
-        clamp_shadow.inputs[1].default_value = 0.15
 
         RGB_BW = nodes.new("ShaderNodeRGBToBW")
         RGB_BW.location = (-380, 0)
@@ -527,8 +526,6 @@ Delete the default cube"""
 
         value_floor = nodes.new("ShaderNodeValue")
         value_floor.location = (-380, -100)
-        # floor dodge value
-        value_floor.outputs[0].default_value = 0.15
 
         link = mat.node_tree.links.new
 
@@ -546,11 +543,24 @@ Delete the default cube"""
         mat.use_backface_culling = True
         mat.blend_method = 'BLEND'
         mat.shadow_method = 'NONE'
-        # viewport
+
+        # cycles material nodes
+        matoutput2 = nodes.new("ShaderNodeOutputMaterial")
+        matoutput2.location = (400, -80)
+        matoutput2.target = 'CYCLES'
+        link(diffuse.outputs[0], matoutput2.inputs[0])
+        # cycles material settings
+        floor.is_shadow_catcher = True
+        floor.visible_diffuse = False
+        floor.visible_glossy = False
+        floor.visible_transmission = False
+
+        # viewport settings
         space = context.space_data
         space.shading.show_backface_culling = True
         space.overlay.show_relationship_lines = False
         
+        # scene builder properties
         scene.fuzzy_props.shadow_clamp = 0.15
         scene.fuzzy_props.floor_dodge = 0.15
 
