@@ -1320,7 +1320,7 @@ class FloorPanel(BuildSceneChild, Panel):
     def poll(cls, context):
         scene = context.scene
         objects = scene.objects
-        return 'Fuzzy floor' in objects
+        return 'Fuzzy floor' in objects and (context.engine == 'BLENDER_EEVEE')
 
     def draw(self, context):
         scene = context.scene
