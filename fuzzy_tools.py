@@ -1538,6 +1538,7 @@ class VIEW3D_PT_cam_properties(Panel):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_parent_id = 'VIEW3D_PT_cameras'
+    bl_options = {'DEFAULT_CLOSED'}
     
     @classmethod
     def poll(cls, context):
