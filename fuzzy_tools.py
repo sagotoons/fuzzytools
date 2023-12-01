@@ -442,7 +442,7 @@ Delete the default cube"""
         bpy.data.collections['Set'].objects.link(floor)
 
         # create empty as Target for floor 'Normal Edit modifier
-        bpy.ops.object.empty_add(location=(10, -20, 30))
+        bpy.ops.object.empty_add(location=(10, -20, 20))
         empty = context.object
         empty.name = "floor_normal"
         empty.empty_display_size = 4
