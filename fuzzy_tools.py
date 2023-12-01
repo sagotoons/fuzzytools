@@ -1533,7 +1533,7 @@ class VIEW3D_PT_scene(Panel):
         row.operator('marker.add_motionblur_marker', text="Off", icon='KEYFRAME').blur = 'off'
         
         
-class VIEW3D_PT_cam_properties(Panel):
+class VIEW3D_PT_camera_properties(Panel):
     bl_label = ""
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -1627,7 +1627,7 @@ classes = [
     
     VIEW3D_PT_cameras,
     VIEW3D_PT_scene,
-    VIEW3D_PT_cam_properties,    
+    VIEW3D_PT_camera_properties,    
     
 ]
 
