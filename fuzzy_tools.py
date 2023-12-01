@@ -1181,6 +1181,29 @@ class MARKER_OT_add_motionblur_marker(Operator):
 
 
 # ------------------------------------------------------------------------
+#    OPERATOR - Copy Shutter to Marker
+# ------------------------------------------------------------------------
+
+class MARKER_OT_shutter_to_marker(Operator):
+    """Copy current shutter time to selected 'mblur_on' markers"""
+    bl_idname = "marker.shutter_to_marker"
+    bl_label = "Copy Shutter to Marker"
+    bl_options = {'UNDO'}
+
+    def execute(self, context):
+        scene = context.scene
+        markers = scene.timeline_markers
+
+        for marker in markers:
+            if marker.select and marker.name.startswith("mblur_on"):
+                base_name = marker.name[:8]
+                v = round(scene.eevee.motion_blur_shutter, 2)
+                marker.name = f"{base_name} {v}"
+
+        return {'FINISHED'}
+
+
+# ------------------------------------------------------------------------
 #    PANELS - Scene Builder
 # ------------------------------------------------------------------------
 
@@ -1614,6 +1637,7 @@ classes = [
 
     TRANSFORM_OT_keyframes_markers,
     MARKER_OT_add_motionblur_marker,
+    MARKER_OT_shutter_to_marker,
     
     # panels
     BuildScenePanel,
