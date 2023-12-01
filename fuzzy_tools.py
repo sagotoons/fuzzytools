@@ -1548,8 +1548,9 @@ class VIEW3D_PT_cam_properties(Panel):
     def draw_header(self, context):
         object = context.active_object
         if object != context.scene.camera:
-            self.layout.enabled = False
-        self.layout.prop(object, "name", text='', emboss=False, icon="CAMERA_DATA")
+            self.layout.operator('view3d.set_active_camera', text=object.name, icon="CAMERA_DATA")
+        else:
+            self.layout.prop(object, "name", text='', emboss=False, icon="VIEW_CAMERA")
     
     def draw(self, context):
         layout = self.layout
