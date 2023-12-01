@@ -1062,6 +1062,28 @@ Requires an animation editor to be open"""
 
 
 # ------------------------------------------------------------------------
+#    OPERATOR - Set active Camera
+# ------------------------------------------------------------------------
+
+class VIEW3D_OT_set_active_camera(Operator):
+    """Set camera as the active camera for this scene"""
+    bl_idname = "view3d.set_active_camera"
+    bl_label = "Set active camera"
+    bl_options = {'UNDO'}
+ 
+    @classmethod
+    def poll(cls, context):
+        return context.object is not None and context.object.type == 'CAMERA'
+
+    def execute(self, context):
+        cam = context.active_object
+        
+        context.scene.camera = cam
+
+        return {'FINISHED'}
+
+
+# ------------------------------------------------------------------------
 #    OPERATOR - Move Keyframes and Markers
 # ------------------------------------------------------------------------
 
@@ -1583,6 +1605,7 @@ classes = [
     OBJECT_OT_hair_hide,
     
     MARKER_OT_camera_bind_new,
+    VIEW3D_OT_set_active_camera,
 
     TRANSFORM_OT_keyframes_markers,
     MARKER_OT_add_motionblur_marker,
