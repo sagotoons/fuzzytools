@@ -1547,13 +1547,11 @@ class VIEW3D_PT_scene(Panel):
    
         row = layout.row(align=True, heading="Motion Blur")
         row.prop(scene.eevee, 'use_motion_blur', text='')
-        row1 = row.row()
-        if scene.eevee.use_motion_blur == False:
-            row1.enabled = False
-        row1.prop(scene.eevee, 'motion_blur_shutter')
+        row.prop(scene.eevee, 'motion_blur_shutter')
         row = layout.row(align=True)
         row.operator('marker.add_motionblur_marker', text="On", icon='KEYFRAME_HLT').blur = 'on'
         row.operator('marker.add_motionblur_marker', text="Off", icon='KEYFRAME').blur = 'off'
+        row.operator('marker.shutter_to_marker', text='', icon='MARKER_HLT')
         
         
 class VIEW3D_PT_camera_properties(Panel):
