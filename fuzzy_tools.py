@@ -1513,7 +1513,7 @@ class VIEW3D_PT_scene(Panel):
         layout.use_property_decorate = False
         
         col = layout.column()
-        col.scale_y = 1.5
+        col.scale_y = 1.3
         col.operator("object.fuzzy_camera", text="Build Camera", icon='CAMERA_DATA')
         
         row = layout.row(align=True)
@@ -1559,9 +1559,9 @@ class VIEW3D_PT_camera_properties(Panel):
         layout.use_property_split = True
         layout.use_property_decorate = False
         
-        row = layout.row(align=True)
-        row.operator('view3d.object_as_camera', text="Set", icon='DECORATE_OVERRIDE')
-        row.operator('marker.camera_bind_new', text="Bind", icon='KEYFRAME_HLT')   
+        col = layout.column()
+        col.scale_y = 1.3
+        row.operator('marker.camera_bind_new', text="Bind to Marker", icon='KEYFRAME_HLT')   
         
         layout.prop(object.data, "lens")
         col = layout.column(heading="Show", align=True)
