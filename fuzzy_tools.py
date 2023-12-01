@@ -1561,18 +1561,21 @@ class VIEW3D_PT_camera_properties(Panel):
         
         col = layout.column()
         col.scale_y = 1.3
-        row.operator('marker.camera_bind_new', text="Bind to Marker", icon='KEYFRAME_HLT')   
+        col.operator('marker.camera_bind_new', text="Bind to Marker", icon='KEYFRAME_HLT')   
         
         layout.prop(object.data, "lens")
-        col = layout.column(heading="Show", align=True)
         
+        col = layout.column(heading="Show", align=True)        
         col.prop(object, "show_name", text="Name")
         col.prop(object.data, "show_limits", text="Limits")
+        
         col = layout.column(align=True)
         col.prop(object.data, "clip_start", text="Clip Start")
         col.prop(object.data, "clip_end", text="End")
+        
         col = layout.column()
         col.prop(object.data, "passepartout_alpha", text="Passepartout")
+        
         col = layout.column(heading="DoF")
         col.prop(object.data.dof, "use_dof", text="")
         if object.data.dof.use_dof:
