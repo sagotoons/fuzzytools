@@ -12,10 +12,11 @@ Quickly set up your scene, including:
 - sunlight and backlight
 - optimized EEVEE settings like AO and Bloom
 
-_Scene Builder is specifically created for an EEVEE pipeline, but many aspects still work outside of EEVEE._
+_Scene Builder is specifically created for a fast EEVEE pipeline, but many aspects still work in Cycles._
 
 ## 2. Fuzzy Viewport
 Quick access to several settings, including:
+- Viewport Lens
 - Use Simplify
 - Hide/Unhide all Hair
 
@@ -25,7 +26,7 @@ Quick access to several camera settings and operators, including:
 - Camera Clipping
 - DoF
 - Bind Camera to Marker
-- Animate Motion Blur with Markers
+- Animate Motion Blur and Shutter with Markers
 
 ## And more...
 Alt+M to Move Keyframes and Markers
