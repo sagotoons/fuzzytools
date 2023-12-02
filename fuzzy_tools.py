@@ -805,21 +805,25 @@ Delete the default light"""
         scene = context.scene
         objects = scene.objects
         objs = bpy.data.objects
+        
+        # list of current Sun lights
+        suns = [obj for obj in objects if obj.type == 'LIGHT' and obj.name.startswith('Sun')]
 
-        # Remove any existing objects named 'Light' or 'Sun'
-        for name in ['Light', 'Sun']:
-            if name in objects:
-                bpy.data.objects.remove(bpy.data.objects[name])
+        if 'Light' in objects:
+            objs.remove(objs["Light"])
 
         # add sun light
         bpy.ops.object.light_add(
-            type='SUN', align='WORLD', location=(20, -10, 10))
+            type='SUN', align='WORLD', location=(20+len(suns), -10, 10))
 
         # name new light 'Sun'
         ob = context.active_object
-        ob.name = "Sun"
-        data = ob.data
-        data.name = ob.name
+        if len(suns) == 0:
+            ob.name = "Sun"
+        else:
+            v = str(len(suns)).zfill(3)
+            ob.name = f"Sun.{v}"
+        ob.data.name = ob.name
 
         # create collection 'Set' if it doesn't exist yet
         link_to_name = 'Set'
