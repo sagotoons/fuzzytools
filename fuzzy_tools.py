@@ -1243,9 +1243,8 @@ class BuildScenePanel(Panel):
        
         if animated:
             layout = self.layout
-            row = layout.row(align=True)
-            row.prop(fuzzyprops, "scene_animate", text="", icon='ACTION')
-            row.label(text=' ')
+            layout.scale_x = 1.2
+            layout.prop(fuzzyprops, "scene_animate", text="", icon='ACTION')
     
     @classmethod
     def poll(cls, context):
@@ -1531,9 +1530,8 @@ class VIEW3D_PT_cameras(Panel):
        
         if animated:
             layout = self.layout
-            row = layout.row(align=True)
-            row.prop(fuzzyprops, "scene_animate", text="", icon='ACTION')
-            row.label(text=' ')
+            layout.scale_x = 1.2
+            layout.prop(fuzzyprops, "scene_animate", text="", icon='ACTION')
 
     def draw(self, context):
         pass
