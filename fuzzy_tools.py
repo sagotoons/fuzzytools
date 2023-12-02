@@ -6,7 +6,7 @@ bl_info = {
     "version" : (1,0),
     "blender" : (3,6,0),
     "location" : "View3d > Sidebar > Fuzzy. Alt+M to move keyframes and markers",
-    "description" : "A collection of tools for the Fuzzy Project or anything else",
+    "description" : "Tools for an efficient 1-person pipeline and multi-camera workflow",
     "wiki_url" : "",
     "category" : "User Interface",
 }
@@ -71,7 +71,7 @@ bpy.app.handlers.render_complete.append(disable_animate_scene)
 
 
 # LIST CHARACTERS 
-## can ignore when not working with Fuzzy Project characters
+## can ignore when not working with 'Project Fuzzy' characters
 ## to avoid Error, do not remove list. Optional to replace or remove content of list
 character_list = {
     'B': 'COLORSET_04_VEC',
