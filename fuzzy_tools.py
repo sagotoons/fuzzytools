@@ -1047,7 +1047,7 @@ Requires an animation editor to be open"""
                                 screen=screen, area=area, 
                                 region=region):
                             bpy.ops.marker.camera_bind()
-                            count = count + 1
+                            count += 1
                             break
         if count == 0:
             def ShowMessageBox(message = "", title = "Message Box", icon = 'ERROR'):
@@ -1056,7 +1056,7 @@ Requires an animation editor to be open"""
 
                 context.window_manager.popup_menu(draw, title = title, icon = icon)          
             #Show a message box with a message and custom title
-            ShowMessageBox("Operator requires an Animation Editor to be open", "Marker not placed")     
+            ShowMessageBox("Requires an Animation Editor to be open", "Marker not placed")     
 
         return {'FINISHED'}
 
@@ -1193,12 +1193,23 @@ class MARKER_OT_shutter_to_markers(Operator):
     def execute(self, context):
         scene = context.scene
         markers = scene.timeline_markers
+        count = 0
 
         for marker in markers:
             if marker.select and marker.name.startswith("mblur_on"):
                 base_name = marker.name[:8]
                 v = round(scene.eevee.motion_blur_shutter, 2)
                 marker.name = f"{base_name} {v}"
+                count += 1
+
+            if count == 0:
+            def ShowMessageBox(message = "", title = "Message Box", icon = 'ERROR'):
+                def draw(self, context):
+                    self.layout.label(text=message)
+
+                context.window_manager.popup_menu(draw, title = title, icon = icon)          
+            #Show a message box with a message and custom title
+            ShowMessageBox("Requires one or more 'mblur' markers to be selected", "No marker renamed")
 
         return {'FINISHED'}
 
