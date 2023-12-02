@@ -898,6 +898,8 @@ class OBJECT_OT_fuzzy_backlight(Operator):
         # light settings
         ob.data.energy = 5
         ob.data.specular_factor = 0
+        # cycles specular
+        ob.visible_glossy = False
 
         ob.data.angle = radians(10)
         ob.data.use_contact_shadow = True
