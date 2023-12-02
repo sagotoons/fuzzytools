@@ -327,12 +327,20 @@ class OBJECT_OT_fuzzy_camera(Operator):
         objects = scene.objects
         objs = bpy.data.objects
 
+        # CAMERA PROPERTIES
+        loc_y = -35
+        loc_z = 2.7
+        rot_x = 90
+        lens = 110
+        clip_start = 1
+        clip_end = 250
+
         # Delete default camera
         if 'Camera' in objects:
             objs.remove(objs["Camera"])
 
         # Add new camera and set rotation
-        bpy.ops.object.camera_add(rotation=(radians(90), 0, 0))
+        bpy.ops.object.camera_add(rotation=(radians(rot_x), 0, 0))
         ob = context.active_object
 
         # List all objects with "CAM." prefix
@@ -350,10 +358,10 @@ class OBJECT_OT_fuzzy_camera(Operator):
             # Change name of camera with increasing number
             ob.name = f"CAM.{i:03}"
             # Place camera distance away from previous camera's origin
-            ob.location = (1.5*(-1 + i), -35, 2.7)
+            ob.location = (1.5*(-1 + i), loc_y, loc_z)
         else:
             ob.name = "CAM.001"
-            ob.location = (0, -35, 2.7)
+            ob.location = (0, loc_y, loc_z)
 
         # create collection 'Cameras' if it doesn't exist yet
         link_to_name = 'Cameras'
@@ -377,9 +385,9 @@ class OBJECT_OT_fuzzy_camera(Operator):
         # optimize camera settings
         data.show_limits = False
         data.show_name = True
-        data.clip_start = 1
-        data.clip_end = 250
-        data.lens = 110
+        data.clip_start = clip_start
+        data.clip_end = clip_end
+        data.lens = lens
         data.passepartout_alpha = 0.95
         data.dof.focus_distance = 35
 
