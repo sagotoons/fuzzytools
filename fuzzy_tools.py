@@ -285,7 +285,7 @@ Enables/disables automatically during rendering""",
 # ------------------------------------------------------------------------
 
 class SCENE_OT_build_all(Operator):
-    """Place a camera, floor, sun light and backlight. Create a new Fuzzy World. Optimize Eevee settings.
+    """Place a camera, floor, sun light and rim light. Create a new Fuzzy World. Optimize Eevee settings.
 Replace existing floor and active world, if available.
 Delete the default cube, camera, and light"""
     bl_idname = "scene.build_all"
@@ -861,13 +861,13 @@ Delete the default light"""
 
 
 # ------------------------------------------------------------------------
-#    OPERATOR - Backlight
+#    OPERATOR - Rim Light
 # ------------------------------------------------------------------------
 
 class OBJECT_OT_fuzzy_backlight(Operator):
-    """Place an optimized backlight"""
+    """Place an optimized rim light"""
     bl_idname = "object.fuzzy_backlight"
-    bl_label = "Build Backlight"
+    bl_label = "Build Rim Light"
     bl_options = {'UNDO'}
 
     @classmethod
@@ -879,20 +879,20 @@ class OBJECT_OT_fuzzy_backlight(Operator):
         objects = scene.objects
         objs = bpy.data.objects
 
-        # list of current Backights
-        backlights = [obj for obj in objects if obj.type == 'LIGHT' and obj.name.startswith('Backlight')]
+        # list of current rim lights
+        rimlights = [obj for obj in objects if obj.type == 'LIGHT' and obj.name.startswith('RimLight')]
    
         # add sun light
         bpy.ops.object.light_add(
-            type='SUN', align='WORLD', location=(-20-len(backlights), 10, 10))
+            type='SUN', align='WORLD', location=(-20-len(rimlights), 10, 10))
 
-        # name new light 'Backlight'
+        # name new light 'RimLight'
         ob = context.active_object
-        if len(backlights) == 0:
-            ob.name = "Backlight"
+        if len(rimlights) == 0:
+            ob.name = "RimLight"
         else:
-            v = str(len(backlights)).zfill(3)
-            ob.name = f"Backlight.{v}"
+            v = str(len(rimlights)).zfill(3)
+            ob.name = f"RimLight.{v}"
         ob.data.name = ob.name
         
         # create collection 'Set' if it doesn't exist yet
@@ -921,7 +921,7 @@ class OBJECT_OT_fuzzy_backlight(Operator):
         ob.data.angle = radians(10)
         ob.data.use_contact_shadow = True
 
-        # make new Backlight active
+        # make new Rim Light active
         objects = context.view_layer.objects
         try:
             if ob.name in objects:
@@ -1310,7 +1310,7 @@ class BuildPartsPanel(BuildSceneChild, Panel):
         row.operator("world.fuzzy_sky", text="Sky", icon='MAT_SPHERE_SKY')
         row.operator("object.fuzzy_sun", text="Sun", icon='LIGHT_SUN')
         row = col.row(align=True)
-        row.operator("object.fuzzy_backlight", text="Backlight", icon='LIGHT')
+        row.operator("object.fuzzy_backlight", text="Rim Light", icon='LIGHT')
         row = col.row(align=True)
         row.operator("scene.eevee", text="Optimize EEVEE", icon='CAMERA_STEREO')
 
