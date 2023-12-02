@@ -1556,8 +1556,10 @@ class VIEW3D_PT_scene(Panel):
     def draw(self, context):
         scene = context.scene
         layout = self.layout
-        
-        layout.prop(scene, "camera", text="Active", icon='CAMERA_DATA')
+
+        row = layout.row(align=True)
+        row.prop(scene, "camera", text="Active", icon='CAMERA_DATA')
+        row.operator('view3d.camera_to_view', text='', icon='DECORATE_OVERRIDE')
 
         col  = layout.column()
         col.scale_y = 1.3
