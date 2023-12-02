@@ -878,16 +878,20 @@ class OBJECT_OT_fuzzy_backlight(Operator):
         objects = scene.objects
         objs = bpy.data.objects
 
-        if 'Backlight' in objects:
-            objs.remove(objs["Backlight"])
-        
+        # list of current Backights
+        backlights = [obj for obj in objects if obj.type == 'LIGHT' and obj.name.startswith('Backlight')]
+   
         # add sun light
         bpy.ops.object.light_add(
-            type='SUN', align='WORLD', location=(-20, 10, 10))
+            type='SUN', align='WORLD', location=(-20-len(backlights), 10, 10))
 
         # name new light 'Backlight'
         ob = context.active_object
-        ob.name = "Backlight"
+        if len(backlights) == 0:
+            ob.name = "Backlight"
+        else:
+            v = str(len(backlights)).zfill(3)
+            ob.name = f"Backlight.{v}"
         ob.data.name = ob.name
         
         # create collection 'Set' if it doesn't exist yet
