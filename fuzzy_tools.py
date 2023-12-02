@@ -1181,13 +1181,13 @@ class MARKER_OT_add_motionblur_marker(Operator):
 
 
 # ------------------------------------------------------------------------
-#    OPERATOR - Copy Shutter to Marker
+#    OPERATOR - Copy Shutter to Markers
 # ------------------------------------------------------------------------
 
-class MARKER_OT_shutter_to_marker(Operator):
+class MARKER_OT_shutter_to_markers(Operator):
     """Copy current shutter time to selected 'mblur_on' markers"""
-    bl_idname = "marker.shutter_to_marker"
-    bl_label = "Copy Shutter to Marker"
+    bl_idname = "marker.shutter_to_markers"
+    bl_label = "Copy Shutter to Markers"
     bl_options = {'UNDO'}
 
     def execute(self, context):
@@ -1551,7 +1551,7 @@ class VIEW3D_PT_scene(Panel):
         row = layout.row(align=True)
         row.operator('marker.add_motionblur_marker', text="On", icon='KEYFRAME_HLT').blur = 'on'
         row.operator('marker.add_motionblur_marker', text="Off", icon='KEYFRAME').blur = 'off'
-        row.operator('marker.shutter_to_marker', text='', icon='MARKER_HLT')
+        row.operator('marker.shutter_to_markers', text='', icon='MARKER_HLT')
         
         
 class VIEW3D_PT_camera_properties(Panel):
@@ -1635,7 +1635,7 @@ classes = [
 
     TRANSFORM_OT_keyframes_markers,
     MARKER_OT_add_motionblur_marker,
-    MARKER_OT_shutter_to_marker,
+    MARKER_OT_shutter_to_markers,
     
     # panels
     BuildScenePanel,
