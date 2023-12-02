@@ -1561,10 +1561,14 @@ class VIEW3D_PT_scene(Panel):
         col = layout.column(heading="Lock")
         col.prop(context.space_data, 'lock_camera', text='Camera to View')
    
-        row = layout.row(align=True, heading="Motion Blur")
-        row.prop(scene.eevee, 'use_motion_blur', text='')
+        col = layout.column(align=True)
+        col.use_property_split = False
+        row = col.row()
+        row.prop(scene.eevee, 'use_motion_blur')
+        row = col.row()
         row.prop(scene.eevee, 'motion_blur_shutter')
-        row = layout.row(align=True)
+        col.separator(factor=0.5)
+        row = col.row(align=True)
         row.operator('marker.add_motionblur_marker', text="On", icon='KEYFRAME_HLT').blur = 'on'
         row.operator('marker.add_motionblur_marker', text="Off", icon='KEYFRAME').blur = 'off'
         row.operator('marker.shutter_to_markers', text='', icon='MARKER_HLT')
