@@ -285,8 +285,8 @@ Enables/disables automatically during rendering""",
 # ------------------------------------------------------------------------
 
 class SCENE_OT_build_all(Operator):
-    """Build a camera, floor, sun light and backlight. Create a new Fuzzy World. Optimize Eevee settings.
-Replace existing floor, sun light, backlight and active world, if available.
+    """Place a camera, floor, sun light and backlight. Create a new Fuzzy World. Optimize Eevee settings.
+Replace existing floor and active world, if available.
 Delete the default cube, camera, and light"""
     bl_idname = "scene.build_all"
     bl_label = "Build All"
@@ -313,7 +313,8 @@ Delete the default cube, camera, and light"""
 # ------------------------------------------------------------------------
 
 class OBJECT_OT_fuzzy_camera(Operator):
-    """Build a camera and add it to existing ones. Delete the default camera"""
+    """Place an optimized camera.
+Delete the default camera"""
     bl_idname = "object.fuzzy_camera"
     bl_label = "Build Camera"
     bl_options = {'UNDO'}
@@ -407,7 +408,7 @@ class OBJECT_OT_fuzzy_camera(Operator):
 # ------------------------------------------------------------------------
 
 class MESH_OT_fuzzy_floor(Operator):
-    """Place a floor for shadow only and replace the old one.
+    """Place a floor with shadow only and replace the old one.
 Delete the default cube"""
     bl_idname = "mesh.fuzzy_floor"
     bl_label = "Build Floor"
@@ -791,7 +792,7 @@ class WORLD_OT_fuzzy_sky(Operator):
 # ------------------------------------------------------------------------
 
 class OBJECT_OT_fuzzy_sun(Operator):
-    """Place a sun light and replace the old one.
+    """Place an optimized sun light.
 Delete the default light"""
     bl_idname = "object.fuzzy_sun"
     bl_label = "Build Sun"
@@ -864,7 +865,7 @@ Delete the default light"""
 # ------------------------------------------------------------------------
 
 class OBJECT_OT_fuzzy_backlight(Operator):
-    """Place a backlight and replace the old one"""
+    """Place an optimized backlight"""
     bl_idname = "object.fuzzy_backlight"
     bl_label = "Build Backlight"
     bl_options = {'UNDO'}
