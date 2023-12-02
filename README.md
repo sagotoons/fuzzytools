@@ -35,7 +35,6 @@ Alt+M to Move Keyframes and Markers
 - download the fuzzy_tools.py file
 - in Blender, go to Preferences -> Add-ons. Click on 'Install' and find the .py file. Select file and click 'Install Add-on'
 - after successful installation, the add-on should appear in the add-ons list. Click the checkbox beside the add-on to enable it
-- to enable/disable Fuzzy Tools afterwards, go to Preferences -> Add-ons. Make sure 'Community' is enabled, then search for 'fuzzy' in the search bar to find the add-on
 
 #
 _Fuzzy Tools should work for blender 3.6 and 4.0_
