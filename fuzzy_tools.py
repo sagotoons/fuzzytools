@@ -342,17 +342,17 @@ class OBJECT_OT_fuzzy_camera(Operator):
             # Remove "CAM." from names to leave only numbers
             cams = [s[4:] for s in [obj.name for obj in cams]]
             # Remove possible letter suffix
-            cams = [s[:2] for s in cams]
+            cams = [s[:3] for s in cams]
             # Find the smallest available number
             available_numbers = set(range(1, max(map(int, cams)) + 2))
             used_numbers = set(map(int, cams))
             i = min(available_numbers - used_numbers)
             # Change name of camera with increasing number
-            ob.name = f"CAM.{i:02}"
+            ob.name = f"CAM.{i:03}"
             # Place camera distance away from previous camera's origin
             ob.location = (1.5*(-1 + i), -35, 2.7)
         else:
-            ob.name = "CAM.01"
+            ob.name = "CAM.001"
             ob.location = (0, -35, 2.7)
 
         # create collection 'Cameras' if it doesn't exist yet
