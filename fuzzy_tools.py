@@ -266,7 +266,7 @@ Enables/disables automatically during rendering""",
     shadow_clamp: FloatProperty(
         name="Clamp Min",
         description="Brighten darkest part of floor shadow",
-        default=0.15,
+        default=0.1,
         min=0, max=1,
         update=update_fuzzyfloor
     )
@@ -274,7 +274,7 @@ Enables/disables automatically during rendering""",
     floor_dodge: FloatProperty(
         name="Dodge",
         description="Brighten brightest part of floor",
-        default=0.15,
+        default=0.1,
         min=0, max=1,
         update=update_fuzzyfloor
     )
@@ -561,8 +561,8 @@ Delete the default cube"""
         space.overlay.show_relationship_lines = False
         
         # scene builder properties
-        scene.fuzzy_props.shadow_clamp = 0.15
-        scene.fuzzy_props.floor_dodge = 0.15
+        scene.fuzzy_props.shadow_clamp = 0.1
+        scene.fuzzy_props.floor_dodge = 0.1
 
         return {'FINISHED'}
 
