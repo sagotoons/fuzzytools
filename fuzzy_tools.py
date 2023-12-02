@@ -1548,23 +1548,17 @@ class VIEW3D_PT_scene(Panel):
     def draw(self, context):
         scene = context.scene
         layout = self.layout
-        layout.use_property_split = True
-        layout.use_property_decorate = False
         
-        col = layout.column()
+        layout.prop(scene, "camera", text="Active", icon='CAMERA_DATA')
+
+        col  = layout.column()
         col.scale_y = 1.3
         col.operator("object.fuzzy_camera", text="Build Camera", icon='CAMERA_DATA')
         
-        row = layout.row(align=True)
-        row.prop(scene, "camera", text="Active", icon='CAMERA_DATA')
-        
-        col = layout.column(heading="Lock")
-        col.prop(context.space_data, 'lock_camera', text='Camera to View')
+        layout.prop(context.space_data, 'lock_camera', text='Lock Camera to View')
    
         col = layout.column(align=True)
-        col.use_property_split = False
-        row = col.row()
-        row.prop(scene.eevee, 'use_motion_blur')
+        col.prop(scene.eevee, 'use_motion_blur')
         row = col.row()
         row.prop(scene.eevee, 'motion_blur_shutter')
         col.separator(factor=0.5)
