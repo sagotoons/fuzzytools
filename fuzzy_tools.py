@@ -329,7 +329,7 @@ Delete the default camera"""
         objs = bpy.data.objects
 
         # CAMERA PROPERTIES
-        loc_y = -35
+         = -35
         loc_z = 2.7
         rot_x = 90
         lens = 110
@@ -390,7 +390,7 @@ Delete the default camera"""
         data.clip_end = clip_end
         data.lens = lens
         data.passepartout_alpha = 0.95
-        data.dof.focus_distance = 35
+        data.dof.focus_distance = abs(loc_y)
 
         # make new camera active
         objects = context.view_layer.objects
