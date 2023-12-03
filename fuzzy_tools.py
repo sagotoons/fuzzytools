@@ -303,7 +303,7 @@ Delete the default cube, camera, and light"""
         ops.world.fuzzy_sky()
         ops.object.fuzzy_sun()
         ops.object.fuzzy_rimlight()
-        ops.scene.eevee()
+        ops.scene.fuzzy_eevee()
 
         return {'FINISHED'}
 
@@ -936,10 +936,10 @@ class OBJECT_OT_fuzzy_rimlight(Operator):
 #    OPERATOR - EEVEE optimizing
 # ------------------------------------------------------------------------
 
-class SCENE_OT_eevee(Operator):
+class SCENE_OT_fuzzy_eevee(Operator):
     """Set the render engine to EEVEE and optimize render settings.
 Enable and adjust settings for ambient occlussion, bloom and color management"""
-    bl_idname = "scene.eevee"
+    bl_idname = "scene.fuzzy_eevee"
     bl_label = "Optimize Eevee"
     bl_options = {'UNDO'}
 
@@ -1312,7 +1312,7 @@ class BuildPartsPanel(BuildSceneChild, Panel):
         row = col.row(align=True)
         row.operator("object.fuzzy_rimlight", text="Rim Light", icon='LIGHT')
         row = col.row(align=True)
-        row.operator("scene.eevee", text="Optimize EEVEE", icon='CAMERA_STEREO')
+        row.operator("scene.fuzzy_eevee", text="Optimize EEVEE", icon='CAMERA_STEREO')
 
 
 class BackgroundPanel(BuildSceneChild, Panel):
@@ -1658,7 +1658,7 @@ classes = [
     WORLD_OT_fuzzy_sky,
     OBJECT_OT_fuzzy_sun,
     OBJECT_OT_fuzzy_rimlight,
-    SCENE_OT_eevee,
+    SCENE_OT_fuzzy_eevee,
 
     OBJECT_OT_hair_show,
     OBJECT_OT_hair_hide,
