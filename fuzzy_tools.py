@@ -953,7 +953,7 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         eevee = scene.eevee
         view = scene.view_settings
 
-        # settings for Eevee global
+        # EEVEE RENDER PROPERTIES
         render.engine = 'BLENDER_EEVEE'
 #        eevee.taa_render_samples = 64
 #        eevee.taa_samples = 16
@@ -965,6 +965,7 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         eevee.bloom_threshold = 1.0
         eevee.bloom_radius = 5
         # depth of field
+        eevee.bokeh_max_size = 0
         eevee.use_bokeh_jittered = True
         # screen space reflection
  #       eevee.use_ssr = False
