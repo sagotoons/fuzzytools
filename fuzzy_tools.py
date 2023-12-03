@@ -302,7 +302,7 @@ Delete the default cube, camera, and light"""
         ops.mesh.fuzzy_floor()
         ops.world.fuzzy_sky()
         ops.object.fuzzy_sun()
-        ops.object.fuzzy_backlight()
+        ops.object.fuzzy_rimlight()
         ops.scene.eevee()
 
         return {'FINISHED'}
@@ -864,9 +864,9 @@ Delete the default light"""
 #    OPERATOR - Rim Light
 # ------------------------------------------------------------------------
 
-class OBJECT_OT_fuzzy_backlight(Operator):
+class OBJECT_OT_fuzzy_rimlight(Operator):
     """Place an optimized rim light"""
-    bl_idname = "object.fuzzy_backlight"
+    bl_idname = "object.fuzzy_rimlight"
     bl_label = "Build Rim Light"
     bl_options = {'UNDO'}
 
@@ -1310,7 +1310,7 @@ class BuildPartsPanel(BuildSceneChild, Panel):
         row.operator("world.fuzzy_sky", text="Sky", icon='MAT_SPHERE_SKY')
         row.operator("object.fuzzy_sun", text="Sun", icon='LIGHT_SUN')
         row = col.row(align=True)
-        row.operator("object.fuzzy_backlight", text="Rim Light", icon='LIGHT')
+        row.operator("object.fuzzy_rimlight", text="Rim Light", icon='LIGHT')
         row = col.row(align=True)
         row.operator("scene.eevee", text="Optimize EEVEE", icon='CAMERA_STEREO')
 
@@ -1657,7 +1657,7 @@ classes = [
     MESH_OT_fuzzy_floor,
     WORLD_OT_fuzzy_sky,
     OBJECT_OT_fuzzy_sun,
-    OBJECT_OT_fuzzy_backlight,
+    OBJECT_OT_fuzzy_rimlight,
     SCENE_OT_eevee,
 
     OBJECT_OT_hair_show,
