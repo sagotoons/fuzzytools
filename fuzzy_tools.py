@@ -329,10 +329,10 @@ Delete the default camera"""
         objs = bpy.data.objects
 
         # CAMERA PROPERTIES
-        loc_y = -35
-        loc_z = 2.7
+        loc_y = -25
+        loc_z = 2.5
         rot_x = 90
-        lens = 110
+        lens = 85
         clip_start = 1
         clip_end = 250
 
