@@ -1575,7 +1575,7 @@ class VIEW3D_PT_scene(Panel):
 
         col  = layout.column()
         col.scale_y = 1.3
-        col.operator("object.fuzzy_camera", text="Build Camera", icon='CAMERA_DATA')
+        col.operator("object.fuzzy_camera", text="Build", icon='CAMERA_DATA')
         
         layout.prop(context.space_data, 'lock_camera', text='Lock Camera to View')
    
