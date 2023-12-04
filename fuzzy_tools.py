@@ -1040,6 +1040,94 @@ class OBJECT_OT_hair_hide(Operator):
 
 
 # ------------------------------------------------------------------------
+#    OPERATOR - add Marker for Motion Blur
+# ------------------------------------------------------------------------
+
+class MARKER_OT_add_motionblur_marker(Operator):
+    """Add a marker to enable or disable motion blur at current frame"""
+    bl_idname = "marker.add_motionblur_marker"
+    bl_label = "Add Motion Blur Marker"
+    bl_options = {'UNDO', 'INTERNAL'}
+
+    blur: bpy.props.StringProperty()
+
+    def execute(self, context):
+        scene = context.scene
+        fr = scene.frame_current
+        marker = scene.timeline_markers
+       
+        for m in marker:
+            if m.frame == fr and m.name.startswith("mblur"):
+                marker.remove(m)
+                break
+
+        if self.blur == 'on':
+            marker.new('mblur_on', frame=fr)
+            scene.eevee.use_motion_blur = True
+        elif self.blur == 'off':
+            marker.new('mblur_off', frame=fr)
+            scene.eevee.use_motion_blur = False
+
+        return {'FINISHED'}
+
+
+# ------------------------------------------------------------------------
+#    OPERATOR - Copy Shutter to Markers
+# ------------------------------------------------------------------------
+
+class MARKER_OT_shutter_to_markers(Operator):
+    """Copy current shutter time to selected 'mblur_on' markers"""
+    bl_idname = "marker.shutter_to_markers"
+    bl_label = "Copy Shutter to Markers"
+    bl_options = {'UNDO'}
+
+    def execute(self, context):
+        scene = context.scene
+        markers = scene.timeline_markers
+        count = 0
+
+        for marker in markers:
+            if marker.select and marker.name.startswith("mblur_on"):
+                base_name = marker.name[:8]
+                v = round(scene.eevee.motion_blur_shutter, 2)
+                marker.name = f"{base_name} {v}"
+                count += 1
+
+        if count == 0:
+            def ShowMessageBox(message = "", title = "Message Box", icon = 'ERROR'):
+                def draw(self, context):
+                    self.layout.label(text=message)
+
+                context.window_manager.popup_menu(draw, title = title, icon = icon)          
+            #Show a message box with a message and custom title
+            ShowMessageBox("Requires at least one 'mblur' marker to be selected", "No marker renamed")
+
+        return {'FINISHED'}
+
+
+# ------------------------------------------------------------------------
+#    OPERATOR - Set active Camera
+# ------------------------------------------------------------------------
+
+class VIEW3D_OT_set_active_camera(Operator):
+    """Set camera as the active camera for this scene"""
+    bl_idname = "view3d.set_active_camera"
+    bl_label = "Set active camera"
+    bl_options = {'UNDO'}
+ 
+    @classmethod
+    def poll(cls, context):
+        return context.object is not None and context.object.type == 'CAMERA'
+
+    def execute(self, context):
+        cam = context.active_object
+        
+        context.scene.camera = cam
+
+        return {'FINISHED'}
+
+
+# ------------------------------------------------------------------------
 #    OPERATOR - Camera Bind
 # ------------------------------------------------------------------------
 
@@ -1077,28 +1165,6 @@ Requires an animation editor to be open"""
                 context.window_manager.popup_menu(draw, title = title, icon = icon)          
             #Show a message box with a message and custom title
             ShowMessageBox("Requires an Animation Editor to be open", "Marker not placed")     
-
-        return {'FINISHED'}
-
-
-# ------------------------------------------------------------------------
-#    OPERATOR - Set active Camera
-# ------------------------------------------------------------------------
-
-class VIEW3D_OT_set_active_camera(Operator):
-    """Set camera as the active camera for this scene"""
-    bl_idname = "view3d.set_active_camera"
-    bl_label = "Set active camera"
-    bl_options = {'UNDO'}
- 
-    @classmethod
-    def poll(cls, context):
-        return context.object is not None and context.object.type == 'CAMERA'
-
-    def execute(self, context):
-        cam = context.active_object
-        
-        context.scene.camera = cam
 
         return {'FINISHED'}
 
@@ -1166,73 +1232,7 @@ class TRANSFORM_OT_keyframes_markers(bpy.types.Operator):
 
     def invoke(self, context, event):
         return context.window_manager.invoke_props_popup(self, event)
-
-
-# ------------------------------------------------------------------------
-#    OPERATOR - add Marker for Motion Blur
-# ------------------------------------------------------------------------
-
-class MARKER_OT_add_motionblur_marker(Operator):
-    """Add a marker to enable or disable motion blur at current frame"""
-    bl_idname = "marker.add_motionblur_marker"
-    bl_label = "Add Motion Blur Marker"
-    bl_options = {'UNDO', 'INTERNAL'}
-
-    blur: bpy.props.StringProperty()
-
-    def execute(self, context):
-        scene = context.scene
-        fr = scene.frame_current
-        marker = scene.timeline_markers
-       
-        for m in marker:
-            if m.frame == fr and m.name.startswith("mblur"):
-                marker.remove(m)
-                break
-
-        if self.blur == 'on':
-            marker.new('mblur_on', frame=fr)
-            scene.eevee.use_motion_blur = True
-        elif self.blur == 'off':
-            marker.new('mblur_off', frame=fr)
-            scene.eevee.use_motion_blur = False
-
-        return {'FINISHED'}
-
-
-# ------------------------------------------------------------------------
-#    OPERATOR - Copy Shutter to Markers
-# ------------------------------------------------------------------------
-
-class MARKER_OT_shutter_to_markers(Operator):
-    """Copy current shutter time to selected 'mblur_on' markers"""
-    bl_idname = "marker.shutter_to_markers"
-    bl_label = "Copy Shutter to Markers"
-    bl_options = {'UNDO'}
-
-    def execute(self, context):
-        scene = context.scene
-        markers = scene.timeline_markers
-        count = 0
-
-        for marker in markers:
-            if marker.select and marker.name.startswith("mblur_on"):
-                base_name = marker.name[:8]
-                v = round(scene.eevee.motion_blur_shutter, 2)
-                marker.name = f"{base_name} {v}"
-                count += 1
-
-        if count == 0:
-            def ShowMessageBox(message = "", title = "Message Box", icon = 'ERROR'):
-                def draw(self, context):
-                    self.layout.label(text=message)
-
-                context.window_manager.popup_menu(draw, title = title, icon = icon)          
-            #Show a message box with a message and custom title
-            ShowMessageBox("Requires at least one 'mblur' marker to be selected", "No marker renamed")
-
-        return {'FINISHED'}
-
+    
 
 # ------------------------------------------------------------------------
 #    PANELS - Scene Builder
@@ -1435,30 +1435,7 @@ class ViewportChild:
     bl_region_type = 'UI'
     bl_parent_id = 'VIEW3D_PT_viewport'
 
-
-class VIEW3D_PT_miscellaneous(ViewportChild, Panel):
-    bl_label = "Viewport Display"
-    bl_options = {'DEFAULT_CLOSED'}
-
-    def draw(self, context):
-        space = context.space_data
-        overlay = space.overlay
-        shade = space.shading
-        
-        layout = self.layout
-        layout.use_property_split = True
-        layout.use_property_decorate = False
-        row = layout.row(align=True)
-        col = row.column(align=True, heading="Local")
-
-        col.prop(overlay, "show_relationship_lines", text="Relationship Lines")
-        col.prop(shade, "show_backface_culling") 
-        row = layout.row(heading="Object")
-        object = context.object
-        if object is not None:
-            row.prop(object, "show_in_front", text="Show in Front")
-        
-    
+ 
 class VIEW3D_PT_simplify(ViewportChild, Panel):
     bl_label = "Simplify"
     bl_options = {'DEFAULT_CLOSED'}
@@ -1519,7 +1496,30 @@ class VIEW3D_PT_hair(ViewportChild, Panel):
                             text="", icon='HIDE_ON', emboss=False)
                 except KeyError:
                     pass
-   
+
+
+class VIEW3D_PT_miscellaneous(ViewportChild, Panel):
+    bl_label = "Viewport Display"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    def draw(self, context):
+        space = context.space_data
+        overlay = space.overlay
+        shade = space.shading
+        
+        layout = self.layout
+        layout.use_property_split = True
+        layout.use_property_decorate = False
+        row = layout.row(align=True)
+        col = row.column(align=True, heading="Local")
+
+        col.prop(overlay, "show_relationship_lines", text="Relationship Lines")
+        col.prop(shade, "show_backface_culling") 
+        row = layout.row(heading="Object")
+        object = context.object
+        if object is not None:
+            row.prop(object, "show_in_front", text="Show in Front")
+
 
 # ------------------------------------------------------------------------
 #    PANELS - Camera Control
@@ -1664,13 +1664,14 @@ classes = [
     OBJECT_OT_hair_show,
     OBJECT_OT_hair_hide,
     
-    MARKER_OT_camera_bind_new,
-    VIEW3D_OT_set_active_camera,
-
-    TRANSFORM_OT_keyframes_markers,
     MARKER_OT_add_motionblur_marker,
     MARKER_OT_shutter_to_markers,
     
+    VIEW3D_OT_set_active_camera,    
+    MARKER_OT_camera_bind_new,
+    
+    TRANSFORM_OT_keyframes_markers,
+
     # panels
     BuildScenePanel,
     BuildAllPanel,
