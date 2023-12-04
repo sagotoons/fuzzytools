@@ -1471,7 +1471,6 @@ class ViewportChild:
  
 class VIEW3D_PT_simplify(ViewportChild, Panel):
     bl_label = "Simplify"
-    bl_options = {'DEFAULT_CLOSED'}
 
     def draw_header(self, context):
         rd = context.scene.render
@@ -1496,6 +1495,7 @@ class VIEW3D_PT_simplify(ViewportChild, Panel):
         
 class VIEW3D_PT_hair(ViewportChild, Panel):
     bl_label = "Hair"
+    bl_options = {'DEFAULT_CLOSED'}
 
     def draw(self, context):
         layout = self.layout
