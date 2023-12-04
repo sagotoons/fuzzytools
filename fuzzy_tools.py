@@ -1668,10 +1668,11 @@ class VIEW3D_PT_camera_properties(Panel):
         col.prop(object.data.dof, "use_dof", text="")
         if object.data.dof.use_dof:
             col.prop(object.data.dof, "focus_object")
-            col1 = col.column()
+            row = col.row()
             if object.data.dof.focus_object is not None:
-                col1.enabled = False
-            col1.prop(object.data.dof, "focus_distance")
+                row.enabled = False
+            row.prop(object.data.dof, "focus_distance")
+            row.operator('object.cursor_to_focus_distance', text='', icon='CURSOR')
             col.prop(object.data.dof, "aperture_fstop")
                   
                
