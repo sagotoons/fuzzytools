@@ -967,7 +967,7 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         eevee.bloom_threshold = 1.0
         eevee.bloom_radius = 5
         # depth of field
-        eevee.bokeh_max_size = 2
+        eevee.bokeh_max_size = 3
         eevee.use_bokeh_jittered = True
         # screen space reflection
  #       eevee.use_ssr = False
