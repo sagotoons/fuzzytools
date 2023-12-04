@@ -1176,7 +1176,7 @@ Requires an animation editor to be open"""
 # ------------------------------------------------------------------------
 
 class OBJECT_OT_cursor_to_focus_distance(Operator):
-    """Copy distance to 3D Cursor to camera focus distance"""
+    """Set distance to 3D Cursor as camera focus distance"""
     bl_idname = "object.cursor_to_focus_distance"
     bl_label = "3D Cursor to Focus Distance"
     bl_options = {'UNDO'}
