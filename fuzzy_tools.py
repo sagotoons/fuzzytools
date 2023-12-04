@@ -14,6 +14,8 @@ bl_info = {
 
 import bpy
 
+import math
+
 from bpy.props import (BoolProperty,
                        FloatProperty,
                        FloatVectorProperty,
