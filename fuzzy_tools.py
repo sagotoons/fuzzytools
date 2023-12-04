@@ -1172,6 +1172,37 @@ Requires an animation editor to be open"""
 
 
 # ------------------------------------------------------------------------
+#    OPERATOR - 3D Cursor to Focus Distance
+# ------------------------------------------------------------------------
+
+class OBJECT_OT_cursor_to_focus_distance(Operator):
+    """Copy distance to 3D Cursor to camera focus distance"""
+    bl_idname = "object.cursor_to_focus_distance"
+    bl_label = "3D Cursor to Focus Distance"
+    bl_options = {'UNDO'}
+ 
+    @classmethod
+    def poll(cls, context):
+        return context.object is not None and context.object.type == 'CAMERA'
+
+    def execute(self, context):
+        scene = context.scene
+        cam = context.active_object
+
+        # camera and 3dcursor location
+        cam_loc = cam.matrix_world.to_translation()
+        cursor_loc = scene.cursor.matrix.to_translation()
+
+        # calculate distance
+        length = math.dist(cursor_loc, cam_loc)
+
+        # set new focus distance
+        cam.data.dof.focus_distance = length
+
+        return {'FINISHED'}
+
+
+# ------------------------------------------------------------------------
 #    OPERATOR - Move Keyframes and Markers
 # ------------------------------------------------------------------------
 
@@ -1671,6 +1702,7 @@ classes = [
     
     VIEW3D_OT_set_active_camera,    
     MARKER_OT_camera_bind_new,
+    OBJECT_OT_cursor_to_focus_distance,
     
     TRANSFORM_OT_keyframes_markers,
 
