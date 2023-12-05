@@ -349,22 +349,22 @@ Delete the default camera"""
         # List all objects with "CAM." prefix
         cams = [obj for obj in objs if obj.name.startswith("CAM.")]
 
-        if cams:
-            # Remove "CAM." from names to leave only numbers
-            cams = [s[4:] for s in [obj.name for obj in cams]]
+        if not cams:
+            ob.name = "CAM.001"
+            ob.location = (0, loc_y, loc_z)
+        else:
+            # Remove "CAM." from names to leave only numbers + letter
+            cams_ABC = [s[4:] for s in [obj.name for obj in cams]]
             # Remove possible letter suffix
-            cams = [s[:3] for s in cams]
+            cams_no_ABC = [s[:3] for s in cams_ABC]
             # Find the smallest available number
-            available_numbers = set(range(1, max(map(int, cams)) + 2))
-            used_numbers = set(map(int, cams))
+            available_numbers = set(range(1, max(map(int, cams_no_ABC)) + 2))
+            used_numbers = set(map(int, cams_no_ABC))
             i = min(available_numbers - used_numbers)
             # Change name of camera with increasing number
             ob.name = f"CAM.{i:03}"
             # Place camera distance away from previous camera's origin
             ob.location = (1.5*(-1 + i), loc_y, loc_z)
-        else:
-            ob.name = "CAM.001"
-            ob.location = (0, loc_y, loc_z)
 
         # create collection 'Cameras' if it doesn't exist yet
         link_to_name = 'Cameras'
