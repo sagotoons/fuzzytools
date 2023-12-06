@@ -1172,6 +1172,54 @@ Requires an animation editor to be open"""
 
 
 # ------------------------------------------------------------------------
+#    OPERATOR - Rename Camera as variant
+# ------------------------------------------------------------------------
+
+class OBJECT_OT_rename_camera_alpha(Operator):
+    """Rename selected cameras as alphabetic variant of active camera"""
+    bl_idname = "object.rename_camera_alpha"
+    bl_label = "Rename as Variant"
+    bl_options = {'UNDO'}
+ 
+    @classmethod
+    def poll(cls, context):
+        if len(context.selected_objects) < 2:
+            return False
+        cameras_selected = all(obj.type == 'CAMERA' for obj in context.selected_objects)
+        return cameras_selected
+
+    def execute(self, context):
+        scene = context.scene
+        objects = scene.objects
+        objs = bpy.data.objects
+
+        active_cam = context.active_object
+        selected_cams = context.selected_objects
+
+        # Use ord and chr to generate alphabet dynamically
+        ABC = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
+
+        # List all objects with "CAM." prefix
+        cams = [obj for obj in objs if obj.name.startswith("CAM.")]
+
+        if active_cam in cams:
+            for cam in selected_cams:
+                if cam != active_cam:
+                    for letter in ABC:
+                        if active_cam.name[-1:].isalpha():
+                            remove_ABC = active_cam.name[:-1]
+                            name_ABC = f"{remove_ABC}{letter}"
+                        else:
+                            name_ABC = f"{active_cam.name}{letter}"
+                        
+                        if name_ABC not in str(cams):
+                            cam.name = name_ABC
+                            break  
+
+        return {'FINISHED'}
+
+
+# ------------------------------------------------------------------------
 #    OPERATOR - 3D Cursor to Focus Distance
 # ------------------------------------------------------------------------
 
@@ -1704,6 +1752,7 @@ classes = [
     
     VIEW3D_OT_set_active_camera,    
     MARKER_OT_camera_bind_new,
+    OBJECT_OT_rename_camera_alpha,
     OBJECT_OT_cursor_to_focus_distance,
     
     TRANSFORM_OT_keyframes_markers,
