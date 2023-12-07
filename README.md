@@ -1,6 +1,6 @@
 ![fuzzytools_banner_narrow](https://github.com/sagotoons/fuzzytools/assets/151992752/9dd74cc7-0026-4173-9b84-f3df2f244eb6)
 
-The Fuzzy Tools add-on is a collection of tools, heavily focused on efficiency and a quick workflow with a multi-camera scene in mind. Some of Fuzzy Tools I demonstrated during my presentation 'Journey Towards an Efficient 1-Person Pipeline' at BCON23, which you can see here: www.youtube.com/watch?v=W01lQrcCz9s
+The Fuzzy Tools add-on is a collection of tools, heavily focused on efficiency and a quick workflow with a multi-camera scene in mind. Some of Fuzzy Tools was demonstrated during my presentation 'Journey Towards an Efficient 1-Person Pipeline' at BCON23, which you can see here: www.youtube.com/watch?v=W01lQrcCz9s
 
 Fuzzy Tools creates the following panels in the sidebar (N):
 
@@ -10,7 +10,7 @@ Quickly set up your scene, including:
 - floor with shadow only
 - world shader with stylized sky
 - sunlight and rim light
-- optimized EEVEE settings like AO and Bloom
+- optimize EEVEE settings like AO and Bloom
 
 _Scene Builder is specifically created for a fast EEVEE pipeline, but many aspects still work in Cycles._
 
