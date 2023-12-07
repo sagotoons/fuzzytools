@@ -1,6 +1,6 @@
 ![fuzzytools_banner_narrow](https://github.com/sagotoons/fuzzytools/assets/151992752/9dd74cc7-0026-4173-9b84-f3df2f244eb6)
 
-The Fuzzy Tools add-on is a collection of tools, heavily focused on efficiency and a quick workflow with a multi-camera scene in mind. Some of Fuzzy Tools was demonstrated during my presentation 'Journey Towards an Efficient 1-Person Pipeline' at BCON23, which you can see here: www.youtube.com/watch?v=W01lQrcCz9s
+The Fuzzy Tools add-on is a collection of tools, heavily focused on efficiency and a quick workflow with a multi-camera scene in mind. Some of Fuzzy Tools I demonstrated during my presentation 'Journey Towards an Efficient 1-Person Pipeline' at BCON23, which you can see here: www.youtube.com/watch?v=W01lQrcCz9s
 
 Fuzzy Tools creates the following panels in the sidebar (N):
 
@@ -15,13 +15,13 @@ Quickly set up your scene, including:
 _Scene Builder is specifically created for a fast EEVEE pipeline, but many aspects still work in Cycles._
 
 ## 2. Fuzzy Viewport
-Quick access to several settings, including:
+Quick access to different viewport settings, including:
 - Viewport Lens
 - Use Simplify
 - Hide/Unhide all Hair
 
 ## 3. Camera Control
-Quick access to several camera settings and operators, including:
+Quick access to different camera settings and operators, including:
 - Focal Length
 - Camera Clipping
 - DoF
