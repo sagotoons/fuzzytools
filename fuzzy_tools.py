@@ -1176,7 +1176,7 @@ Requires an animation editor to be open"""
 # ------------------------------------------------------------------------
 
 class OBJECT_OT_rename_camera_alpha(Operator):
-    """Rename selected cameras as alphabetic variant of active camera"""
+    """Rename selected cameras as alphabetic variants of active camera"""
     bl_idname = "object.rename_camera_alpha"
     bl_label = "Rename as Variant"
     bl_options = {'UNDO'}
@@ -1650,7 +1650,10 @@ class VIEW3D_PT_scene(Panel):
 
         row = layout.row(align=True)
         row.prop(scene, "camera", text="Active", icon='CAMERA_DATA')
-        row.operator("object.select_camera", text="", icon='RESTRICT_SELECT_OFF')
+        row1 = row.row(align=True)
+        if scene.camera.name not in context.view_layer.objects:
+           row1.enabled = False
+        row1.operator("object.select_camera", text="", icon='RESTRICT_SELECT_OFF')
         row.operator('view3d.camera_to_view', text='', icon='DECORATE_OVERRIDE')
 
         col  = layout.column()
