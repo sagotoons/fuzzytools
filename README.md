@@ -9,7 +9,7 @@ Quickly set up your scene, including:
 - optimized camera(s)
 - floor with shadow only
 - world shader with stylized sky
-- sunlight and backlight
+- sunlight and rim light
 - optimized EEVEE settings like AO and Bloom
 
 _Scene Builder is specifically created for a fast EEVEE pipeline, but many aspects still work in Cycles._
