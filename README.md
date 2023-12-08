@@ -15,7 +15,7 @@ Some amazing features that come with Fuzzy Tools:
 
 Fuzzy Tools creates the following panels in the sidebar (N):
 
-### 1. Scene Builder
+### [1. Scene Builder](https://github.com/sagotoons/fuzzytools/wiki/Scene-Builder)
 Quickly set up your scene, including:
 - optimized camera(s)
 - floor with shadow only
@@ -23,13 +23,13 @@ Quickly set up your scene, including:
 - sunlight and rim light
 - optimize EEVEE settings like AO, Shadows and Bloom
 
-### 2. Fuzzy Viewport
+### [2. Fuzzy Viewport](https://github.com/sagotoons/fuzzytools/wiki/Fuzzy-Viewport)
 Quick access to different viewport settings, including:
 - Viewport Lens
 - Use Simplify
 - Hide/Unhide all Hair
 
-### 3. Camera Control
+### [3. Camera Control](https://github.com/sagotoons/fuzzytools/wiki/Camera-Control)
 Quick access to different camera settings and operators, including:
 - Focal Length
 - DoF and 3D Cursor as Focus Distance
