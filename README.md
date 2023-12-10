@@ -1,4 +1,4 @@
-![fuzzytools_banner_narrow](https://github.com/sagotoons/fuzzytools/assets/151992752/9dd74cc7-0026-4173-9b84-f3df2f244eb6)
+![Fuzzy Tools banner](https://github.com/sagotoons/fuzzytools/blob/f3716b76bbcdbd0bbb631c68eb08386e1e4bce0d/images/fuzzytools_banner.png)
 
 The Fuzzy Tools add-on is a collection of tools, heavily focused on efficiency and a quick workflow with a multi-camera scene in mind. Some of Fuzzy Tools was demonstrated during my presentation 'Journey Towards an Efficient 1-Person Pipeline' at BCON23, which you can see here: www.youtube.com/watch?v=W01lQrcCz9s
 
