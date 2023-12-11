@@ -1650,10 +1650,13 @@ class VIEW3D_PT_scene(Panel):
 
         row = layout.row(align=True)
         row.prop(scene, "camera", text="Active", icon='CAMERA_DATA')
-        row1 = row.row(align=True)
-        if scene.camera.name not in context.view_layer.objects:
-           row1.enabled = False
-        row1.operator("object.select_camera", text="", icon='RESTRICT_SELECT_OFF')
+        try:
+            row1 = row.row(align=True)
+            if scene.camera.name not in context.view_layer.objects:
+               row1.enabled = False
+            row1.operator("object.select_camera", text="", icon='RESTRICT_SELECT_OFF')
+        except AttributeError:
+            pass
         row.operator('view3d.camera_to_view', text='', icon='DECORATE_OVERRIDE')
 
         col  = layout.column()
