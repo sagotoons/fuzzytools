@@ -7,7 +7,8 @@ bl_info = {
     "blender" : (3,6,0),
     "location" : "View3d > Sidebar > Fuzzy. Alt+M to move keyframes and markers",
     "description" : "Tools for an efficient 1-person pipeline and multi-camera workflow",
-    "wiki_url" : "",
+    "doc_url" : "https://github.com/sagotoons/fuzzytools/wiki",
+    "tracker_url" : "https://github.com/sagotoons/fuzzytools/issues",
     "category" : "User Interface",
 }
 
