@@ -470,8 +470,11 @@ Delete the default cube"""
             bpy.data.collections[oldcoll].objects.unlink(empty)
         bpy.data.collections['Set'].objects.link(empty)
 
-        # objects settings
-        floor.data.use_auto_smooth = True
+        # objects settings ## error exception added for blender 4.1
+        try:
+            floor.data.use_auto_smooth = True
+        except AttributeError:
+            pass
         
         # create modifier 'Normal Edit' and set empty as Target
         normal = floor.modifiers.new("Normal Direction", 'NORMAL_EDIT')
