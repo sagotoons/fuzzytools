@@ -1100,13 +1100,8 @@ class MARKER_OT_shutter_to_markers(Operator):
                 count += 1
 
         if count == 0:
-            def ShowMessageBox(message = "", title = "Message Box", icon = 'ERROR'):
-                def draw(self, context):
-                    self.layout.label(text=message)
-
-                context.window_manager.popup_menu(draw, title = title, icon = icon)          
-            #Show a message box with a message and custom title
-            ShowMessageBox("Requires at least one 'mblur' marker to be selected", "No marker renamed")
+            self.report({'WARNING'}, "Selection of 'mblur_on' marker required")
+            return {'CANCELLED'}
 
         return {'FINISHED'}
 
@@ -1164,13 +1159,8 @@ Requires an animation editor to be open"""
                             count += 1
                             break
         if count == 0:
-            def ShowMessageBox(message = "", title = "Message Box", icon = 'ERROR'):
-                def draw(self, context):
-                    self.layout.label(text=message)
-
-                context.window_manager.popup_menu(draw, title = title, icon = icon)          
-            #Show a message box with a message and custom title
-            ShowMessageBox("Requires an Animation Editor to be open", "Marker not placed")     
+            self.report({'WARNING'}, "Open Animation Editor required")
+            return {'CANCELLED'}
 
         return {'FINISHED'}
 
