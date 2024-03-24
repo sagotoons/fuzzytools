@@ -53,7 +53,6 @@ def reload_image(dummy):
 def auto_animate_scene(scene, context):
     prop = bpy.context.scene.fuzzy_props
     prop.scene_animate = True
-    bpy.context.scene.render.hair_type = 'STRIP' # change Hair Type to Strip
 bpy.app.handlers.render_init.append(auto_animate_scene)
 
 # handler for removing previous handler during canceling or completing render
