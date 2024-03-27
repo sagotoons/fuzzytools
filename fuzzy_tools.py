@@ -1653,11 +1653,18 @@ class VIEW3D_PT_scene(Panel):
             pass
         row.operator('view3d.camera_to_view', text='', icon='DECORATE_OVERRIDE')
 
-        col  = layout.column()
+        col = layout.column()
         col.scale_y = 1.3
         col.operator("object.fuzzy_camera", text="Build", icon='CAMERA_DATA')
-        
-        layout.prop(context.space_data, 'lock_camera', text='Lock Camera to View')
+
+        if context.space_data.lock_camera == True:
+            icon = 'LOCKED'
+        else:
+            icon = 'UNLOCKED'
+        row = layout.row(align=True)
+        row.scale_x = 1.1
+        row.prop(context.space_data, 'lock_camera', text='', icon=icon)
+        row.label(text=' Lock to View')
    
         col = layout.column(align=True)
         col.prop(scene.eevee, 'use_motion_blur')
