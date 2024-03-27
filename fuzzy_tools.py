@@ -1662,7 +1662,7 @@ class VIEW3D_PT_scene(Panel):
         else:
             icon = 'UNLOCKED'
         row = layout.row(align=True)
-        row.scale_x = 1.1
+        row.scale_x = 1.2
         row.prop(context.space_data, 'lock_camera', text='', icon=icon)
         row.label(text=' Lock to View')
    
