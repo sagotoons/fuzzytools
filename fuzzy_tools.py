@@ -614,6 +614,7 @@ class WORLD_OT_fuzzy_sky(Operator):
 
         nodes.remove(nodes.get('Background'))
 
+        # HDR nodes
         worldoutput = nodes.get("World Output")
         worldoutput.location = (400, 50)
 
@@ -627,11 +628,50 @@ class WORLD_OT_fuzzy_sky(Operator):
         BG2 = nodes.new("ShaderNodeBackground")
         BG2.location = (0, -100)
 
+        skyclamp = nodes.new("ShaderNodeMixRGB")
+        skyclamp.location = (-180, 200)
+        skyclamp.blend_type = 'DARKEN'
+        skyclamp.inputs[2].default_value = (10,10,10, 1)
+        
+        lightpath = nodes.new("ShaderNodeLightPath")
+        lightpath.location = (-400, 100)
+        lightpath.hide = True
+
+        skytex = nodes.new("ShaderNodeTexEnvironment")
+        skytex.location = (-450, 400)
+
+        mapskytex = nodes.new("ShaderNodeMapping")
+        mapskytex.location = (-680, 440)
+        mapskytex.name = "Mapping Sky"
+        mapskytex.label = "Mapping Sky"
+        mapskytex.inputs[2].default_value[2] = radians(100)
+
+        texcoord1 = nodes.new("ShaderNodeTexCoord")
+        texcoord1.location = (-880, 440)        
+
+        # connect nodes
+        link = scene.world.node_tree.links.new
+
+        link(mixshader.outputs[0], worldoutput.inputs[0])
+        link(BG1.outputs[0], mixshader.inputs[1])
+        link(BG2.outputs[0], mixshader.inputs[2])
+        link(lightpath.outputs[0], mixshader.inputs[0])
+        link(lightpath.outputs[5], skyclamp.inputs[0])
+        link(skytex.outputs[0], skyclamp.inputs[1])
+        link(skyclamp.outputs[0], BG1.inputs[0])
+        link(mapskytex.outputs[0], skytex.inputs[0])
+        link(texcoord1.outputs[0], mapskytex.inputs[0])
+
+        # load the texture from Blender data folder
+        hdri = bpy.data.images.load(
+            context.preferences.studio_lights['sunset.exr'].path, check_existing=True)
+        skytex.image = hdri
+
+        # BG nodes        
         flat_gradient = nodes.new("ShaderNodeMixRGB")
         flat_gradient.location = (-180, -120)
         flat_gradient.name = "Flat to Gradient"
         flat_gradient.label = "Flat to Gradient"
-#        flat_gradient.mute = True
 
         sky1 = nodes.new("ShaderNodeRGB")
         sky1.location = (-680, -440)
@@ -724,14 +764,10 @@ class WORLD_OT_fuzzy_sky(Operator):
         grad_scale.label = "Scale Gradient"
         grad_scale.name = "Scale Gradient"
 
-        texcoord = nodes.new("ShaderNodeTexCoord")
-        texcoord.location = (-1700, 0)
+        texcoord2 = nodes.new("ShaderNodeTexCoord")
+        texcoord2.location = (-1700, 0)
 
-        link = scene.world.node_tree.links.new
-
-        link(mixshader.outputs[0], worldoutput.inputs[0])
-        link(BG1.outputs[0], mixshader.inputs[1])
-        link(BG2.outputs[0], mixshader.inputs[2])
+        # connect nodes
         link(flat_gradient.outputs[0], BG2.inputs[0])
         link(swapsky1.outputs[0], flat_gradient.inputs[1])
         link(swapsky2.outputs[0], flat_gradient.inputs[2])
@@ -747,47 +783,15 @@ class WORLD_OT_fuzzy_sky(Operator):
         link(invert.outputs[0], ramp_radial.inputs[0])
         link(mapsphere.outputs[0], gradsphere.inputs[0])
         link(maplinear.outputs[0], window_3d.inputs[1])
-        link(texcoord.outputs[5], mapsphere.inputs[0])
-        link(texcoord.outputs[5], maplinear.inputs[0])
+        link(texcoord2.outputs[5], mapsphere.inputs[0])
+        link(texcoord2.outputs[5], maplinear.inputs[0])
         link(window_3d.outputs[0], gradlinear.inputs[0])
         link(maplinear3d.outputs[0], window_3d.inputs[2])
-        link(texcoord.outputs[0], divide.inputs[1])
+        link(texcoord2.outputs[0], divide.inputs[1])
         link(divide.outputs[0], maplinear3d.inputs[0])
         link(grad_scale.outputs[0], divide.inputs[2])
-        
-        skyclamp = nodes.new("ShaderNodeMixRGB")
-        skyclamp.location = (-180, 200)
-        skyclamp.blend_type = 'DARKEN'
-        skyclamp.inputs[2].default_value = (10,10,10, 1)
-        
-        lightpath = nodes.new("ShaderNodeLightPath")
-        lightpath.location = (-400, 100)
-        lightpath.hide = True
 
-        skytex = nodes.new("ShaderNodeTexEnvironment")
-        skytex.location = (-450, 400)
-
-        mapskytex = nodes.new("ShaderNodeMapping")
-        mapskytex.location = (-680, 440)
-        mapskytex.name = "Mapping Sky"
-        mapskytex.label = "Mapping Sky"
-        mapskytex.inputs[2].default_value[2] = radians(100)
-
-        texcoord1 = nodes.new("ShaderNodeTexCoord")
-        texcoord1.location = (-880, 440)        
-
-        link(lightpath.outputs[0], mixshader.inputs[0])
-        link(lightpath.outputs[5], skyclamp.inputs[0])
-        link(skytex.outputs[0], skyclamp.inputs[1])
-        link(skyclamp.outputs[0], BG1.inputs[0])
-        link(mapskytex.outputs[0], skytex.inputs[0])
-        link(texcoord1.outputs[0], mapskytex.inputs[0])
-
-        # load the texture from Blender data folder
-        hdri = bpy.data.images.load(
-            context.preferences.studio_lights['sunset.exr'].path, check_existing=True)
-        skytex.image = hdri
-
+        # reset Fuzzy properties
         try:
             scene['fuzzy_props'].clear()
         except KeyError:
