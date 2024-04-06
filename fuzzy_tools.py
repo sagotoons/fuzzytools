@@ -90,7 +90,8 @@ character_list = {
 
 def update_fuzzy(self, context):
     scene = context.scene
-    node = scene.world.node_tree.nodes
+    HDR_node = scene.world.node_tree.nodes
+    node = bpy.data.node_groups['Fuzzy BG'].nodes
 
     try:
         node["BG Color 1"].outputs[0].default_value[0:3] = self.bgcolor1
@@ -111,9 +112,9 @@ def update_fuzzy(self, context):
 
         node["Scale Gradient"].outputs[0].default_value = self.gradient_scale
 
-        node["Mapping Sky"].inputs[2].default_value[2] = self.hdri_rotation
+        HDR_node["Mapping Sky"].inputs[2].default_value[2] = self.hdri_rotation
 
-        node["Background"].inputs[1].default_value = self.hdri_strength
+        HDR_node["Background"].inputs[1].default_value = self.hdri_strength
         
     except KeyError:
         pass
@@ -651,7 +652,6 @@ class WORLD_OT_fuzzy_sky(Operator):
 
         # connect nodes
         link = scene.world.node_tree.links.new
-
         link(mixshader.outputs[0], worldoutput.inputs[0])
         link(BG1.outputs[0], mixshader.inputs[1])
         link(BG2.outputs[0], mixshader.inputs[2])
@@ -667,7 +667,25 @@ class WORLD_OT_fuzzy_sky(Operator):
             context.preferences.studio_lights['sunset.exr'].path, check_existing=True)
         skytex.image = hdri
 
-        # BG nodes        
+        # check for Fuzzy BG node group and remove
+        BG = 'Fuzzy BG'
+        groups = bpy.data.node_groups
+        if BG in groups:
+            groups.remove(groups[BG])
+
+        # create Fuzzy BG node group
+        BG_group = groups.new(BG, 'ShaderNodeTree')
+        BG_group.interface.new_socket("Color", in_out='OUTPUT',
+                                      socket_type='NodeSocketColor')
+
+        # create empty group node and apply Fuzzy BG
+        group = nodes.new("ShaderNodeGroup")
+        group.location = (-300, -200)
+        group.node_tree = BG_group
+        
+        # BG group nodes
+        nodes = BG_group.nodes
+        
         flat_gradient = nodes.new("ShaderNodeMixRGB")
         flat_gradient.location = (-180, -120)
         flat_gradient.name = "Flat to Gradient"
@@ -772,8 +790,14 @@ class WORLD_OT_fuzzy_sky(Operator):
         vec_trans.vector_type = 'NORMAL'
         vec_trans.convert_from = 'CAMERA'
 
+        output = nodes.new("NodeGroupOutput")
+        output.location = (60, -100)
+
         # connect nodes
-        link(flat_gradient.outputs[0], BG2.inputs[0])
+        link(group.outputs[0], BG2.inputs[0])
+        # connect group nodes
+        link = BG_group.links.new
+        link(flat_gradient.outputs[0], outputs.inputs[0])
         link(swapsky1.outputs[0], flat_gradient.inputs[1])
         link(swapsky2.outputs[0], flat_gradient.inputs[2])
         link(sky1.outputs[0], swapsky1.inputs[2])
