@@ -797,7 +797,7 @@ class WORLD_OT_fuzzy_sky(Operator):
         link(group.outputs[0], BG2.inputs[0])
         # connect group nodes
         link = BG_group.links.new
-        link(flat_gradient.outputs[0], outputs.inputs[0])
+        link(flat_gradient.outputs[0], output.inputs[0])
         link(swapsky1.outputs[0], flat_gradient.inputs[1])
         link(swapsky2.outputs[0], flat_gradient.inputs[2])
         link(sky1.outputs[0], swapsky1.inputs[2])
