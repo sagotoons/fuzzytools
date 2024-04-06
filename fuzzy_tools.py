@@ -3,7 +3,7 @@
 bl_info = {
     "name" : "Fuzzy Tools",
     "author" : "Sacha Goedegebure",
-    "version" : (1,1,1),
+    "version" : (1,1,1), ## upgrades in progress. Check for official v1.1.1 release in case of bugs
     "blender" : (3,6,0),
     "location" : "View3d > Sidebar > Fuzzy. Alt+M to move keyframes and markers",
     "description" : "Tools for an efficient 1-person pipeline and multi-camera workflow",
@@ -773,12 +773,15 @@ class WORLD_OT_fuzzy_sky(Operator):
         mapskytex.label = "Mapping Sky"
         mapskytex.inputs[2].default_value[2] = radians(100)
 
+        texcoord1 = nodes.new("ShaderNodeTexCoord")
+        texcoord1.location = (-880, 440)        
+
         link(lightpath.outputs[0], mixshader.inputs[0])
         link(lightpath.outputs[5], skyclamp.inputs[0])
         link(skytex.outputs[0], skyclamp.inputs[1])
         link(skyclamp.outputs[0], BG1.inputs[0])
         link(mapskytex.outputs[0], skytex.inputs[0])
-        link(texcoord.outputs[0], mapskytex.inputs[0])
+        link(texcoord1.outputs[0], mapskytex.inputs[0])
 
         # load the texture from Blender data folder
         hdri = bpy.data.images.load(
