@@ -765,7 +765,12 @@ class WORLD_OT_fuzzy_sky(Operator):
         grad_scale.name = "Scale Gradient"
 
         texcoord2 = nodes.new("ShaderNodeTexCoord")
-        texcoord2.location = (-1700, 0)
+        texcoord2.location = (-1860, -100)
+
+        vec_trans = nodes.new("ShaderNodeVectorTransform")
+        vec_trans.location = (-1650, -300)
+        vec_trans.vector_type = 'NORMAL'
+        vec_trans.convert_from = 'CAMERA'
 
         # connect nodes
         link(flat_gradient.outputs[0], BG2.inputs[0])
@@ -787,7 +792,8 @@ class WORLD_OT_fuzzy_sky(Operator):
         link(texcoord2.outputs[5], maplinear.inputs[0])
         link(window_3d.outputs[0], gradlinear.inputs[0])
         link(maplinear3d.outputs[0], window_3d.inputs[2])
-        link(texcoord2.outputs[0], divide.inputs[1])
+        link(texcoord2.outputs[4], vec_trans.inputs[0])
+        link(vec_trans.outputs[0], divide.inputs[1])
         link(divide.outputs[0], maplinear3d.inputs[0])
         link(grad_scale.outputs[0], divide.inputs[2])
 
