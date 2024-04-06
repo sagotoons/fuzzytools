@@ -675,8 +675,11 @@ class WORLD_OT_fuzzy_sky(Operator):
 
         # create Fuzzy BG node group
         BG_group = groups.new(BG, 'ShaderNodeTree')
-        BG_group.interface.new_socket("Color", in_out='OUTPUT',
-                                      socket_type='NodeSocketColor')
+        if bpy.app.version_string.startswith('3'):
+            BG_group.outputs.new('NodeSocketColor', "Color")
+        else:
+            BG_group.interface.new_socket("Color", in_out='OUTPUT',
+                                          socket_type='NodeSocketColor')
 
         # create empty group node and apply Fuzzy BG
         group = nodes.new("ShaderNodeGroup")
