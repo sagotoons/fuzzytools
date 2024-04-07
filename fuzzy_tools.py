@@ -520,7 +520,7 @@ Delete the default cube"""
         shadow.inputs[0].default_value = (0, 0, 0, 1)
 
         transparent = nodes.new("ShaderNodeBsdfTransparent")
-        transparent.location = (0, -160)
+        transparent.location = (-200, -160)
 
         clamp_shadow = nodes.new("ShaderNodeClamp")
         clamp_shadow.location = (0, 160)
@@ -543,18 +543,38 @@ Delete the default cube"""
         value_floor = nodes.new("ShaderNodeValue")
         value_floor.location = (-380, -100)
 
-        link = mat.node_tree.links.new
+        alpha_mix = nodes.new("ShaderNodeMixShader")
+        alpha_mix.name = "Floor Alpha"
+        alpha_mix.location = (0, -160)
 
+        BG_group = nodes.new("ShaderNodeGroup")
+        BG_group.name = "Floor Group"
+        BG_group.location = (-200, -260)
+
+        # check for Fuzzy BG node group
+        BG = 'Fuzzy BG'
+        groups = bpy.data.node_groups
+        if BG not in groups:
+            alpha_mix.inputs[0].default_value = 0.0
+        else:
+            alpha_mix.inputs[0].default_value = 1.0
+            BG_group.node_tree = groups[BG]
+
+        # link nodes
+        link = mat.node_tree.links.new
         link(mixshader.outputs[0], matoutput.inputs[0])
         link(shadow.outputs[0], mixshader.inputs[1])
-        link(transparent.outputs[0], mixshader.inputs[2])
+        link(transparent.outputs[0], alpha_mix.inputs[1])
+        link(alpha_mix.outputs[0], mixshader.inputs[2])
         link(clamp_shadow.outputs[0], mixshader.inputs[0])
         link(RGB_BW.outputs[0], dodge_floor.inputs[1])
         link(shader_RGB.outputs[0], RGB_BW.inputs[0])
         link(diffuse.outputs[0], shader_RGB.inputs[0])
         link(dodge_floor.outputs[0], clamp_shadow.inputs[0])
         link(value_floor.outputs[0], dodge_floor.inputs[2])
-
+        if BG in groups:
+            link(BG_group.outputs[0], alpha_mix.inputs[2])
+        
         # material settings
         mat.use_backface_culling = True
         mat.blend_method = 'BLEND'
@@ -824,6 +844,16 @@ class WORLD_OT_fuzzy_sky(Operator):
         link(divide.outputs[0], maplinear3d.inputs[0])
         link(grad_scale.outputs[0], divide.inputs[2])
 
+        # check for Fuzzy Floor and set Fuzzy BG node group
+        obj = bpy.data.objects
+        if 'Fuzzy floor' in obj:
+            tree = bpy.data.materials['floor_shadow'].node_tree
+            floor_group = tree.nodes['Floor Group']
+            floor_alpha = tree.nodes['Floor Alpha']
+            floor_group.node_tree = BG_group
+            tree.links.new(floor_group.outputs[0], floor_alpha.inputs[2])
+            floor_alpha.inputs[0].default_value = 1.0
+            
         # reset Fuzzy properties
         try:
             scene['fuzzy_props'].clear()
