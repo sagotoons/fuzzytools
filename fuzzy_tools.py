@@ -1554,7 +1554,7 @@ class FloorPanel(BuildSceneChild, Panel):
         col.prop(fuzzyprops, "floor_dodge")
         if 'Fuzzy BG' in bpy.data.node_groups:
             col = layout.column(heading="Floor")
-            node = bpy.data.materials('floor_shadow').node_tree.nodes['Floor Alpha']
+            node = bpy.data.materials['floor_shadow'].node_tree.nodes['Floor Alpha']
             col.prop(node, 'mute', text="Transparent")
 
 
