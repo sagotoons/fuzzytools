@@ -519,8 +519,8 @@ Delete the default cube"""
         shadow.location = (0, -20)
         shadow.inputs[0].default_value = (0, 0, 0, 1)
 
-        transparent = nodes.new("ShaderNodeBsdfTransparent")
-        transparent.location = (-200, -160)
+        holdout = nodes.new("ShaderNodeHoldout")
+        holdout.location = (-200, -160)
 
         clamp_shadow = nodes.new("ShaderNodeClamp")
         clamp_shadow.location = (0, 160)
@@ -564,7 +564,7 @@ Delete the default cube"""
         link = mat.node_tree.links.new
         link(mixshader.outputs[0], matoutput.inputs[0])
         link(shadow.outputs[0], mixshader.inputs[1])
-        link(transparent.outputs[0], alpha_mix.inputs[1])
+        link(holdout.outputs[0], alpha_mix.inputs[1])
         link(alpha_mix.outputs[0], mixshader.inputs[2])
         link(clamp_shadow.outputs[0], mixshader.inputs[0])
         link(RGB_BW.outputs[0], dodge_floor.inputs[1])
@@ -1555,7 +1555,7 @@ class FloorPanel(BuildSceneChild, Panel):
         if 'Fuzzy BG' in bpy.data.node_groups:
             col = layout.column(heading="Floor")
             node = bpy.data.materials['floor_shadow'].node_tree.nodes['Floor Alpha']
-            col.prop(node, 'mute', text="Transparent")
+            col.prop(node, 'mute', text="Holdout")
 
 
 # ------------------------------------------------------------------------
