@@ -1553,9 +1553,12 @@ class FloorPanel(BuildSceneChild, Panel):
         col.prop(fuzzyprops, "shadow_clamp")
         col.prop(fuzzyprops, "floor_dodge")
         if 'Fuzzy BG' in bpy.data.node_groups:
-            col = layout.column(heading="Floor")
-            node = bpy.data.materials['floor_shadow'].node_tree.nodes['Floor Alpha']
-            col.prop(node, 'mute', text="Holdout")
+            try:
+                col = layout.column(heading="Floor")
+                node = bpy.data.materials['floor_shadow'].node_tree.nodes['Floor Alpha']
+                col.prop(node, 'mute', text="Holdout")
+            except KeyError:
+                pass
 
 
 # ------------------------------------------------------------------------
