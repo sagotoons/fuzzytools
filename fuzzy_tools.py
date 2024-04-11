@@ -526,13 +526,13 @@ Delete the default cube"""
         clamp_shadow.location = (0, 160)
 
         RGB_BW = nodes.new("ShaderNodeRGBToBW")
-        RGB_BW.location = (-380, 0)
+        RGB_BW.location = (-570, 0)
 
         shader_RGB = nodes.new("ShaderNodeShaderToRGB")
-        shader_RGB.location = (-570, 0)
+        shader_RGB.location = (-770, 0)
 
         diffuse = nodes.new("ShaderNodeBsdfDiffuse")
-        diffuse.location = (-770, 0)
+        diffuse.location = (-970, -100)
         diffuse.inputs[0].default_value = (1, 1, 1, 1)
 
         dodge_floor = nodes.new("ShaderNodeMixRGB")
@@ -540,8 +540,21 @@ Delete the default cube"""
         dodge_floor.inputs[0].default_value = 1
         dodge_floor.blend_type = 'DODGE'
 
+        softlight = nodes.new("ShaderNodeMixRGB")
+        softlight.location = (-380, 80)
+        softlight.inputs[0].default_value = 1
+        softlight.blend_type = 'SOFT_LIGHT'
+
+        brightness = nodes.new("ShaderNodeMix")
+        brightness.name = "Brightness"
+        brightness.location = (-570, 200)
+        brightness.clamp_factor = False
+        brightness.inputs[0].default_value = 1
+        brightness.inputs[2].default_value = -0.5
+        brightness.inputs[3].default_value = 0.5
+
         value_floor = nodes.new("ShaderNodeValue")
-        value_floor.location = (-380, -100)
+        value_floor.location = (-380, -200)
 
         alpha_mix = nodes.new("ShaderNodeMixShader")
         alpha_mix.name = "Floor Alpha"
@@ -567,7 +580,9 @@ Delete the default cube"""
         link(holdout.outputs[0], alpha_mix.inputs[1])
         link(alpha_mix.outputs[0], mixshader.inputs[2])
         link(clamp_shadow.outputs[0], mixshader.inputs[0])
-        link(RGB_BW.outputs[0], dodge_floor.inputs[1])
+        link(RGB_BW.outputs[0], softlight.inputs[1])
+        link(brightness.outputs[0], softlight.inputs[2])
+        link(softlight.outputs[0], dodge_floor.inputs[1])
         link(shader_RGB.outputs[0], RGB_BW.inputs[0])
         link(diffuse.outputs[0], shader_RGB.inputs[0])
         link(dodge_floor.outputs[0], clamp_shadow.inputs[0])
