@@ -41,7 +41,7 @@ Quick access to different camera settings and operators, including:
 - after successful installation, the add-on should appear in the add-ons list. Click the checkbox beside the add-on to enable it
 
 #
-_Fuzzy Tools should work in blender 3.6 and 4.0_
+_Fuzzy Tools should work in blender 3.6, 4.0 and 4.1_
 
 #
 If you enjoy Fuzzy Tools, please consider supporting me on PayPal:
