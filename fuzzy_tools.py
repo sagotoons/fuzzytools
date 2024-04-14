@@ -3,7 +3,7 @@
 bl_info = {
     "name" : "Fuzzy Tools",
     "author" : "Sacha Goedegebure",
-    "version" : (1,1,1), ## upgrades in progress. Check for official v1.1.1 release in case of bugs
+    "version" : (1,2),
     "blender" : (3,6,0),
     "location" : "View3d > Sidebar > Fuzzy. Alt+M to move keyframes and markers",
     "description" : "Tools for an efficient 1-person pipeline and multi-camera workflow",
