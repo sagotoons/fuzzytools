@@ -816,9 +816,14 @@ class WORLD_OT_fuzzy_sky(Operator):
         divide.inputs[0].default_value = 1
 
         grad_scale = nodes.new("ShaderNodeValue")
-        grad_scale.location = (-1650, -480)
+        grad_scale.location = (-1860, -500)
         grad_scale.label = "Scale Gradient"
         grad_scale.name = "Scale Gradient"
+
+        power = nodes.new("ShaderNodeMath")
+        power.location = (-1650, -480)
+        power.operation = 'POWER'
+        power.inputs[1].default_value = 2.5
 
         texcoord2 = nodes.new("ShaderNodeTexCoord")
         texcoord2.location = (-1860, -100)
@@ -857,7 +862,8 @@ class WORLD_OT_fuzzy_sky(Operator):
         link(texcoord2.outputs[4], vec_trans.inputs[0])
         link(vec_trans.outputs[0], divide.inputs[1])
         link(divide.outputs[0], maplinear3d.inputs[0])
-        link(grad_scale.outputs[0], divide.inputs[2])
+        link(grad_scale.outputs[0], power.inputs[0])
+        link(power.outputs[0], divide.inputs[2])
 
         # check for Fuzzy Floor and set Fuzzy BG node group
         obj = bpy.data.objects
