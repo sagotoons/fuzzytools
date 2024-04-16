@@ -823,7 +823,7 @@ class WORLD_OT_fuzzy_sky(Operator):
         power = nodes.new("ShaderNodeMath")
         power.location = (-1650, -480)
         power.operation = 'POWER'
-        power.inputs[1].default_value = 2.5
+        power.inputs[1].default_value = 2
 
         texcoord2 = nodes.new("ShaderNodeTexCoord")
         texcoord2.location = (-1860, -100)
