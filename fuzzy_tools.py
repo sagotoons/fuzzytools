@@ -1052,11 +1052,10 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
 
         # EEVEE RENDER PROPERTIES
         render.engine = 'BLENDER_EEVEE'
-#        eevee.taa_render_samples = 64
-#        eevee.taa_samples = 16
         # ambient occlusion
         eevee.use_gtao = True
         eevee.gtao_distance = 2.0
+        eevee.use_gtao_bent_normals = False
         # bloom
         eevee.use_bloom = True
         eevee.bloom_threshold = 1.0
@@ -1065,13 +1064,11 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         eevee.bokeh_max_size = 3
         eevee.use_bokeh_jittered = True
         # screen space reflection
- #       eevee.use_ssr = False
         eevee.use_ssr_refraction = True
         eevee.use_ssr_halfres = False
         eevee.ssr_quality = 1
         # hair
         render.hair_type = 'STRIP'
-#        render.hair_subdiv = 0
         # shadow
         eevee.shadow_cascade_size = '4096'
         eevee.shadow_cube_size = '2048'
