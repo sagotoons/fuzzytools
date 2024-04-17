@@ -1054,7 +1054,8 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         render.engine = 'BLENDER_EEVEE'
         # ambient occlusion
         eevee.use_gtao = True
-        eevee.gtao_distance = 2.0
+        eevee.gtao_distance = 1.6
+        eevee.gtao_factor = 0.7
         eevee.use_gtao_bent_normals = False
         # bloom
         eevee.use_bloom = True
