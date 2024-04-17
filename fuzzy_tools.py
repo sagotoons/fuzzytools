@@ -393,7 +393,7 @@ Delete the default camera"""
         data.clip_start = clip_start
         data.clip_end = clip_end
         data.lens = lens
-        data.passepartout_alpha = 0.95
+        data.passepartout_alpha = 0.8
         data.dof.focus_distance = abs(loc_y)
 
         # make new camera active
@@ -1049,6 +1049,7 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         render = scene.render
         eevee = scene.eevee
         view = scene.view_settings
+        space = context.space_data
 
         # EEVEE RENDER PROPERTIES
         render.engine = 'BLENDER_EEVEE'
@@ -1078,6 +1079,9 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         view.view_transform = 'Filmic'
         view.exposure = 1.4
         view.gamma = 0.6
+        # overlay
+        space.shading.use_scene_world = True
+        space.overlay.show_look_dev = True
                
         return {'FINISHED'}
 
