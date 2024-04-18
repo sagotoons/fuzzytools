@@ -1532,9 +1532,16 @@ class HDRIPanel(BuildSceneChild, Panel):
         col = layout.column(align=True)
         col.use_property_split = True
         col.use_property_decorate = False
-        col.prop(nodes["Mapping Sky"].inputs[2], 'default_value', index=2, text='Rotation')
-        col.prop(nodes["HDRI Strength"].inputs[1], 'default_value', text='Strength')
+        
+        properties = [
+            (nodes.get("Mapping Sky", None), 2, 2, 'Rotation'),
+            (nodes.get("HDRI Strength", None), 1, -1, 'Strength')
+        ]
 
+        for node, index1, index2, label in properties:
+            if node is not None:
+                col.prop(node.inputs[index1], 'default_value', index=index2, text=label)
+                
 
 class FloorPanel(BuildSceneChild, Panel):
     bl_label = "Floor Shadow"
