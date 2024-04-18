@@ -460,6 +460,7 @@ Delete the default cube"""
         normal.mode = 'DIRECTIONAL'
         normal.use_direction_parallel = True
         normal.target = bpy.data.objects["floor normal"]
+        normal.no_polynors_fix = True
 
         # object settings
         floor.hide_select = True
