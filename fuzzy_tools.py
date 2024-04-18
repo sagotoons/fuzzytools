@@ -680,10 +680,13 @@ class WORLD_OT_fuzzy_sky(Operator):
         mapskytex.location = (-680, 440)
         mapskytex.name = "Mapping Sky"
         mapskytex.label = "Mapping Sky"
-        mapskytex.inputs[2].default_value[2] = radians(100)
+
+        mapskytex2 = nodes.new("ShaderNodeMapping")
+        mapskytex2.location = (-880, 440)
+        mapskytex2.inputs[2].default_value[2] = radians(90)
 
         texcoord1 = nodes.new("ShaderNodeTexCoord")
-        texcoord1.location = (-880, 440)        
+        texcoord1.location = (-1080, 440)        
 
         # connect nodes
         link = scene.world.node_tree.links.new
@@ -695,7 +698,8 @@ class WORLD_OT_fuzzy_sky(Operator):
         link(skytex.outputs[0], skyclamp.inputs[1])
         link(skyclamp.outputs[0], BG1.inputs[0])
         link(mapskytex.outputs[0], skytex.inputs[0])
-        link(texcoord1.outputs[0], mapskytex.inputs[0])
+        link(mapskytex2.outputs[0], mapskytex.inputs[0])
+        link(texcoord1.outputs[0], mapskytex2.inputs[0])
 
         # load the texture from Blender data folder
         hdri = bpy.data.images.load(
