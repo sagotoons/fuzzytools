@@ -434,10 +434,13 @@ Delete the default cube"""
         bpy.ops.object.empty_add(location=(10, -20, 20))
         empty = context.object
         empty.name = "floor_normal"
-        empty.empty_display_size = 4
+        empty.empty_display_size = 6
+        empty.empty_display_type = 'SINGLE ARROW'
         empty.show_name = True
-        empty.hide_viewport = True
         link_to_name = 'Set'
+        track = empty.constraints.new('DAMPED_TRACK')
+        track.target = floor
+        track.track_axis = 'TRACK_Z'
         
         # link empty to collection 'Set'
         oldcoll = empty.users_collection[0].name
