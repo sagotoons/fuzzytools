@@ -111,10 +111,6 @@ def update_fuzzy(self, context):
         node["Linear Ease"].mute = not self.linear_coord
 
         node["Scale Gradient"].outputs[0].default_value = self.gradient_scale
-
-        HDR_node["Mapping Sky"].inputs[2].default_value[2] = self.hdri_rotation
-
-        HDR_node["Background"].inputs[1].default_value = self.hdri_strength
         
     except KeyError:
         pass
@@ -244,26 +240,6 @@ Enables/disables automatically during rendering""",
         default=0.5,
         min=0.001,
         max=1,
-        update=update_fuzzy
-    )
-
-    hdri_rotation: FloatProperty(
-        name="HDRI Rotation",
-        description="Rotation of HDRI environment texture",
-        default=radians(100),
-        step=8,
-        precision=3,
-        unit='ROTATION',
-        update=update_fuzzy
-    )
-
-    hdri_strength: FloatProperty(
-        name="HDRI Strength",
-        description="Strength of HDRI shader",
-        default=1.0,
-        min=0,
-        step=0.1,
-        precision=3,
         update=update_fuzzy
     )
 
@@ -660,6 +636,8 @@ class WORLD_OT_fuzzy_sky(Operator):
         BG1 = nodes.new("ShaderNodeBackground")
         BG1.location = (0, 20)
         BG1.inputs[1].default_value = (1.0)
+        BG1.name = 'HDRI Strength'
+        BG1.label = 'HDRI Strength'
 
         BG2 = nodes.new("ShaderNodeBackground")
         BG2.location = (0, -100)
@@ -1548,14 +1526,14 @@ class HDRIPanel(BuildSceneChild, Panel):
 
     def draw(self, context):
         scene = context.scene
-        fuzzyprops = scene.fuzzy_props
+        nodes = scene.world.node_tree.nodes
 
         layout = self.layout
         col = layout.column(align=True)
         col.use_property_split = True
         col.use_property_decorate = False
-        col.prop(fuzzyprops, "hdri_rotation", text='Rotation')
-        col.prop(fuzzyprops, "hdri_strength", text='Strength')
+        col.prop(nodes["Mapping Sky"].inputs[2], 'default_value', index=2, text='Rotation')
+        col.prop(nodes["HDRI Strength"].inputs[1], 'default_value', text='Strength')
 
 
 class FloorPanel(BuildSceneChild, Panel):
