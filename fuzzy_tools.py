@@ -656,8 +656,8 @@ class WORLD_OT_fuzzy_sky(Operator):
 
         mapskytex = nodes.new("ShaderNodeMapping")
         mapskytex.location = (-680, 440)
-        mapskytex.name = "Mapping Sky"
-        mapskytex.label = "Mapping Sky"
+        mapskytex.name = "HDRI Rotation"
+        mapskytex.label = "HDRI Rotation"
 
         mapskytex2 = nodes.new("ShaderNodeMapping")
         mapskytex2.location = (-880, 440)
@@ -1534,7 +1534,7 @@ class HDRIPanel(BuildSceneChild, Panel):
         col.use_property_decorate = False
         
         properties = [
-            (nodes.get("Mapping Sky", None), 2, 2, 'Rotation'),
+            (nodes.get("HDRI Rotation", None), 2, 2, 'Rotation'),
             (nodes.get("HDRI Strength", None), 1, -1, 'Strength')
         ]
 
