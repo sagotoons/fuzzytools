@@ -1748,6 +1748,7 @@ class VIEW3D_PT_scene(Panel):
 
         row = layout.row(align=True)
         row.prop(scene, "camera", text="Active", icon='CAMERA_DATA')
+        row.operator('view3d.view_camera', text='', icon='VIEWZOOM')
         row.operator('view3d.camera_to_view', text='', icon='DECORATE_OVERRIDE')
 
         col = layout.column()
