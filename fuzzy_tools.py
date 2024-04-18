@@ -403,7 +403,7 @@ Delete the default cube"""
         objects = scene.objects
 
         # delete objects
-        for name in ["Cube", "Fuzzy floor", "Floor normal"]:
+        for name in ["Cube", "Fuzzy floor", "floor normal"]:
             if name in objects:
                 bpy.data.objects.remove(bpy.data.objects[name])
 
@@ -433,7 +433,7 @@ Delete the default cube"""
         # create empty as Target for floor Normal Edit modifier
         bpy.ops.object.empty_add(location=(10, -20, 20))
         empty = context.object
-        empty.name = "Floor normal"
+        empty.name = "floor normal"
         empty.empty_display_size = 6
         empty.empty_display_type = 'SINGLE_ARROW'
         empty.show_name = True
@@ -460,7 +460,7 @@ Delete the default cube"""
         normal = floor.modifiers.new("Normal Direction", 'NORMAL_EDIT')
         normal.mode = 'DIRECTIONAL'
         normal.use_direction_parallel = True
-        normal.target = bpy.data.objects["Floor normal"]
+        normal.target = bpy.data.objects["floor normal"]
 
         # object settings
         floor.hide_select = True
