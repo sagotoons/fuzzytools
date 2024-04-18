@@ -1703,7 +1703,6 @@ class VIEW3D_PT_cameras(Panel):
     bl_options = {'DEFAULT_CLOSED'}
     bl_order = 3
 
-
     def draw_header_preset(self, context):
         scene = context.scene
         fuzzyprops = scene.fuzzy_props
@@ -1731,20 +1730,24 @@ class VIEW3D_PT_scene(Panel):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_parent_id = 'VIEW3D_PT_cameras'
+    bl_options = {'DEFAULT_CLOSED'}
 
+    def draw_header_preset(self, context):
+        layout = self.layout
+        scene = context.scene
+        object = context.active_object
+        layout.scale_x = 1.2        
+        if object != scene.camera:
+            if scene.camera.name not in context.view_layer.objects:
+                layout.enabled = False
+            layout.operator("object.select_camera", text="", icon='RESTRICT_SELECT_OFF')
+        
     def draw(self, context):
         scene = context.scene
         layout = self.layout
 
         row = layout.row(align=True)
         row.prop(scene, "camera", text="Active", icon='CAMERA_DATA')
-        try:
-            row1 = row.row(align=True)
-            if scene.camera.name not in context.view_layer.objects:
-               row1.enabled = False
-            row1.operator("object.select_camera", text="", icon='RESTRICT_SELECT_OFF')
-        except AttributeError:
-            pass
         row.operator('view3d.camera_to_view', text='', icon='DECORATE_OVERRIDE')
 
         col = layout.column()
