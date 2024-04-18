@@ -431,12 +431,11 @@ Delete the default cube"""
         bpy.data.collections['Set'].objects.link(floor)
 
         # create empty as Target for floor Normal Edit modifier
-        bpy.ops.object.empty_add(location=(10, -20, 20))
+        bpy.ops.object.empty_add(location=(15, -20, 20))
         empty = context.object
         empty.name = "floor normal"
         empty.empty_display_size = 6
         empty.empty_display_type = 'SINGLE_ARROW'
-        empty.show_name = True
         link_to_name = 'Set'
         track = empty.constraints.new('DAMPED_TRACK')
         track.target = floor
