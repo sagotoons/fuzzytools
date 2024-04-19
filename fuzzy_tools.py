@@ -245,7 +245,7 @@ Enables/disables automatically during rendering""",
 
     shadow_clamp: FloatProperty(
         name="Clamp Min",
-        description="Brighten darkest part of floor shadow",
+        description="Brighten darkest part of floor",
         default=0.1,
         min=0, max=1,
         update=update_fuzzyfloor
@@ -1563,13 +1563,17 @@ class FloorPanel(BuildSceneChild, Panel):
         fuzzyprops = scene.fuzzy_props
 
         layout = self.layout
+        split = layout.split(factor=0.4)
+        split.alignment = 'RIGHT'
+        split.label(text="Brighten")
+        col = split.column(align=True)
+        col.prop(fuzzyprops, "shadow_clamp", text="Dark")
+        col.prop(fuzzyprops, "floor_dodge", text="Bright")
+          
         layout.use_property_split = True
         layout.use_property_decorate = False
         col = layout.column(align=True)
-        col.prop(fuzzyprops, "shadow_clamp")
-        col.prop(fuzzyprops, "floor_dodge")
         try:
-            col.separator()
             nodes = bpy.data.materials['floor_shadow'].node_tree.nodes
             col.prop(nodes['Shadow Value'].inputs[0], 'default_value', text="Value Fix")
             if 'Fuzzy BG' in bpy.data.node_groups:
