@@ -1592,7 +1592,7 @@ class VIEW3D_PT_viewport(Panel):
 
     def draw_header_preset(self, context):
         layout = self.layout
-        layout.scale_x = 0.8
+        layout.scale_x = 0.92
         layout.prop(context.space_data, "lens", text="")
 
     def draw(self, context):
