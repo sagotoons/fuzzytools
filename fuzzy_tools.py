@@ -1571,7 +1571,7 @@ class FloorPanel(BuildSceneChild, Panel):
         try:
             col.separator()
             nodes = bpy.data.materials['floor_shadow'].node_tree.nodes
-            col.prop(nodes['Shadow Value'].inputs[0], 'default_value', text="Tweak Value")
+            col.prop(nodes['Shadow Value'].inputs[0], 'default_value', text="Value Fix")
             if 'Fuzzy BG' in bpy.data.node_groups:
                 col = layout.column(heading="Floor")
                 col.prop(nodes['Floor Alpha'], 'mute', text="Holdout")
