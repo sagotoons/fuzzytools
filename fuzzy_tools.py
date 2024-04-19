@@ -122,7 +122,7 @@ def update_fuzzyfloor(self, context):
         node = bpy.data.materials['floor_shadow'].node_tree.nodes
         
         node["Clamp"].inputs[1].default_value = self.shadow_clamp
-        node["Value"].outputs[0].default_value = self.floor_dodge
+        node["Dodge Value"].outputs[0].default_value = self.floor_dodge
     
     except KeyError:
         pass
@@ -502,7 +502,7 @@ Delete the default cube"""
         holdout.location = (-200, -160)
 
         clamp_shadow = nodes.new("ShaderNodeClamp")
-        clamp_shadow.location = (0, 160)
+        clamp_shadow.location = (-200, 160)
 
         RGB_BW = nodes.new("ShaderNodeRGBToBW")
         RGB_BW.location = (-570, 0)
@@ -515,25 +515,26 @@ Delete the default cube"""
         diffuse.inputs[0].default_value = (1, 1, 1, 1)
 
         dodge_floor = nodes.new("ShaderNodeMixRGB")
-        dodge_floor.location = (-200, 80)
+        dodge_floor.location = (-380, 60)
         dodge_floor.inputs[0].default_value = 1
         dodge_floor.blend_type = 'DODGE'
 
-        softlight = nodes.new("ShaderNodeMixRGB")
-        softlight.location = (-380, 80)
-        softlight.inputs[0].default_value = 1
-        softlight.blend_type = 'SOFT_LIGHT'
+        power = nodes.new("ShaderNodeMath")
+        power.location = (0, 180)
+        power.operation = 'POWER'
+        power.use_clamp = True
 
-        brightness = nodes.new("ShaderNodeMix")
-        brightness.name = "Brightness"
-        brightness.location = (-570, 200)
-        brightness.clamp_factor = False
-        brightness.inputs[0].default_value = 1
-        brightness.inputs[2].default_value = -0.5
-        brightness.inputs[3].default_value = 0.5
+        value = nodes.new("ShaderNodeMath")
+        value.name = "Shadow Value"
+        value.location = (-380, 260)
+        value.operation = 'MULTIPLY_ADD'
+        value.inputs[0].default_value = 0
+        value.inputs[1].default_value = -1
+        value.inputs[2].default_value = 1
 
-        value_floor = nodes.new("ShaderNodeValue")
-        value_floor.location = (-380, -200)
+        value_dodge = nodes.new("ShaderNodeValue")
+        value_dodge.name = "Dodge Value"
+        value_dodge.location = (-570, -150)
 
         alpha_mix = nodes.new("ShaderNodeMixShader")
         alpha_mix.name = "Floor Alpha"
@@ -558,14 +559,14 @@ Delete the default cube"""
         link(shadow.outputs[0], mixshader.inputs[1])
         link(holdout.outputs[0], alpha_mix.inputs[1])
         link(alpha_mix.outputs[0], mixshader.inputs[2])
-        link(clamp_shadow.outputs[0], mixshader.inputs[0])
-        link(RGB_BW.outputs[0], softlight.inputs[1])
-        link(brightness.outputs[0], softlight.inputs[2])
-        link(softlight.outputs[0], dodge_floor.inputs[1])
+        link(clamp_shadow.outputs[0], power.inputs[0])
+        link(RGB_BW.outputs[0], dodge_floor.inputs[1])
+        link(value.outputs[0], power.inputs[1])
+        link(power.outputs[0], mixshader.inputs[0])
         link(shader_RGB.outputs[0], RGB_BW.inputs[0])
         link(diffuse.outputs[0], shader_RGB.inputs[0])
         link(dodge_floor.outputs[0], clamp_shadow.inputs[0])
-        link(value_floor.outputs[0], dodge_floor.inputs[2])
+        link(value_dodge.outputs[0], dodge_floor.inputs[2])
         if BG in groups:
             link(BG_group.outputs[0], alpha_mix.inputs[2])
         
@@ -1570,7 +1571,7 @@ class FloorPanel(BuildSceneChild, Panel):
         try:
             col.separator()
             nodes = bpy.data.materials['floor_shadow'].node_tree.nodes
-            col.prop(nodes['Brightness'].inputs[0], 'default_value', text="Brightness")
+            col.prop(nodes['Shadow Value'].inputs[0], 'default_value', text="Tweak Value")
             if 'Fuzzy BG' in bpy.data.node_groups:
                 col = layout.column(heading="Floor")
                 col.prop(nodes['Floor Alpha'], 'mute', text="Holdout")
