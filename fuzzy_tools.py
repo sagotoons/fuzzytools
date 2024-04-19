@@ -1675,19 +1675,20 @@ class VIEW3D_PT_miscellaneous(ViewportChild, Panel):
         space = context.space_data
         overlay = space.overlay
         shade = space.shading
+        object = context.object
         
         layout = self.layout
-        layout.use_property_split = True
-        layout.use_property_decorate = False
-        row = layout.row(align=True)
-        col = row.column(align=True, heading="Local")
-
-        col.prop(overlay, "show_relationship_lines", text="Relationship Lines")
-        col.prop(shade, "show_backface_culling") 
-        row = layout.row(heading="Object")
-        object = context.object
+        split = layout.split(factor=0.25)
+        split.alignment = 'RIGHT'
+        split.label(text='Local')
+        col1 = split.column(align=True)
+        col1.prop(overlay, "show_relationship_lines")
+        col1.prop(shade, "show_backface_culling")
         if object is not None:
-            row.prop(object, "show_in_front", text="Show in Front")
+            split = layout.split(factor=0.25)
+            split.alignment = 'RIGHT'
+            split.label(text='Object')
+            split.prop(object, "show_in_front", text="Show in Front")
 
 
 # ------------------------------------------------------------------------
