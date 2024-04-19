@@ -1579,11 +1579,11 @@ class FloorPanel(BuildSceneChild, Panel):
 
 
 # ------------------------------------------------------------------------
-#    PANELS - Fuzzy Viewport
+#    PANELS - Fuzzy View
 # ------------------------------------------------------------------------
 
 class VIEW3D_PT_viewport(Panel):
-    bl_label = "Fuzzy Viewport"
+    bl_label = "Fuzzy View"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = 'Fuzzy'
