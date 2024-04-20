@@ -116,23 +116,10 @@ def update_fuzzy(self, context):
         pass
 
 
-def update_fuzzyfloor(self, context):
-    
-    try:
-        node = bpy.data.materials['floor_shadow'].node_tree.nodes
-        
-        node["Clamp"].inputs[1].default_value = self.shadow_clamp
-        node["Dodge Value"].outputs[0].default_value = self.floor_dodge
-    
-    except KeyError:
-        pass
-
-
 def check(self):
     # update custom scene properties
     prop = self.fuzzy_props    
     prop.gradient = prop.gradient
-    prop.floor_dodge = prop.floor_dodge
    
     # check motion blur markers
     scene = bpy.context.scene
@@ -241,22 +228,6 @@ Enables/disables automatically during rendering""",
         min=0.001,
         max=1,
         update=update_fuzzy
-    )
-
-    shadow_clamp: FloatProperty(
-        name="Clamp Min",
-        description="Brighten darkest part of floor",
-        default=0.1,
-        min=0, max=1,
-        update=update_fuzzyfloor
-    )
-
-    floor_dodge: FloatProperty(
-        name="Dodge",
-        description="Brighten brightest part of floor",
-        default=0.1,
-        min=0, max=1,
-        update=update_fuzzyfloor
     )
 
 
@@ -495,14 +466,14 @@ Delete the default cube"""
         mixshader.location = (200, 60)
 
         shadow = nodes.new("ShaderNodeBsdfDiffuse")
-        shadow.location = (0, -20)
+        shadow.location = (0, 10)
         shadow.inputs[0].default_value = (0, 0, 0, 1)
 
         holdout = nodes.new("ShaderNodeHoldout")
         holdout.location = (-200, -160)
 
         clamp_shadow = nodes.new("ShaderNodeClamp")
-        clamp_shadow.location = (-200, 160)
+        clamp_shadow.location = (-200, 240)
 
         RGB_BW = nodes.new("ShaderNodeRGBToBW")
         RGB_BW.location = (-570, 0)
@@ -526,15 +497,23 @@ Delete the default cube"""
 
         value = nodes.new("ShaderNodeMath")
         value.name = "Shadow Value"
-        value.location = (-380, 260)
+        value.location = (-200, 60)
         value.operation = 'MULTIPLY_ADD'
         value.inputs[0].default_value = 0
         value.inputs[1].default_value = -1
         value.inputs[2].default_value = 1
 
-        value_dodge = nodes.new("ShaderNodeValue")
+        value_dodge = nodes.new("ShaderNodeMix")
         value_dodge.name = "Dodge Value"
         value_dodge.location = (-570, -150)
+        value_dodge.inputs[0].default_value = 0.1
+        value_dodge.inputs[3].default_value = 1
+
+        value_clamp = nodes.new("ShaderNodeMix")
+        value_clamp.name = "Clamp Value"
+        value_clamp.location = (-380, 260)
+        value_clamp.inputs[0].default_value = 0.1
+        value_clamp.inputs[3].default_value = 1
 
         alpha_mix = nodes.new("ShaderNodeMixShader")
         alpha_mix.name = "Floor Alpha"
@@ -567,6 +546,7 @@ Delete the default cube"""
         link(diffuse.outputs[0], shader_RGB.inputs[0])
         link(dodge_floor.outputs[0], clamp_shadow.inputs[0])
         link(value_dodge.outputs[0], dodge_floor.inputs[2])
+        link(value_clamp.outputs[0], alpha_mix.inputs[1])
         if BG in groups:
             link(BG_group.outputs[0], alpha_mix.inputs[2])
         
@@ -590,10 +570,6 @@ Delete the default cube"""
         space = context.space_data
         space.shading.show_backface_culling = True
         space.overlay.show_relationship_lines = False
-        
-        # scene builder properties
-        scene.fuzzy_props.shadow_clamp = 0.1
-        scene.fuzzy_props.floor_dodge = 0.1
 
         return {'FINISHED'}
 
@@ -1560,27 +1536,29 @@ class FloorPanel(BuildSceneChild, Panel):
 
     def draw(self, context):
         scene = context.scene
-        fuzzyprops = scene.fuzzy_props
 
-        layout = self.layout
-        split = layout.split(factor=0.4)
-        split.alignment = 'RIGHT'
-        split.label(text="Brighten")
-        col = split.column(align=True)
-        col.prop(fuzzyprops, "shadow_clamp", text="Dark")
-        col.prop(fuzzyprops, "floor_dodge", text="Bright")
-          
-        layout.use_property_split = True
-        layout.use_property_decorate = False
-        col = layout.column(align=True)
         try:
             nodes = bpy.data.materials['floor_shadow'].node_tree.nodes
-            col.prop(nodes['Shadow Value'].inputs[0], 'default_value', text="Value Fix")
+            val = 'default_value'
+            
+            layout = self.layout
+            split = layout.split(factor=0.4)
+            split.alignment = 'RIGHT'
+            split.label(text="Brighten")
+            col = split.column(align=True)
+            col.prop(nodes['Clamp Value'].inputs[0], val, text="Dark")
+            col.prop(nodes['Dodge Value'].inputs[0], val, text="Bright")
+          
+            layout.use_property_split = True
+            layout.use_property_decorate = False
+            col = layout.column(align=True)
+            col.prop(nodes['Shadow Value'].inputs[0], val, text="Value Fix")
             if 'Fuzzy BG' in bpy.data.node_groups:
                 col = layout.column(heading="Floor", align=True)
                 col.prop(nodes['Floor Alpha'], 'mute', text="Holdout")
                 col = col.column(heading="Film")
                 col.prop(scene.render, "film_transparent")
+                
         except KeyError:
             pass
 
