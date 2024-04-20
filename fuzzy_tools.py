@@ -1577,8 +1577,10 @@ class FloorPanel(BuildSceneChild, Panel):
             nodes = bpy.data.materials['floor_shadow'].node_tree.nodes
             col.prop(nodes['Shadow Value'].inputs[0], 'default_value', text="Value Fix")
             if 'Fuzzy BG' in bpy.data.node_groups:
-                col = layout.column(heading="Floor")
+                col = layout.column(heading="Floor", align=True)
                 col.prop(nodes['Floor Alpha'], 'mute', text="Holdout")
+                col = col.column(heading="Film")
+                col.prop(scene.render, "film_transparent")
         except KeyError:
             pass
 
