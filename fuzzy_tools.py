@@ -1454,7 +1454,8 @@ class BackgroundPanel(BuildSceneChild, Panel):
     @classmethod
     def poll(cls, context):
         scene = context.scene.world
-        return scene.name == "Fuzzy World"
+        if scene is not None:
+            return scene.name == "Fuzzy World"
 
     def draw(self, context):
         scene = context.scene
@@ -1502,7 +1503,8 @@ class HDRIPanel(BuildSceneChild, Panel):
     @classmethod
     def poll(cls, context):
         scene = context.scene.world
-        return scene.name == "Fuzzy World"
+        if scene is not None:
+            return scene.name == "Fuzzy World"
 
     def draw(self, context):
         scene = context.scene
