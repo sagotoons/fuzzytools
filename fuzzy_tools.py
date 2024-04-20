@@ -170,7 +170,7 @@ class FuzzyProperties(PropertyGroup):
 
     scene_animate: BoolProperty(
         name='Scene Animation',
-        description="""Update animated Scene Builder properties and motion blur.
+        description="""Update animated Sky properties and motion blur.
 Enables/disables automatically during rendering""",
         default=False,
         update=check_scene
@@ -1382,7 +1382,7 @@ class BuildScenePanel(Panel):
         fuzzyprops = scene.fuzzy_props
         animated = False
         
-        # check for animated scene properties in Scene Builder
+        # check for animated Sky properties in Sky Panel
         if scene.animation_data is not None:
             action = scene.animation_data.action
             if action is not None:
