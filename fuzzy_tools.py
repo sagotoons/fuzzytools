@@ -1542,17 +1542,14 @@ class FloorPanel(BuildSceneChild, Panel):
             val = 'default_value'
             
             layout = self.layout
-            split = layout.split(factor=0.4)
-            split.alignment = 'RIGHT'
-            split.label(text="Brighten")
-            col = split.column(align=True)
-            col.prop(nodes['Clamp Value'].inputs[0], val, text="Dark")
-            col.prop(nodes['Dodge Value'].inputs[0], val, text="Bright")
-          
             layout.use_property_split = True
             layout.use_property_decorate = False
+            
             col = layout.column(align=True)
-            col.prop(nodes['Shadow Value'].inputs[0], val, text="Value Fix")
+            col.prop(nodes['Clamp Value'].inputs[0], val, text="Clamp Dark")
+            col.prop(nodes['Dodge Value'].inputs[0], val, text="Dodge Bright") 
+            layout.prop(nodes['Shadow Value'].inputs[0], val, text="Value Fix")
+            
             if 'Fuzzy BG' in bpy.data.node_groups:
                 col = layout.column(heading="Floor", align=True)
                 col.prop(nodes['Floor Alpha'], 'mute', text="Holdout")
