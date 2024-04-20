@@ -170,8 +170,8 @@ class FuzzyProperties(PropertyGroup):
 
     scene_animate: BoolProperty(
         name='Scene Animation',
-        description="""Update animated Sky properties and motion blur.
-Enables/disables automatically during rendering""",
+        description="""Update animated Sky properties and motion blur in viewport.
+Enables automatically during rendering""",
         default=False,
         update=check_scene
     )
