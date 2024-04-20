@@ -546,7 +546,7 @@ Delete the default cube"""
         link(diffuse.outputs[0], shader_RGB.inputs[0])
         link(dodge_floor.outputs[0], clamp_shadow.inputs[0])
         link(value_dodge.outputs[0], dodge_floor.inputs[2])
-        link(value_clamp.outputs[0], alpha_mix.inputs[1])
+        link(value_clamp.outputs[0], clamp_shadow.inputs[1])
         if BG in groups:
             link(BG_group.outputs[0], alpha_mix.inputs[2])
         
