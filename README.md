@@ -4,7 +4,7 @@ The Fuzzy Tools add-on is a collection of tools, heavily focused on efficiency a
 _Fuzzy Tools is specifically created for a fast EEVEE pipeline, but many aspects still work in Cycles._
 
 # Features
-Some amazing features that come with Fuzzy Tools:
+Some unique features that come with Fuzzy Tools:
 - set up lights, camera, world and floor (shadow only) with just one or a few buttons 
 - the option to enable/disable Motion Blur and animate shutter time with markers
 - use the 3D Cursor to set the camera Focus Distance
@@ -22,11 +22,12 @@ Quickly set up your scene, including:
 - sunlight and rim light
 - optimize EEVEE settings like AO, Shadows and Bloom
 
-### [2. Fuzzy Viewport](https://github.com/sagotoons/fuzzytools/wiki/Fuzzy-Viewport)
-Quick access to different viewport settings, including:
+### [2. Fuzzy View](https://github.com/sagotoons/fuzzytools/wiki/Fuzzy-View)
+Quick access to different viewport and hair settings, including:
 - Viewport Lens
 - Use Simplify
 - Hide/Unhide all Hair
+- Hair Type
 
 ### [3. Camera Control](https://github.com/sagotoons/fuzzytools/wiki/Camera-Control)
 Quick access to different camera settings and operators, including:
