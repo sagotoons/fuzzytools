@@ -973,7 +973,7 @@ class OBJECT_OT_fuzzy_rimlight(Operator):
         
         # light settings
         ob.data.energy = 5
-        ob.data.specular_factor = 0
+        ob.data.specular_factor = 0.1
         # cycles specular
         ob.visible_glossy = False
 
