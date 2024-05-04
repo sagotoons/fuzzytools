@@ -90,10 +90,15 @@ character_list = {
 
 def update_fuzzy(self, context):
     scene = context.scene
-    HDR_node = scene.world.node_tree.nodes
-    node = bpy.data.node_groups['Fuzzy BG'].nodes
-
+    
     try:
+        HDR_node = scene.world.node_tree.nodes
+        
+    except AttributeError:
+        pass
+        
+    try:
+        node = bpy.data.node_groups['Fuzzy BG'].nodes
         node["BG Color 1"].outputs[0].default_value[0:3] = self.bgcolor1
         node["BG Color 2"].outputs[0].default_value[0:3] = self.bgcolor2
 
