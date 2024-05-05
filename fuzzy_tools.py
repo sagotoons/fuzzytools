@@ -91,34 +91,32 @@ character_list = {
 def update_fuzzy(self, context):
     scene = context.scene
     
-    try:
+    if scene.world is not None:
         HDR_node = scene.world.node_tree.nodes
+
+        if scene.world.name == 'Fuzzy World':        
+            try:
+                node = bpy.data.node_groups['Fuzzy BG'].nodes
+                node["BG Color 1"].outputs[0].default_value[0:3] = self.bgcolor1
+                node["BG Color 2"].outputs[0].default_value[0:3] = self.bgcolor2
         
-    except AttributeError:
-        pass
+                node["Swap Colors 1"].mute = self.bgcolor_swap
+                node["Swap Colors 2"].mute = self.bgcolor_swap
         
-    try:
-        node = bpy.data.node_groups['Fuzzy BG'].nodes
-        node["BG Color 1"].outputs[0].default_value[0:3] = self.bgcolor1
-        node["BG Color 2"].outputs[0].default_value[0:3] = self.bgcolor2
-
-        node["Swap Colors 1"].mute = self.bgcolor_swap
-        node["Swap Colors 2"].mute = self.bgcolor_swap
-
-        node["Flat to Gradient"].mute = not self.gradient
-
-        if self.gradient_type == 'OP1':
-            node["Radial to Linear"].mute = True
-        else:
-            node["Radial to Linear"].mute = False
-
-        node["Window to 3D"].mute = not self.linear_coord
-        node["Linear Ease"].mute = not self.linear_coord
-
-        node["Scale Gradient"].outputs[0].default_value = self.gradient_scale
+                node["Flat to Gradient"].mute = not self.gradient
         
-    except KeyError:
-        pass
+                if self.gradient_type == 'OP1':
+                    node["Radial to Linear"].mute = True
+                else:
+                    node["Radial to Linear"].mute = False
+        
+                node["Window to 3D"].mute = not self.linear_coord
+                node["Linear Ease"].mute = not self.linear_coord
+        
+                node["Scale Gradient"].outputs[0].default_value = self.gradient_scale
+                
+            except KeyError:
+                pass
 
 
 def check(self):
