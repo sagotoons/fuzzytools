@@ -1042,8 +1042,8 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         eevee.use_soft_shadows = True
         # color management
         view.view_transform = 'Filmic'
-        view.exposure = 1.4
-        view.gamma = 0.6
+        view.exposure = 2.0
+        view.gamma = 0.5
         # overlay
         space.shading.use_scene_world = True
         space.overlay.show_look_dev = True
