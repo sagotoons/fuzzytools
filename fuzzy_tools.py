@@ -1017,7 +1017,10 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         space = context.space_data
 
         # EEVEE RENDER PROPERTIES
-        render.engine = 'BLENDER_EEVEE'
+        if bpy.app.version_string.startswith('4.2'):
+            render.engine = 'BLENDER_EEVEE_NEXT'
+        else:
+            render.engine = 'BLENDER_EEVEE'
         # ambient occlusion
         eevee.use_gtao = True
         eevee.gtao_distance = 1.6
