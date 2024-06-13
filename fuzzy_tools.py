@@ -1626,11 +1626,10 @@ class VIEW3D_PT_hair(ViewportChild, Panel):
         scene = context.scene
         rd = scene.render
         
-        if context.engine == 'BLENDER_EEVEE':
-            row = layout.row(align=True)
-            row.use_property_split = True
-            row.use_property_decorate = False
-            row.prop(rd, "hair_type", text = "Type", expand=True)
+        row = layout.row(align=True)
+        row.use_property_split = True
+        row.use_property_decorate = False
+        row.prop(rd, "hair_type", text = "Type", expand=True)
 
         col = layout.column(align=True)
         row = col.row(align=True)
