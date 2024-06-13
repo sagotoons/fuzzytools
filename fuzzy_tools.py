@@ -1019,8 +1019,10 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         # EEVEE RENDER PROPERTIES
         if bpy.app.version_string.startswith('4.2'):
             render.engine = 'BLENDER_EEVEE_NEXT'
+            version = render
         else:
             render.engine = 'BLENDER_EEVEE'
+            version = eevee
         # ambient occlusion
         eevee.use_gtao = True
         eevee.gtao_distance = 1.6
@@ -1037,6 +1039,8 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         eevee.use_ssr_refraction = True
         eevee.use_ssr_halfres = False
         eevee.ssr_quality = 1
+        # motion blur
+        version.motion_blur_position = 'START'
         # hair
         render.hair_type = 'STRIP'
         # shadow
