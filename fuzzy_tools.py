@@ -1109,6 +1109,29 @@ class OBJECT_OT_hair_hide(Operator):
 
 
 # ------------------------------------------------------------------------
+#    OPERATOR - Copy passepartout of Active Camera to all cameras
+# ------------------------------------------------------------------------
+
+class OBJECT_OT_copy_passepartout(Operator):
+    """Copy the Passepartout Alpha of Active Camera to all cameras"""
+    bl_idname = "object.copy_passepartout"
+    bl_label = "Copy Passepartout"
+    bl_options = {'UNDO'}
+
+    def execute(self, context):
+        scene = context.scene
+        active_cam = scene.camera
+        alpha = active_cam.data.passepartout_alpha
+
+        cams = bpy.data.cameras
+
+        for cam in cams:
+            cam.passepartout_alpha = alpha
+
+        return {'FINISHED'}
+
+
+# ------------------------------------------------------------------------
 #    OPERATOR - add Marker for Motion Blur
 # ------------------------------------------------------------------------
 
@@ -1846,7 +1869,8 @@ classes = [
 
     OBJECT_OT_hair_show,
     OBJECT_OT_hair_hide,
-    
+
+    OBJECT_OT_copy_passepartout,    
     MARKER_OT_add_motionblur_marker,
     MARKER_OT_shutter_to_markers,
     
