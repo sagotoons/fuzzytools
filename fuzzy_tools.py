@@ -1767,6 +1767,15 @@ class VIEW3D_PT_scene(Panel):
         row.operator('view3d.view_camera', text='', icon='VIEWZOOM')
         row.operator('view3d.camera_to_view', text='', icon='DECORATE_OVERRIDE')
 
+        if scene.camera is not None:
+            col = layout.column()
+            row = col.row(align=True)
+            row.prop(scene.camera.data, 'passepartout_alpha', text="Passepartout")
+            row.operator('object.copy_passepartout', text='', icon='DUPLICATE')
+            row = col.row(align=True)
+            row.prop(scene.camera.data, 'clip_start', text="Start")
+            row.prop(scene.camera.data, 'clip_end', text="End")
+
         col = layout.column()
         col.scale_y = 1.3
         col.operator("object.fuzzy_camera", text="Build", icon='CAMERA_DATA')
