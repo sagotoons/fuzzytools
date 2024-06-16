@@ -1753,7 +1753,7 @@ class VIEW3D_PT_camera_scene(Panel):
         scene = context.scene
         object = context.active_object
         layout.scale_x = 1.2        
-        if object != scene.camera:
+        if object != scene.camera and scene.camera is not None:
             if scene.camera.name not in context.view_layer.objects:
                 layout.enabled = False
             layout.operator("object.select_camera", text="", icon='RESTRICT_SELECT_OFF')
