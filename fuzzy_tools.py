@@ -1741,7 +1741,7 @@ class VIEW3D_PT_cameras(Panel):
         pass
 
 
-class VIEW3D_PT_scene(Panel):
+class VIEW3D_PT_camera_scene(Panel):
     bl_label = "Scene"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -1800,7 +1800,7 @@ class VIEW3D_PT_scene(Panel):
         row.operator('marker.shutter_to_markers', text='', icon='MARKER_HLT')
         
         
-class VIEW3D_PT_camera_properties(Panel):
+class VIEW3D_PT_camera_selected(Panel):
     bl_label = ""
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -1901,8 +1901,8 @@ classes = [
     VIEW3D_PT_miscellaneous,
     
     VIEW3D_PT_cameras,
-    VIEW3D_PT_scene,
-    VIEW3D_PT_camera_properties,    
+    VIEW3D_PT_camera_scene,
+    VIEW3D_PT_camera_selected,    
     
 ]
 
