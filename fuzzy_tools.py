@@ -1833,9 +1833,6 @@ class VIEW3D_PT_camera_properties(Panel):
         col.prop(object.data, "clip_start", text="Clip Start")
         col.prop(object.data, "clip_end", text="End")
         
-        col = layout.column()
-        col.prop(object.data, "passepartout_alpha", text="Passepartout")
-        
         col = layout.column(heading="DoF")
         col.prop(object.data.dof, "use_dof", text="")
         if object.data.dof.use_dof:
