@@ -1761,23 +1761,31 @@ class VIEW3D_PT_camera_scene(Panel):
         scene = context.scene
         layout = self.layout
 
-        row = layout.row(align=True)
-        row.prop(scene, "camera", text="Active", icon='CAMERA_DATA')
+        if context.mode == 'OBJECT':
+            col = layout.column()
+            col.scale_y = 1.3
+            col.operator("object.fuzzy_camera", text="Build", icon='CAMERA_DATA')
+
+        box = layout.box()
+        col = box.column()
+        col.label(text='Active:')
+        row = col.row(align=True)
+        row.prop(scene, "camera", text="", icon='CAMERA_DATA')
+        col.separator()
         row.operator('view3d.view_camera', text='', icon='VIEWZOOM')
         row.operator('view3d.camera_to_view', text='', icon='DECORATE_OVERRIDE')
 
         if scene.camera is not None:
-            col = layout.column()
+            cam = scene.camera.data
             row = col.row(align=True)
-            row.prop(scene.camera.data, 'passepartout_alpha', text="Passepartout")
+            row.prop(cam, 'lens')
+            row = col.row(align=True)
+            row.prop(cam, 'clip_start', text="Start")
+            row.prop(cam, 'clip_end', text="End")
+            col.separator()
+            row = col.row(align=True)
+            row.prop(cam, 'passepartout_alpha', text="Passepartout")
             row.operator('object.copy_passepartout', text='', icon='DUPLICATE')
-            row = col.row(align=True)
-            row.prop(scene.camera.data, 'clip_start', text="Start")
-            row.prop(scene.camera.data, 'clip_end', text="End")
-
-        col = layout.column()
-        col.scale_y = 1.3
-        col.operator("object.fuzzy_camera", text="Build", icon='CAMERA_DATA')
 
         if context.space_data.lock_camera == True:
             icon = 'LOCKED'
