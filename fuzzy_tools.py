@@ -571,7 +571,7 @@ Delete the default cube"""
 
         # viewport settings
         space = context.space_data
-        space.shading.show_backface_culling = True
+#        space.shading.show_backface_culling = True
         space.overlay.show_relationship_lines = False
 
         return {'FINISHED'}
