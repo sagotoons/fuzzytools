@@ -1860,7 +1860,7 @@ class VIEW3D_PT_camera_selected(Panel):
             if object.data.dof.focus_object is not None:
                 row.enabled = False
             row.prop(object.data.dof, "focus_distance", text="Distance")
-            row.operator('object.cursor_to_focus_distance', text='', icon='CURSOR')
+            row.operator('ui.eyedropper_depth', icon='EYEDROPPER', text="")
             col.prop(object.data.dof, "aperture_fstop")
                   
                
