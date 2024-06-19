@@ -7,7 +7,6 @@ _Fuzzy Tools is specifically created for a fast EEVEE pipeline, but many aspects
 Some unique features that come with Fuzzy Tools:
 - set up lights, camera, world and floor (shadow only) with just one or a few buttons 
 - the option to enable/disable Motion Blur and animate shutter time with markers
-- use the 3D Cursor to set the camera Focus Distance
 - Alt+M to shift all keyframes and markers from the current frame regardless of selection
 
 ## Panels
