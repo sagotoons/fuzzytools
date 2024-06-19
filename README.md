@@ -17,7 +17,7 @@ Fuzzy Tools creates the following panels in the sidebar (N):
 Quickly set up your scene, including:
 - optimized camera(s)
 - floor with shadow only
-- World shader with stylized sky
+- World shader with stylized background
 - sunlight and rim light
 - optimize EEVEE settings like AO, Shadows and Bloom
 
@@ -31,8 +31,7 @@ Quick access to different viewport and hair settings, including:
 ### [3. Camera Control](https://github.com/sagotoons/fuzzytools/wiki/Camera-Control)
 Quick access to different camera settings and operators, including:
 - Focal Length
-- DoF and 3D Cursor as Focus Distance
-- Bind Camera to Marker
+- Depth of Field
 - Animate Motion Blur and Shutter with Markers
 
 # To install
