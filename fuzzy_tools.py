@@ -1435,6 +1435,21 @@ class BackgroundPanel(BuildSceneChild, Panel):
     bl_label = "Background"
     bl_idname = "VIEW3D_PT_background"
     bl_options = {'DEFAULT_CLOSED'}
+    
+    def draw_header_preset(self, context):
+        scene = context.scene
+        
+        # check for animated Background properties
+        if scene.animation_data is not None:
+            action = scene.animation_data.action
+            if action is not None:
+                for fcurve in action.fcurves:
+                    if 'fuzzy_props' in fcurve.data_path:
+                        fuzzyprops = scene.fuzzy_props
+                        layout = self.layout
+                        layout.scale_x = 1.2
+                        layout.prop(fuzzyprops, "scene_animate", text="", icon='ACTION')        
+                        break
 
     @classmethod
     def poll(cls, context):
