@@ -1777,7 +1777,7 @@ class VIEW3D_PT_camera_scene(Panel):
         col.separator(factor=0.5)
         row = col.row(align=True)
         row.scale_y = 1.2
-        row.scale_x = 1.2
+        row.scale_x = 1.1
         row.operator('marker.add_motionblur_marker', text="On", icon='KEYFRAME_HLT').blur = 'on'
         row.operator('marker.add_motionblur_marker', text="Off", icon='KEYFRAME').blur = 'off'
         row.operator('marker.shutter_to_markers', text='', icon='MARKER_HLT')
