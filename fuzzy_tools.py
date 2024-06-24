@@ -1780,7 +1780,6 @@ class VIEW3D_PT_camera_scene(Panel):
         col.use_property_decorate = False
         col.prop(version, 'use_motion_blur', text="")
         col.prop(version, 'motion_blur_shutter')
-        col.prop(scene.eevee, 'motion_blur_steps', text="Steps")
         col.separator(factor=0.5)
         split = col.split(factor=0.4)
         split.alignment = 'RIGHT'
