@@ -1740,7 +1740,7 @@ class VIEW3D_PT_camera_scene(Panel):
             col.operator("object.fuzzy_camera", text="Build", icon='CAMERA_DATA')
 
         box = layout.box()
-        col = box.column()
+        col = box.column(align=True)
         col.label(text='Active:')
         row = col.row(align=True)
         row.prop(scene, "camera", text="", icon='CAMERA_DATA')
