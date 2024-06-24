@@ -1778,7 +1778,6 @@ class VIEW3D_PT_camera_scene(Panel):
                     row.prop(fuzzyprops, 'scene_animate', text="", icon='ACTION')
                     break
         row = split.row(align=True)
-        row.scale_y = 1.2
         row.operator('marker.add_motionblur_marker', text="On", icon='KEYFRAME_HLT').blur = 'on'
         row.operator('marker.add_motionblur_marker', text="Off", icon='KEYFRAME').blur = 'off'
         row.operator('marker.shutter_to_markers', text='', icon='MARKER_HLT')
