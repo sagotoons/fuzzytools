@@ -1691,24 +1691,6 @@ class VIEW3D_PT_cameras(Panel):
     bl_options = {'DEFAULT_CLOSED'}
     bl_order = 3
 
-    def draw_header_preset(self, context):
-        scene = context.scene
-        fuzzyprops = scene.fuzzy_props
-        animated = False
-       
-       # check for 'mblur' marker
-        markers = scene.timeline_markers
-        if markers is not None:
-            for m in markers:
-                if m.name.startswith('mblur'):
-                    animated = True
-                    break
-       
-        if animated:
-            layout = self.layout
-            layout.scale_x = 1.2
-            layout.prop(fuzzyprops, "scene_animate", text="", icon='ACTION')
-
     def draw(self, context):
         pass
 
