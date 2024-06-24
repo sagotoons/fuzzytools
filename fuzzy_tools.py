@@ -478,8 +478,11 @@ Delete the default cube"""
         clamp_shadow = nodes.new("ShaderNodeClamp")
         clamp_shadow.location = (-200, 240)
 
-        RGB_BW = nodes.new("ShaderNodeRGBToBW")
-        RGB_BW.location = (-570, 0)
+        mix_AO = nodes.new("ShaderNodeMixRGB")
+        mix_AO.location = (-570, 100)
+        mix_AO.inputs[0].default_value = 1
+        mix_AO.blend_type = 'MULTIPLY'
+        mix_AO.mute = True
 
         shader_RGB = nodes.new("ShaderNodeShaderToRGB")
         shader_RGB.location = (-770, 0)
@@ -542,10 +545,10 @@ Delete the default cube"""
         link(holdout.outputs[0], alpha_mix.inputs[1])
         link(alpha_mix.outputs[0], mixshader.inputs[2])
         link(clamp_shadow.outputs[0], power.inputs[0])
-        link(RGB_BW.outputs[0], dodge_floor.inputs[1])
+        link(mix_AO.outputs[0], dodge_floor.inputs[1])
         link(value.outputs[0], power.inputs[1])
         link(power.outputs[0], mixshader.inputs[0])
-        link(shader_RGB.outputs[0], RGB_BW.inputs[0])
+        link(shader_RGB.outputs[0], mix_AO.inputs[1])
         link(diffuse.outputs[0], shader_RGB.inputs[0])
         link(dodge_floor.outputs[0], clamp_shadow.inputs[0])
         link(value_dodge.outputs[0], dodge_floor.inputs[2])
