@@ -1380,25 +1380,6 @@ class BuildScenePanel(Panel):
     bl_category = 'Fuzzy'
     bl_options = {'DEFAULT_CLOSED'}
     bl_order = 0
-
-    def draw_header_preset(self, context):
-        scene = context.scene
-        fuzzyprops = scene.fuzzy_props
-        animated = False
-        
-        # check for animated Sky properties in Sky Panel
-        if scene.animation_data is not None:
-            action = scene.animation_data.action
-            if action is not None:
-                for fcurve in action.fcurves:
-                    if 'fuzzy_props' in fcurve.data_path:
-                        animated = True          
-                        break
-       
-        if animated:
-            layout = self.layout
-            layout.scale_x = 1.2
-            layout.prop(fuzzyprops, "scene_animate", text="", icon='ACTION')
     
     @classmethod
     def poll(cls, context):
