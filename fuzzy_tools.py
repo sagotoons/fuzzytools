@@ -797,6 +797,7 @@ class WORLD_OT_fuzzy_sky(Operator):
         vec_trans.location = (-1650, -300)
         vec_trans.vector_type = 'NORMAL'
         vec_trans.convert_from = 'CAMERA'
+        vec_trans.convert_to = 'WORLD'
 
         output = nodes.new("NodeGroupOutput")
         output.location = (60, -100)
