@@ -1752,7 +1752,7 @@ class VIEW3D_PT_camera_scene(Panel):
         row.prop(context.space_data, 'lock_camera', text='', icon=icon)
         row.label(text=' Lock to View')
 
-        # Motion Blur - check Blender Version
+        # Motion Blur - check blender Version
         if bpy.app.version_string.startswith('4.2'):
             version = scene.render
         else:
@@ -1764,8 +1764,19 @@ class VIEW3D_PT_camera_scene(Panel):
         col.prop(version, 'motion_blur_shutter')
         col.separator(factor=0.5)
         split = col.split(factor=0.4)
-        split.alignment = 'RIGHT'
-        split.label(text="Animate")
+        split.scale_y = 1.2
+        row = split.row()
+        row.scale_x = 1.2
+        row.alignment = 'RIGHT'
+        row.label(text="Animate")
+        # check for 'mblur' marker
+        markers = scene.timeline_markers
+        if markers is not None:
+            for m in markers:
+                if m.name.startswith('mblur'):
+                    fuzzyprops = scene.fuzzy_props
+                    row.prop(fuzzyprops, 'scene_animate', text="", icon='ACTION')
+                    break
         row = split.row(align=True)
         row.scale_y = 1.2
         row.operator('marker.add_motionblur_marker', text="On", icon='KEYFRAME_HLT').blur = 'on'
