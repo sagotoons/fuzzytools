@@ -1769,12 +1769,17 @@ class VIEW3D_PT_camera_scene(Panel):
         row.scale_y = 1.2
         row.prop(context.space_data, 'lock_camera', text='', icon=icon)
         row.label(text=' Lock to View')
-   
+
+        # Motion Blur - check Blender Version
+        if bpy.app.version_string.startswith('4.2'):
+            version = scene.render
+        else:
+            version = scene.eevee
         col = layout.column(align=True, heading="Motion Blur")
         col.use_property_split = True
         col.use_property_decorate = False
-        col.prop(scene.eevee, 'use_motion_blur', text="")
-        col.prop(scene.eevee, 'motion_blur_shutter')
+        col.prop(version, 'use_motion_blur', text="")
+        col.prop(version, 'motion_blur_shutter')
         col.prop(scene.eevee, 'motion_blur_steps', text="Steps")
         col.separator(factor=0.5)
         split = col.split(factor=0.4)
