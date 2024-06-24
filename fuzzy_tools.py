@@ -1766,9 +1766,9 @@ class VIEW3D_PT_camera_scene(Panel):
         split = col.split(factor=0.4)
         split.scale_y = 1.2
         row = split.row()
-        row.scale_x = 1.2
+        row.scale_x = 1.1
         row.alignment = 'RIGHT'
-        row.label(text="Animate")
+        row.label(text="Marker")
         # check for 'mblur' marker
         markers = scene.timeline_markers
         if markers is not None:
