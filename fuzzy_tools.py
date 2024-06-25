@@ -636,7 +636,7 @@ class WORLD_OT_fuzzy_sky(Operator):
         lightpath = nodes.new("ShaderNodeLightPath")
         lightpath.location = (-400, 100)
         for output in lightpath.outputs:
-            outputs.hide = True
+            output.hide = True
 
         skytex = nodes.new("ShaderNodeTexEnvironment")
         skytex.location = (-480, 400)
