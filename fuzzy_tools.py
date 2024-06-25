@@ -620,7 +620,7 @@ class WORLD_OT_fuzzy_sky(Operator):
         mixshader.location = (200, 60)
 
         BG1 = nodes.new("ShaderNodeBackground")
-        BG1.location = (0, 20)
+        BG1.location = (0, 160)
         BG1.inputs[1].default_value = (1.0)
         BG1.name = 'HDRI Strength'
         BG1.label = 'HDRI Strength'
@@ -629,16 +629,17 @@ class WORLD_OT_fuzzy_sky(Operator):
         BG2.location = (0, -100)
 
         skyclamp = nodes.new("ShaderNodeMixRGB")
-        skyclamp.location = (-180, 200)
+        skyclamp.location = (-180, 260)
         skyclamp.blend_type = 'DARKEN'
         skyclamp.inputs[2].default_value = (10,10,10, 1)
         
         lightpath = nodes.new("ShaderNodeLightPath")
         lightpath.location = (-400, 100)
-        lightpath.hide = True
+        for output in lightpath.outputs:
+            outputs.hide = True
 
         skytex = nodes.new("ShaderNodeTexEnvironment")
-        skytex.location = (-450, 400)
+        skytex.location = (-480, 400)
 
         mapskytex = nodes.new("ShaderNodeMapping")
         mapskytex.location = (-680, 440)
