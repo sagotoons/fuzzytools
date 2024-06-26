@@ -1466,6 +1466,7 @@ class BackgroundPanel(BuildSceneChild, Panel):
         scene = context.scene
         fuzzyprops = scene.fuzzy_props
         node = scene.world.node_tree.nodes
+        BG_node = node['BG Group'].node_tree.nodes
 
         layout = self.layout
         row = layout.row(align=True)
@@ -1497,7 +1498,7 @@ class BackgroundPanel(BuildSceneChild, Panel):
         col = layout.column(align=True)
         col.enabled = fuzzyprops.linear_coord and fuzzyprops.gradient and fuzzyprops.gradient_type != 'OP1'
         if fuzzyprops.linear_coord == True:
-            col.prop(fuzzyprops, "gradient_scale", text='Scale from Horizon')
+            col.prop(BG_node['Scale Gradient'].inputs[0], "default_value", text='Scale from Horizon')
 
 
 class HDRIPanel(BuildSceneChild, Panel):
