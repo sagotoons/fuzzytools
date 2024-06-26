@@ -1813,7 +1813,7 @@ class VIEW3D_PT_camera_selected(Panel):
         row.operator('marker.camera_bind_new', text="Bind to Marker", icon='KEYFRAME_HLT')
         row.separator(factor=0.5)
         row.scale_x = 1.2
-        row.operator('object.rename_camera_alpha', text='', icon='SORTALPHA') 
+        row.operator('object.rename_camera_alphabet', text='', icon='SORTALPHA') 
         
         layout.prop(object.data, "lens")
         
