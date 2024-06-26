@@ -785,10 +785,12 @@ class WORLD_OT_fuzzy_sky(Operator):
         divide.blend_type = 'DIVIDE'
         divide.inputs[0].default_value = 1
 
-        grad_scale = nodes.new("ShaderNodeValue")
+        grad_scale = nodes.new("ShaderNodeMix")
         grad_scale.location = (-1860, -500)
         grad_scale.label = "Scale Gradient"
         grad_scale.name = "Scale Gradient"
+        grad_scale.inputs[2].default_value = 0.001
+        grad_scale.inputs[3].default_value = 1
 
         power = nodes.new("ShaderNodeMath")
         power.location = (-1650, -480)
