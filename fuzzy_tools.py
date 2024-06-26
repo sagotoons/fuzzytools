@@ -1123,7 +1123,7 @@ class OBJECT_OT_copy_passepartout(Operator):
     """Copy the Passepartout Alpha of Active Camera to all cameras"""
     bl_idname = "object.copy_passepartout"
     bl_label = "Copy Passepartout"
-    bl_options = {'UNDO'}
+    bl_options = {'UNDO', 'INTERNAL'}
 
     def execute(self, context):
         scene = context.scene
