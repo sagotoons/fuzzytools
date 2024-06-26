@@ -688,6 +688,7 @@ class WORLD_OT_fuzzy_sky(Operator):
         # create empty group node and apply Fuzzy BG
         group = nodes.new("ShaderNodeGroup")
         group.location = (-300, -200)
+        group.name = "BG Group"
         group.node_tree = BG_group
         
         # BG group nodes
