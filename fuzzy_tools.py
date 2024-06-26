@@ -1480,14 +1480,20 @@ class BackgroundPanel(BuildSceneChild, Panel):
         BG_node = node['BG Group'].node_tree.nodes
 
         layout = self.layout
-        row = layout.row(align=True)
-        row.use_property_split = True
-        row.use_property_decorate = False
+        col = layout.column()
+        col.use_property_split = True
+        col.use_property_decorate = False
+        row = col.row(align=True)
+        row.prop(fuzzyprops, "bgcolor1", text='Palette')
+        row.prop(fuzzyprops, "bgcolor2", text='')
+        row.separator()
+        row.label(icon='BLANK1')
+        row = col.row(align=True)
         if BG_node['Color Swap'].mute:
-            row.prop(BG_node['BG Color 1'].outputs[0], 'default_value', text='Colors')
+            row.prop(BG_node['BG Color 1'].outputs[0], 'default_value', text='Sky Colors')
             row.prop(BG_node['BG Color 2'].outputs[0], 'default_value', text='')
         else:
-            row.prop(BG_node['BG Color 2'].outputs[0], 'default_value', text='Colors')
+            row.prop(BG_node['BG Color 2'].outputs[0], 'default_value', text='Sky Colors')
             row.prop(BG_node['BG Color 1'].outputs[0], 'default_value', text='')
         row.separator()
         row.prop(BG_node['Color Swap'], 'mute', icon='FILE_REFRESH', 
