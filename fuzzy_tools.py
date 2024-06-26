@@ -1331,8 +1331,7 @@ class TRANSFORM_OT_keyframes_markers(bpy.types.Operator):
     fake_user: bpy.props.BoolProperty(
         name="Fake User",
         description="Include actions with Fake User",
-        default=False,
-        options={'SKIP_SAVE'}
+        default=False
     )
   
     def execute(self, context):
