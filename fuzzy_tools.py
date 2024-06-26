@@ -710,7 +710,16 @@ class WORLD_OT_fuzzy_sky(Operator):
         sky2.name = "BG Color 2"
         sky2.label = "BG Color 2"
         sky2.outputs[0].default_value = (0.02, 0.05, 0.40, 1)
-
+        
+        color_swap = nodes.new("ShaderNodeMath")
+        color_swap.location = (-880, -600)
+        color_swap.name = "Color Swap"
+        color_swap.label = "Color Swap"
+        color_swap.operation = 'MULTIPLY'
+        color_swap.inputs[0].default_value = 0
+        color_swap.inputs[1].default_value = 1
+        color_swap.mute = True
+        
         radial_linear = nodes.new("ShaderNodeMixRGB")
         radial_linear.location = (-400, -60)
         radial_linear.label = "Radial to Linear"
@@ -820,6 +829,8 @@ class WORLD_OT_fuzzy_sky(Operator):
         link(sky1.outputs[0], swapsky2.inputs[1])
         link(sky2.outputs[0], swapsky1.inputs[1])
         link(sky2.outputs[0], swapsky2.inputs[2])
+        link(color_swap.outputs[0], swapsky1.inputs[0])
+        link(color_swap.outputs[0], swapsky2.inputs[0])
         link(radial_linear.outputs[0], flat_gradient.inputs[0])
         link(gradsphere.outputs[0], invert.inputs[1])
         link(gradlinear.outputs[0], ramp_linear.inputs[0])
