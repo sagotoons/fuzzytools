@@ -1483,15 +1483,15 @@ class BackgroundPanel(BuildSceneChild, Panel):
         row = layout.row(align=True)
         row.use_property_split = True
         row.use_property_decorate = False
-        if fuzzyprops.bgcolor_swap:
-            row.prop(fuzzyprops, "bgcolor2", text='Colors')
-            row.prop(fuzzyprops, "bgcolor1", text='')
+        if BG_node['Color Swap'].mute:
+            row.prop(BG_node['BG Color 1'].outputs[0], 'default_value', text='Colors')
+            row.prop(BG_node['BG Color 2'].outputs[0], 'default_value', text='')
         else:
-            row.prop(fuzzyprops, "bgcolor1", text='Colors')
-            row.prop(fuzzyprops, "bgcolor2", text='')
+            row.prop(BG_node['BG Color 2'].outputs[0], 'default_value', text='Colors')
+            row.prop(BG_node['BG Color 1'].outputs[0], 'default_value', text='')
         row.separator()
-        row.prop(fuzzyprops, "bgcolor_swap", text='',
-                 icon='FILE_REFRESH', emboss=False)
+        row.prop(BG_node['Color Swap'], 'mute', icon='FILE_REFRESH', 
+                                            icon_only=True, emboss=False)
 
         col = layout.column(align=True)
         row = col.row(align=True)
