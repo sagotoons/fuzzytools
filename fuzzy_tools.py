@@ -693,7 +693,7 @@ class WORLD_OT_fuzzy_sky(Operator):
         nodes = BG_group.nodes
         
         flat_gradient = nodes.new("ShaderNodeMixRGB")
-        flat_gradient.location = (-180, -120)
+        flat_gradient.location = (-80, -120)
         flat_gradient.name = "Flat to Gradient"
         flat_gradient.label = "Flat to Gradient"
 
@@ -719,7 +719,7 @@ class WORLD_OT_fuzzy_sky(Operator):
         color_swap.mute = True
         
         radial_linear = nodes.new("ShaderNodeMixRGB")
-        radial_linear.location = (-400, -60)
+        radial_linear.location = (-180, -60)
         radial_linear.label = "Radial to Linear"
         radial_linear.name = "Radial to Linear"
         radial_linear.inputs[0].default_value = 1
@@ -734,7 +734,11 @@ class WORLD_OT_fuzzy_sky(Operator):
         ramp_linear.label = "Linear Ease"
         ramp_linear.name = "Linear Ease"
         ramp_linear.color_ramp.interpolation = "EASE"
-        ramp_linear.mute = True
+
+        mute_ease = nodes.new("ShaderNodeMix")
+        mute_ease.location = (-420, -200)
+        mute_ease.name = "Mute Ease"
+        mute_ease.label = "Mute Ease"
 
         swapsky1 = nodes.new("ShaderNodeMixRGB")
         swapsky1.location = (-450, -440)
@@ -779,13 +783,18 @@ class WORLD_OT_fuzzy_sky(Operator):
         maplinear3d.inputs[2].default_value[1] = -1.5708
         maplinear3d.inputs[1].default_value[2] = -0.5
         maplinear3d.hide = True
+        
+        coord_swap = nodes.new("ShaderNodeMix")
+        coord_swap.location = (-1250, -450)
+        coord_swap.name = "Window to Global"
+        coord_swap.label = "Window to Global"
+        coord_swap.inputs[0].default_value = 0
+        coord_swap.inputs[3].default_value = 1
 
         window_3d = nodes.new("ShaderNodeMixRGB")
         window_3d.location = (-1050, -240)
         window_3d.label = "Window to 3D"
         window_3d.name = "Window to 3D"
-        window_3d.inputs[0].default_value = 1
-        window_3d.mute = True
 
         divide = nodes.new("ShaderNodeMixRGB")
         divide.location = (-1450, -350)
@@ -814,7 +823,7 @@ class WORLD_OT_fuzzy_sky(Operator):
         vec_trans.convert_to = 'WORLD'
 
         output = nodes.new("NodeGroupOutput")
-        output.location = (60, -100)
+        output.location = (0, -100)
 
         # connect nodes
         link(group.outputs[0], BG2.inputs[0])
@@ -833,7 +842,11 @@ class WORLD_OT_fuzzy_sky(Operator):
         link(gradsphere.outputs[0], invert.inputs[1])
         link(gradlinear.outputs[0], ramp_linear.inputs[0])
         link(ramp_radial.outputs[0], radial_linear.inputs[1])
-        link(ramp_linear.outputs[0], radial_linear.inputs[2])
+        link(ramp_linear.outputs[0], mute_ease.inputs[3])
+        link(coord_swap.outputs[0], mute_ease.inputs[0])
+        link(coord_swap.outputs[0], window_3d.inputs[0])
+        link(gradlinear.outputs[0], mute_ease.inputs[2])
+        link(mute_ease.outputs[0], radial_linear.inputs[2])
         link(invert.outputs[0], ramp_radial.inputs[0])
         link(mapsphere.outputs[0], gradsphere.inputs[0])
         link(maplinear.outputs[0], window_3d.inputs[1])
@@ -846,7 +859,6 @@ class WORLD_OT_fuzzy_sky(Operator):
         link(divide.outputs[0], maplinear3d.inputs[0])
         link(grad_scale.outputs[0], power.inputs[0])
         link(power.outputs[0], divide.inputs[2])
-
         # check for Fuzzy Floor and set Fuzzy BG node group
         obj = bpy.data.objects
         if 'Fuzzy floor' in obj:
