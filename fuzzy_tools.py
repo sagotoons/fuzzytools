@@ -1508,23 +1508,23 @@ class BackgroundPanel(BuildSceneChild, Panel):
         row.separator()
         row.prop(BG_node['Color Swap'], 'mute', icon='FILE_REFRESH', 
                                             icon_only=True, emboss=False)
-
         col = layout.column(align=True)
         row = col.row(align=True)
-        row.prop(fuzzyprops, "gradient")
+        row.prop(BG_node['Flat to Gradient'], 'mute', text='Gradient', invert_checkbox=True)
 
         col.separator(factor=0.2)
         row = col.row(align=True)
         r1 = row.row(align=True)
         r2 = row.row(align=True)
-        r1.enabled = fuzzyprops.gradient
-        r1.prop(fuzzyprops, "gradient_type", expand=True)
-        r2.enabled = fuzzyprops.gradient and fuzzyprops.gradient_type != 'OP1'
-        r2.prop(fuzzyprops, "linear_coord", text='', icon='WORLD')
+        r1.enabled = not BG_node['Flat to Gradient'].mute
+        r1.prop(BG_node['Radial to Linear'], 'mute', text='Radial', toggle=1)
+        r1.prop(BG_node['Radial to Linear'], 'mute', text='Linear', toggle=1, invert_checkbox=True)
+        r2.enabled = not BG_node['Flat to Gradient'].mute and not BG_node['Radial to Linear'].mute
+        r2.prop(BG_node['Window to Global'], 'mute', text='', icon='WORLD')
 
         col = layout.column(align=True)
-        col.enabled = fuzzyprops.linear_coord and fuzzyprops.gradient and fuzzyprops.gradient_type != 'OP1'
-        if fuzzyprops.linear_coord == True:
+        col.enabled = BG_node['Window to Global'].mute and not BG_node['Flat to Gradient'].mute and not BG_node['Radial to Linear'].mute
+        if BG_node['Window to Global'].mute == True:
             col.prop(BG_node['Scale Gradient'].inputs[0], "default_value", text='Scale from Horizon')
 
 
