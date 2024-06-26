@@ -1260,9 +1260,9 @@ Requires an animation editor to be open"""
 #    OPERATOR - Rename Camera as variant
 # ------------------------------------------------------------------------
 
-class OBJECT_OT_rename_camera_alpha(Operator):
+class OBJECT_OT_rename_camera_alphabet(Operator):
     """Rename selected cameras as alphabetic variants of active camera"""
-    bl_idname = "object.rename_camera_alpha"
+    bl_idname = "object.rename_camera_alphabet"
     bl_label = "Rename as Variant"
     bl_options = {'UNDO'}
  
@@ -1863,7 +1863,7 @@ classes = [
     
     VIEW3D_OT_set_active_camera,    
     MARKER_OT_camera_bind_new,
-    OBJECT_OT_rename_camera_alpha,
+    OBJECT_OT_rename_camera_alphabet,
     
     TRANSFORM_OT_keyframes_markers,
 
