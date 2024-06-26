@@ -1069,6 +1069,7 @@ class OBJECT_OT_hair_show(Operator):
     """Show all hair in scene"""
     bl_idname = "object.hair_show"
     bl_label = "Show Hair"
+    bl_options = {'UNDO'}
 
     def execute(self, context):
         # particle system modifiers
@@ -1095,6 +1096,7 @@ class OBJECT_OT_hair_hide(Operator):
     """Hide all hair in scene"""
     bl_idname = "object.hair_hide"
     bl_label = "Hide Hair"
+    bl_options = {'UNDO'}
 
     def execute(self, context):
         # particle system modifiers
