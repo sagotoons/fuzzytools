@@ -97,8 +97,6 @@ def update_fuzzy(self, context):
         if scene.world.name == 'Fuzzy World':        
             try:
                 node = bpy.data.node_groups['Fuzzy BG'].nodes
-                node["BG Color 1"].outputs[0].default_value[0:3] = self.bgcolor1
-                node["BG Color 2"].outputs[0].default_value[0:3] = self.bgcolor2
         
                 node["Swap Colors 1"].mute = self.bgcolor_swap
                 node["Swap Colors 2"].mute = self.bgcolor_swap
