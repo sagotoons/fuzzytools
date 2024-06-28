@@ -144,15 +144,15 @@ Enables automatically during rendering""",
         update=check_scene
     )
 
-    bgcolor1: FloatVectorProperty(
+    fuzzy_color1: FloatVectorProperty(
         name="Palette Color 1",
         subtype='COLOR',
         default=(0.09, 0.17, 1.0),
         min=0.0, max=1.0,
     )
 
-    bgcolor2: FloatVectorProperty(
-        name="Pallete Color 2",
+    fuzzy_color2: FloatVectorProperty(
+        name="Palette Color 2",
         subtype='COLOR',
         default=(0.02, 0.05, 0.40),
         min=0.0, max=1.0,
@@ -1339,8 +1339,8 @@ class BackgroundPanel(BuildSceneChild, Panel):
         col.use_property_split = True
         col.use_property_decorate = False
         row = col.row(align=True)
-        row.prop(fuzzyprops, "bgcolor1", text='Palette')
-        row.prop(fuzzyprops, "bgcolor2", text='')
+        row.prop(fuzzyprops, "fuzzy_color1", text='Palette')
+        row.prop(fuzzyprops, "fuzzy_color2", text='')
         row.separator()
         row.label(icon='BLANK1')
         row = col.row(align=True)
