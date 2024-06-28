@@ -1544,9 +1544,9 @@ class VIEW3D_PT_miscellaneous(ViewportChild, Panel):
         split = layout.split(factor=0.25)
         split.alignment = 'RIGHT'
         split.label(text='Local')
-        col1 = split.column(align=True)
-        col1.prop(overlay, "show_relationship_lines")
-        col1.prop(shade, "show_backface_culling")
+        col = split.column(align=True)
+        col.prop(overlay, "show_relationship_lines")
+        col.prop(shade, "show_backface_culling")
         if object is not None:
             split = layout.split(factor=0.25)
             split.alignment = 'RIGHT'
