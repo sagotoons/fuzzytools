@@ -88,40 +88,7 @@ character_list = {
 #    SCENE PROPERTIES
 # ------------------------------------------------------------------------
 
-def update_fuzzy(self, context):
-    scene = context.scene
-    
-    if scene.world is not None:
-        HDR_node = scene.world.node_tree.nodes
-
-        if scene.world.name == 'Fuzzy World':        
-            try:
-                node = bpy.data.node_groups['Fuzzy BG'].nodes
-        
-                node["Swap Colors 1"].mute = self.bgcolor_swap
-                node["Swap Colors 2"].mute = self.bgcolor_swap
-        
-                node["Flat to Gradient"].mute = not self.gradient
-        
-                if self.gradient_type == 'OP1':
-                    node["Radial to Linear"].mute = True
-                else:
-                    node["Radial to Linear"].mute = False
-        
-                node["Window to 3D"].mute = not self.linear_coord
-                node["Linear Ease"].mute = not self.linear_coord
-        
-                node["Scale Gradient"].outputs[0].default_value = self.gradient_scale
-                
-            except KeyError:
-                pass
-
-
 def check(self):
-    # update custom scene properties
-    prop = self.fuzzy_props    
-    prop.gradient = prop.gradient
-   
     # check motion blur markers
     scene = bpy.context.scene
     frame = scene.frame_current
@@ -178,57 +145,17 @@ Enables automatically during rendering""",
     )
 
     bgcolor1: FloatVectorProperty(
-        name="Background color 1",
+        name="Palette Color 1",
         subtype='COLOR',
         default=(0.09, 0.17, 1.0),
         min=0.0, max=1.0,
-        update=update_fuzzy
     )
 
     bgcolor2: FloatVectorProperty(
-        name="Background color 2",
+        name="Pallete Color 2",
         subtype='COLOR',
         default=(0.02, 0.05, 0.40),
         min=0.0, max=1.0,
-        update=update_fuzzy
-    )
-
-    bgcolor_swap: BoolProperty(
-        name="Swap background colors",
-        default=False,
-        update=update_fuzzy
-    )
-
-    gradient: BoolProperty(
-        name="Gradient",
-        description="Enable gradient background",
-        default=True,
-        update=update_fuzzy
-    )
-
-    gradient_type: EnumProperty(
-        name="Gradient Type",
-        description="Type of Gradient background",
-        items=[('OP1', "Radial", ""),
-               ('OP2', "Linear", ""),
-               ],
-        update=update_fuzzy
-    )
-
-    linear_coord: BoolProperty(
-        name="",
-        description="Use global world coordinates for Linear Gradient",
-        default=False,
-        update=update_fuzzy
-    )
-
-    gradient_scale: FloatProperty(
-        name="Gradient Scale",
-        description="Scale gradient from horizon",
-        default=0.5,
-        min=0.001,
-        max=1,
-        update=update_fuzzy
     )
 
 
@@ -1394,21 +1321,6 @@ class BackgroundPanel(BuildSceneChild, Panel):
     bl_label = "Background"
     bl_idname = "VIEW3D_PT_background"
     bl_options = {'DEFAULT_CLOSED'}
-    
-    def draw_header_preset(self, context):
-        scene = context.scene
-        
-        # check for animated Background properties
-        if scene.animation_data is not None:
-            action = scene.animation_data.action
-            if action is not None:
-                for fcurve in action.fcurves:
-                    if 'fuzzy_props' in fcurve.data_path:
-                        fuzzyprops = scene.fuzzy_props
-                        layout = self.layout
-                        layout.scale_x = 1.2
-                        layout.prop(fuzzyprops, "scene_animate", text="", icon='ACTION')        
-                        break
 
     @classmethod
     def poll(cls, context):
