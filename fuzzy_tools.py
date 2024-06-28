@@ -1086,55 +1086,29 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
 
 
 # ------------------------------------------------------------------------
-#    OPERATOR - Show all Hair
+#    OPERATOR - Show/hide all Hair in viewport
 # ------------------------------------------------------------------------
 
-class OBJECT_OT_hair_show(Operator):
-    """Show all hair in scene"""
-    bl_idname = "object.hair_show"
-    bl_label = "Show Hair"
+class OBJECT_OT_hair_viewport(Operator):
+    """Viewport hair visibility"""
+    bl_idname = "object.hair_viewport"
+    bl_label = "Show or Hide Hair"
     bl_options = {'UNDO'}
 
+    hide: bpy.props.BoolProperty()
+    
     def execute(self, context):
         # particle system modifiers
         for obj in bpy.data.objects:
+            # Check for particle system hair modifiers
             for modifier in obj.modifiers:
                 if (modifier.type == 'PARTICLE_SYSTEM' and 
                         modifier.particle_system.particles.data.settings.type == 'HAIR'):
-                    modifier.show_viewport = True
-                            
-        # new CURVES hair 
-        objs_curves = [obj for obj in bpy.data.objects if obj.type == 'CURVES']
-        
-        for obj in objs_curves:
-            obj.hide_viewport = False
+                    modifier.show_viewport = not self.hide
 
-        return {'FINISHED'}
-
-
-# ------------------------------------------------------------------------
-#    OPERATOR - Hide all Hair
-# ------------------------------------------------------------------------
-
-class OBJECT_OT_hair_hide(Operator):
-    """Hide all hair in scene"""
-    bl_idname = "object.hair_hide"
-    bl_label = "Hide Hair"
-    bl_options = {'UNDO'}
-
-    def execute(self, context):
-        # particle system modifiers
-        for obj in bpy.data.objects:
-            for modifier in obj.modifiers:
-                if (modifier.type == 'PARTICLE_SYSTEM' and 
-                        modifier.particle_system.particles.data.settings.type == 'HAIR'):
-                    modifier.show_viewport = False
-        
-        # new CURVES hair 
-        objs_curves = [obj for obj in bpy.data.objects if obj.type == 'CURVES']
-
-        for obj in objs_curves:
-            obj.hide_viewport = True
+            # Check for CURVES type objects
+            if obj.type == 'CURVES':
+                obj.hide_viewport = self.hide
 
         return {'FINISHED'}
 
@@ -1665,8 +1639,8 @@ class VIEW3D_PT_hair(ViewportChild, Panel):
         row = col.row(align=True)
         row.label(text="Visibility")
         row = col.row(align=True)
-        row.operator("object.hair_show", text="Show All", icon='HIDE_OFF')
-        row.operator("object.hair_hide", text="Hide All", icon='HIDE_ON')
+        row.operator("object.hair_viewport", text="Show All", icon='HIDE_OFF').hide = False
+        row.operator("object.hair_viewport", text="Hide All", icon='HIDE_ON').hide = True
         
         hair = bpy.data.objects
         col = layout.grid_flow(row_major=True, columns=2)
@@ -1888,8 +1862,7 @@ classes = [
     OBJECT_OT_fuzzy_rimlight,
     SCENE_OT_fuzzy_eevee,
 
-    OBJECT_OT_hair_show,
-    OBJECT_OT_hair_hide,
+    OBJECT_OT_hair_viewport,
 
     OBJECT_OT_copy_passepartout,    
     MARKER_OT_add_motionblur_marker,
