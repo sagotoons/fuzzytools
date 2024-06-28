@@ -637,11 +637,11 @@ class WORLD_OT_fuzzy_sky(Operator):
             ('gradlinear', "Gradient Linear", "TexGradient", -880, -240),
             ('rampradial', "Radial Ease", "ValToRGB", -700, 20), #row7
             ('ramplinear', "Linear Ease", "ValToRGB", -700, -200),
-            ('sky1', "BG Color 1", "RGB", -680, -440),
-            ('sky2', "BG Color 2", "RGB", -680, -640),
+            ('col1', "BG Color 1", "RGB", -680, -440),
+            ('col2', "BG Color 2", "RGB", -680, -640),
             ('linear2ease', "Linear Ease", "Mix", -420, -200), #row8
-            ('swapsky1', "Swap Colors 1", "MixRGB", -420, -440),
-            ('swapsky2', "Swap Colors 2", "MixRGB", -420, -640),
+            ('swapcol1', "Swap Colors 1", "MixRGB", -420, -440),
+            ('swapcol2', "Swap Colors 2", "MixRGB", -420, -640),
             ('radial2linear', "Radial to Linear", "MixRGB", -220, -80), #row9
             ('colgradient', "Color Gradient", "MixRGB",-40, -300), #row10
             ('flat2gradient', "Flat to Gradient", "MixRGB", 140, -100), #row11   
@@ -675,8 +675,8 @@ class WORLD_OT_fuzzy_sky(Operator):
         ref['power'].operation = 'POWER'
         ref['ramplinear'].color_ramp.interpolation = "EASE"
         ref['rampradial'].color_ramp.interpolation = "EASE"
-        ref['sky1'].outputs[0].default_value = (0.09, 0.17, 1, 1)
-        ref['sky2'].outputs[0].default_value = (0.02, 0.05, 0.40, 1)
+        ref['col1'].outputs[0].default_value = (0.09, 0.17, 1, 1)
+        ref['col2'].outputs[0].default_value = (0.02, 0.05, 0.40, 1)
         ref['vectrans'].convert_from = 'CAMERA'
         ref['vectrans'].convert_to = 'WORLD'
         ref['vectrans'].vector_type = 'NORMAL'
@@ -723,10 +723,10 @@ class WORLD_OT_fuzzy_sky(Operator):
             'radial2linear': [('colgradient', 0)],
             'ramplinear': [('linear2ease', 3)],
             'rampradial': [('radial2linear', 1)],
-            'sky1': [('swapsky1', 2), ('swapsky2', 1)],
-            'sky2': [('swapsky1', 1), ('swapsky2', 2)],
-            'swapsky1': [('colgradient', 1), ('flat2gradient', 1)],
-            'swapsky2': [('colgradient', 2)],
+            'col1': [('swapcol1', 2), ('swapcol2', 1)],
+            'col2': [('swapcol1', 1), ('swapcol2', 2)],
+            'swapcol1': [('colgradient', 1), ('flat2gradient', 1)],
+            'swapcol2': [('colgradient', 2)],
             'vectrans': [('divide', 1)],
             'window3d': [('gradlinear', 0)],
         }
@@ -742,7 +742,7 @@ class WORLD_OT_fuzzy_sky(Operator):
         link(ref['texcoord2'].outputs[5], ref['maplinear'].inputs[0])
 
         switch_links = {
-            'Color Swap': ['swapsky1', 'swapsky2'],
+            'Color Swap': ['swapcol1', 'swapcol2'],
             'Flat Gradient': ['flat2gradient'],
             'Radial Linear': ['radial2linear'],
             'Window Global': ['linear2ease', 'window3d'],
