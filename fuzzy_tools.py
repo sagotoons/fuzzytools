@@ -18,7 +18,8 @@ import bpy
 import math
 
 from bpy.props import (BoolProperty,
-                       FloatProperty,
+                       FloatProperty, 
+                       IntProperty,
                        FloatVectorProperty,
                        EnumProperty,
                        PointerProperty,
@@ -1200,21 +1201,21 @@ class TRANSFORM_OT_keyframes_markers(bpy.types.Operator):
     bl_label = "Move Keyframes and Markers"
     bl_options = {'REGISTER', 'UNDO'}
     
-    frame_shift: bpy.props.IntProperty(
+    frame_shift: IntProperty(
         name="Frames",
         description="Amount of frames to move",
         default=0,
         options={'SKIP_SAVE'}
     )
     
-    before_current: bpy.props.BoolProperty(
+    before_current: BoolProperty(
         name="Before Current Frame",
         description="Move before current frame instead of after",
         default=False,
         options={'SKIP_SAVE'}
     )
 
-    fake_user: bpy.props.BoolProperty(
+    fake_user: BoolProperty(
         name="Fake User",
         description="Include actions with Fake User",
         default=False
