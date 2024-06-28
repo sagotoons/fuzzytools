@@ -692,173 +692,138 @@ class WORLD_OT_fuzzy_sky(Operator):
         # BG group nodes
         nodes = BG_group.nodes
         
-        flat_gradient = nodes.new("ShaderNodeMixRGB")
-        flat_gradient.location = (-80, -120)
-        flat_gradient.name = "Flat to Gradient"
-        flat_gradient.label = "Flat to Gradient"
+        # dictionary
+        ref = {}
+        # list with ref_name, name, type, locx, locy
+        node_list = [
+            ('texcoord2', "Tex Coord", "TexCoord", -1860, -100), # row 1
+            ('gradscale', "Scale Gradient", "Mix", -1860, -500),
+            ('vectrans', "", "VectorTransform", -1650, -300), # row 2
+            ('power', "", "Math", -1650, -480),
+            ('mapsphere', "", "Mapping", -1450, 50), # row 3
+            ('divide', "", "MixRGB", -1450, -350),
+            ('maplinear3d', "", "Mapping", -1250, -400), # row 4
+            ('maplinear', "", "Mapping", -1250, -30),
+            ('gradsphere', "", "TexGradient", -1050, -80), #row5
+            ('window3d', "Window to 3D", "MixRGB", -1050, -240),
+            ('invert', "", "Invert", -880, -80), #row6
+            ('gradlinear', "Gradient Linear", "TexGradient", -880, -240),
+            ('rampradial', "Radial Ease", "ValToRGB", -700, 20), #row7
+            ('ramplinear', "Linear Ease", "ValToRGB", -700, -200),
+            ('sky1', "BG Color 1", "RGB", -680, -440),
+            ('sky2', "BG Color 2", "RGB", -680, -640),
+            ('linear2ease', "Linear Ease", "Mix", -420, -200), #row8
+            ('swapsky1', "Swap Colors 1", "MixRGB", -420, -440),
+            ('swapsky2', "Swap Colors 2", "MixRGB", -420, -640),
+            ('radial2linear', "Radial to Linear", "MixRGB", -220, -80), #row9
+            ('colgradient', "Color Gradient", "MixRGB",-40, -300), #row10
+            ('flat2gradient', "Flat to Gradient", "MixRGB", 140, -100), #row11   
+        ]
+         
+        # create nodes
+        for ref_name, name, type, locx, locy in node_list:
+            node = nodes.new("ShaderNode"+type)
+            node.location = (locx, locy)
+            node.label = name
+            node.name = name
+            
+            # Save ref_name in dictionary
+            ref[ref_name] = node
+     
+        # extra node properties    
+        ref['divide'].blend_type = 'DIVIDE'
+        ref['divide'].inputs[0].default_value = 1
+        ref['gradscale'].inputs[2].default_value = 0.001
+        ref['gradscale'].inputs[3].default_value = 1
+        ref['gradsphere'].gradient_type = 'SPHERICAL'
+        ref['maplinear'].inputs[2].default_value[2] = 1.5708
+        ref['maplinear'].vector_type = 'TEXTURE'
+        ref['maplinear3d'].inputs[1].default_value[2] = -0.5
+        ref['maplinear3d'].inputs[2].default_value[1] = -1.5708
+        ref['maplinear3d'].vector_type = 'TEXTURE'
+        ref['mapsphere'].inputs[1].default_value = (0.5, 0.5, 0)
+        ref['mapsphere'].inputs[3].default_value = (0.71, 0.71, 1)
+        ref['mapsphere'].vector_type = 'TEXTURE'
+        ref['power'].inputs[1].default_value = 2
+        ref['power'].operation = 'POWER'
+        ref['ramplinear'].color_ramp.interpolation = "EASE"
+        ref['rampradial'].color_ramp.interpolation = "EASE"
+        ref['sky1'].outputs[0].default_value = (0.09, 0.17, 1, 1)
+        ref['sky2'].outputs[0].default_value = (0.02, 0.05, 0.40, 1)
+        ref['vectrans'].convert_from = 'CAMERA'
+        ref['vectrans'].convert_to = 'WORLD'
+        ref['vectrans'].vector_type = 'NORMAL'
 
-        sky1 = nodes.new("ShaderNodeRGB")
-        sky1.location = (-680, -440)
-        sky1.name = "BG Color 1"
-        sky1.label = "BG Color 1"
-        sky1.outputs[0].default_value = (0.09, 0.17, 1, 1)
-
-        sky2 = nodes.new("ShaderNodeRGB")
-        sky2.location = (-680, -640)
-        sky2.name = "BG Color 2"
-        sky2.label = "BG Color 2"
-        sky2.outputs[0].default_value = (0.02, 0.05, 0.40, 1)
-        
-        color_swap = nodes.new("ShaderNodeMath")
-        color_swap.location = (-880, -600)
-        color_swap.name = "Color Swap"
-        color_swap.label = "Color Swap"
-        color_swap.operation = 'MULTIPLY'
-        color_swap.inputs[0].default_value = 0
-        color_swap.inputs[1].default_value = 1
-        color_swap.mute = True
-        
-        radial_linear = nodes.new("ShaderNodeMixRGB")
-        radial_linear.location = (-180, -60)
-        radial_linear.label = "Radial to Linear"
-        radial_linear.name = "Radial to Linear"
-        radial_linear.inputs[0].default_value = 1
-        radial_linear.mute = True
-
-        ramp_radial = nodes.new("ShaderNodeValToRGB")
-        ramp_radial.location = (-700, 20)
-        ramp_radial.color_ramp.interpolation = "EASE"
-
-        ramp_linear = nodes.new("ShaderNodeValToRGB")
-        ramp_linear.location = (-700, -200)
-        ramp_linear.label = "Linear Ease"
-        ramp_linear.name = "Linear Ease"
-        ramp_linear.color_ramp.interpolation = "EASE"
-
-        mute_ease = nodes.new("ShaderNodeMix")
-        mute_ease.location = (-420, -200)
-        mute_ease.name = "Mute Ease"
-        mute_ease.label = "Mute Ease"
-
-        swapsky1 = nodes.new("ShaderNodeMixRGB")
-        swapsky1.location = (-450, -440)
-        swapsky1.label = "Swap Colors 1"
-        swapsky1.name = "Swap Colors 1"
-        swapsky1.inputs[0].default_value = 1
-
-        swapsky2 = nodes.new("ShaderNodeMixRGB")
-        swapsky2.location = (-450, -640)
-        swapsky2.label = "Swap Colors 2"
-        swapsky2.name = "Swap Colors 2"
-        swapsky2.inputs[0].default_value = 1
-
-        gradsphere = nodes.new("ShaderNodeTexGradient")
-        gradsphere.location = (-1050, -80)
-        gradsphere.gradient_type = 'SPHERICAL'
-
-        gradlinear = nodes.new("ShaderNodeTexGradient")
-        gradlinear.location = (-880, -240)
-
-        invert = nodes.new("ShaderNodeInvert")
-        invert.location = (-880, -80)
-
-        mapsphere = nodes.new("ShaderNodeMapping")
-        mapsphere.location = (-1250, -170)
-        mapsphere.vector_type = 'TEXTURE'
-        mapsphere.inputs[1].default_value[0] = 0.5
-        mapsphere.inputs[1].default_value[1] = 0.5
-        mapsphere.inputs[3].default_value[0] = 0.71
-        mapsphere.inputs[3].default_value[1] = 0.71
-        mapsphere.hide = True
-
-        maplinear = nodes.new("ShaderNodeMapping")
-        maplinear.location = (-1250, -350)
-        maplinear.vector_type = 'TEXTURE'
-        maplinear.inputs[2].default_value[2] = 1.5708
-        maplinear.hide = True
-
-        maplinear3d = nodes.new("ShaderNodeMapping")
-        maplinear3d.location = (-1250, -400)
-        maplinear3d.vector_type = 'TEXTURE'
-        maplinear3d.inputs[2].default_value[1] = -1.5708
-        maplinear3d.inputs[1].default_value[2] = -0.5
-        maplinear3d.hide = True
-        
-        coord_swap = nodes.new("ShaderNodeMix")
-        coord_swap.location = (-1250, -450)
-        coord_swap.name = "Window to Global"
-        coord_swap.label = "Window to Global"
-        coord_swap.inputs[0].default_value = 0
-        coord_swap.inputs[3].default_value = 1
-
-        window_3d = nodes.new("ShaderNodeMixRGB")
-        window_3d.location = (-1050, -240)
-        window_3d.label = "Window to 3D"
-        window_3d.name = "Window to 3D"
-
-        divide = nodes.new("ShaderNodeMixRGB")
-        divide.location = (-1450, -350)
-        divide.blend_type = 'DIVIDE'
-        divide.inputs[0].default_value = 1
-
-        grad_scale = nodes.new("ShaderNodeMix")
-        grad_scale.location = (-1860, -500)
-        grad_scale.label = "Scale Gradient"
-        grad_scale.name = "Scale Gradient"
-        grad_scale.inputs[2].default_value = 0.001
-        grad_scale.inputs[3].default_value = 1
-
-        power = nodes.new("ShaderNodeMath")
-        power.location = (-1650, -480)
-        power.operation = 'POWER'
-        power.inputs[1].default_value = 2
-
-        texcoord2 = nodes.new("ShaderNodeTexCoord")
-        texcoord2.location = (-1860, -100)
-
-        vec_trans = nodes.new("ShaderNodeVectorTransform")
-        vec_trans.location = (-1650, -300)
-        vec_trans.vector_type = 'NORMAL'
-        vec_trans.convert_from = 'CAMERA'
-        vec_trans.convert_to = 'WORLD'
-
+        # output node
         output = nodes.new("NodeGroupOutput")
-        output.location = (0, -100)
+        output.location = (340, -100)
 
+        switches = [
+            ("Color Swap", -880, -600, True),
+            ("Flat Gradient", -40, -100, True),
+            ("Radial Linear", -420, -40, False),
+            ("Window Global", -1450, -560, False),
+        ]
+        
+        for name, locx, locy, clamp in switches:
+            switch = nodes.new("ShaderNodeMix")
+            switch.location = (locx, locy)
+            switch.name = name
+            switch.label = name
+            switch.clamp_factor = clamp
+            switch.inputs[0].default_value = -1
+            switch.inputs[2].default_value = 1
+            switch.inputs[3].default_value = 2
+            for input in switch.inputs:
+                input.hide = True
+            
         # connect nodes
         link(group.outputs[0], BG2.inputs[0])
         # connect group nodes
         link = BG_group.links.new
-        link(flat_gradient.outputs[0], output.inputs[0])
-        link(swapsky1.outputs[0], flat_gradient.inputs[1])
-        link(swapsky2.outputs[0], flat_gradient.inputs[2])
-        link(sky1.outputs[0], swapsky1.inputs[2])
-        link(sky1.outputs[0], swapsky2.inputs[1])
-        link(sky2.outputs[0], swapsky1.inputs[1])
-        link(sky2.outputs[0], swapsky2.inputs[2])
-        link(color_swap.outputs[0], swapsky1.inputs[0])
-        link(color_swap.outputs[0], swapsky2.inputs[0])
-        link(radial_linear.outputs[0], flat_gradient.inputs[0])
-        link(gradsphere.outputs[0], invert.inputs[1])
-        link(gradlinear.outputs[0], ramp_linear.inputs[0])
-        link(ramp_radial.outputs[0], radial_linear.inputs[1])
-        link(ramp_linear.outputs[0], mute_ease.inputs[3])
-        link(coord_swap.outputs[0], mute_ease.inputs[0])
-        link(coord_swap.outputs[0], window_3d.inputs[0])
-        link(gradlinear.outputs[0], mute_ease.inputs[2])
-        link(mute_ease.outputs[0], radial_linear.inputs[2])
-        link(invert.outputs[0], ramp_radial.inputs[0])
-        link(mapsphere.outputs[0], gradsphere.inputs[0])
-        link(maplinear.outputs[0], window_3d.inputs[1])
-        link(texcoord2.outputs[5], mapsphere.inputs[0])
-        link(texcoord2.outputs[5], maplinear.inputs[0])
-        link(window_3d.outputs[0], gradlinear.inputs[0])
-        link(maplinear3d.outputs[0], window_3d.inputs[2])
-        link(texcoord2.outputs[4], vec_trans.inputs[0])
-        link(vec_trans.outputs[0], divide.inputs[1])
-        link(divide.outputs[0], maplinear3d.inputs[0])
-        link(grad_scale.outputs[0], power.inputs[0])
-        link(power.outputs[0], divide.inputs[2])
+        node_links = {
+            'colgradient': [('flat2gradient', 2)],
+            'divide': [('maplinear3d', 0)],
+            'gradlinear': [('ramplinear', 0), ('linear2ease', 2)],
+            'gradsphere': [('invert', 1)],
+            'gradscale': [('power', 0)],
+            'invert': [('rampradial', 0)],
+            'linear2ease': [('radial2linear', 2)],
+            'maplinear': [('window3d', 1)],
+            'maplinear3d': [('window3d', 2)],
+            'mapsphere': [('gradsphere', 0)],
+            'power': [('divide', 2)],
+            'radial2linear': [('colgradient', 0)],
+            'ramplinear': [('linear2ease', 3)],
+            'rampradial': [('radial2linear', 1)],
+            'sky1': [('swapsky1', 2), ('swapsky2', 1)],
+            'sky2': [('swapsky1', 1), ('swapsky2', 2)],
+            'swapsky1': [('colgradient', 1), ('flat2gradient', 1)],
+            'swapsky2': [('colgradient', 2)],
+            'vectrans': [('divide', 1)],
+            'window3d': [('gradlinear', 0)],
+        }
+        
+        for name, targets in node_links.items():
+            for target, input_index in targets:
+                link(ref[name].outputs[0], ref[target].inputs[input_index])
+       
+        # remaining links
+        link(ref['flat2gradient'].outputs[0], output.inputs[0])
+        link(ref['texcoord2'].outputs[4], ref['vectrans'].inputs[0])
+        link(ref['texcoord2'].outputs[5], ref['mapsphere'].inputs[0])
+        link(ref['texcoord2'].outputs[5], ref['maplinear'].inputs[0])
+
+        switch_links = {
+            'Color Swap': ['swapsky1', 'swapsky2'],
+            'Flat Gradient': ['flat2gradient'],
+            'Radial Linear': ['radial2linear'],
+            'Window Global': ['linear2ease', 'window3d'],
+        }
+        for name, targets in switch_links.items():
+            for target in targets:
+                link(nodes[name].outputs[0], ref[target].inputs[0])
+        
         # check for Fuzzy Floor and set Fuzzy BG node group
         obj = bpy.data.objects
         if 'Fuzzy floor' in obj:
@@ -868,12 +833,6 @@ class WORLD_OT_fuzzy_sky(Operator):
             floor_group.node_tree = BG_group
             tree.links.new(floor_group.outputs[0], floor_alpha.inputs[2])
             floor_alpha.inputs[0].default_value = 1.0
-            
-        # reset Fuzzy properties
-        try:
-            scene['fuzzy_props'].clear()
-        except KeyError:
-            pass
 
         return {'FINISHED'}
 
