@@ -1196,7 +1196,7 @@ class OBJECT_OT_rename_camera_alphabet(Operator):
 # ------------------------------------------------------------------------
 
 class TRANSFORM_OT_keyframes_markers(bpy.types.Operator):
-    """Move keyframes and markers from current frame"""
+    """Move keyframes and markers from current frame, regardless of selection"""
     bl_idname = "transform.keyframes_markers"
     bl_label = "Move Keyframes and Markers"
     bl_options = {'REGISTER', 'UNDO'}
@@ -1215,6 +1215,18 @@ class TRANSFORM_OT_keyframes_markers(bpy.types.Operator):
         options={'SKIP_SAVE'}
     )
 
+    keys: BoolProperty(
+        name="Keyframes",
+        description="Move Keyframes",
+        default=True
+    )
+    
+    markers: BoolProperty(
+        name="Markers",
+        description="Move Markers",
+        default=True
+    )
+    
     fake_user: BoolProperty(
         name="Fake User",
         description="Include actions with Fake User",
@@ -1227,32 +1239,47 @@ class TRANSFORM_OT_keyframes_markers(bpy.types.Operator):
         frames = self.frame_shift
         a = bpy.data.actions
         
-        for action in a:
-            if (self.fake_user or not action.use_fake_user):
-                f = action.fcurves
-                for curve in f:
-                    kfp = curve.keyframe_points
-                    for point in kfp:
-                        if self.before_current == False:
-                            if point.co.x > fr:
+        if self.keys:
+            for action in a:
+                if (self.fake_user or not action.use_fake_user):
+                    f = action.fcurves
+                    for curve in f:
+                        kfp = curve.keyframe_points
+                        for point in kfp:
+                            if self.before_current == False:
+                                if point.co.x > fr:
+                                        point.co_ui.x += frames
+                            else:
+                                if point.co.x < fr:
                                     point.co_ui.x += frames
-                        else:
-                            if point.co.x < fr:
-                                point.co_ui.x += frames
-
-        m = scene.timeline_markers
-        for marker in m:
-            if self.before_current == False:
-                if marker.frame > fr:
-                    marker.frame += frames
-            else:
-                if marker.frame < fr:
-                    marker.frame += frames
+        
+        if self.markers:
+            m = scene.timeline_markers
+            for marker in m:
+                if self.before_current == False:
+                    if marker.frame > fr:
+                        marker.frame += frames
+                else:
+                    if marker.frame < fr:
+                        marker.frame += frames
         
         return {'FINISHED'}
 
     def invoke(self, context, event):
         return context.window_manager.invoke_props_popup(self, event)
+    
+    def draw(self, context):
+        layout = self.layout
+        layout.use_property_split = True
+        layout.prop(self, 'frame_shift')
+        layout.prop(self, 'before_current')
+        row = layout.row(heading="Move")
+        row.prop(self, 'keys')
+        row.prop(self, 'markers')
+        row = layout.row()
+        if not self.keys:
+            row.enabled = False
+        row.prop(self, 'fake_user')
     
 
 # ------------------------------------------------------------------------
