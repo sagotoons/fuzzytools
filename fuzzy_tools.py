@@ -139,7 +139,7 @@ class FuzzyProperties(PropertyGroup):
 
     scene_animate: BoolProperty(
         name='Scene Animation',
-        description="""Update animated Background and motion blur properties in viewport.
+        description="""Update animated motion blur properties in viewport.
 Enables automatically during rendering""",
         default=False,
         update=check_scene
