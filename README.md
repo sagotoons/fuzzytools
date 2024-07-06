@@ -7,7 +7,7 @@ _Fuzzy Tools is specifically created for a fast EEVEE Legacy pipeline, but many 
 Some unique features that come with Fuzzy Tools:
 - Set up lights, camera, world and floor (shadow only) with just one or a few buttons
 - Use markers to enable/disable Motion Blur and change shutter time
-- Alt+M to shift all keyframes and markers from the current frame regardless of selection
+- Alt+M to move keyframes and markers from the current frame, regardless of selection
 
 ## Panels
 
@@ -33,11 +33,6 @@ Quick access to different camera settings and operators, including:
 - Selecting and changing Active Camera
 - Set Markers to animate Motion Blur and Shutter
 - Bind Camera to Markers
-
-# To install
-- Download the fuzzy_tools.py file
-- In Blender, go to Preferences -> Add-ons. Click on 'Install' and find the .py file. Select file and click 'Install Add-on'
-- After successful installation, the add-on should appear in the add-ons list. Click the checkbox beside the add-on to enable it
 
 #
 _Fuzzy Tools should work in blender 3.6, 4.0 and 4.1_
