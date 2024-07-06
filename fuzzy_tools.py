@@ -1217,7 +1217,7 @@ class TRANSFORM_OT_keyframes_markers(bpy.types.Operator):
 
     keys: BoolProperty(
         name="Keyframes",
-        description="Move Keyframes",
+        description="Move Keyframes (NOT linked actions and locked curves)",
         default=True
     )
     
@@ -1241,16 +1241,15 @@ class TRANSFORM_OT_keyframes_markers(bpy.types.Operator):
         
         if self.keys:
             for action in a:
-                if (self.fake_user or not action.use_fake_user):
-                    f = action.fcurves
-                    for curve in f:
-                        kfp = curve.keyframe_points
-                        for point in kfp:
-                            if self.before_current == False:
-                                if point.co.x > fr:
-                                        point.co_ui.x += frames
-                            else:
-                                if point.co.x < fr:
+                if not action.library and (self.fake_user or not action.use_fake_user):
+                    fcurves = action.fcurves
+                    for curve in fcurves:
+                        if not curve.lock:  # Check if the curve is not locked
+                            kfp = curve.keyframe_points
+                            for point in kfp:
+                                if not self.before_current and point.co.x > fr:
+                                    point.co_ui.x += frames
+                                elif self.before_current and point.co.x < fr:
                                     point.co_ui.x += frames
         
         if self.markers:
@@ -1280,6 +1279,7 @@ class TRANSFORM_OT_keyframes_markers(bpy.types.Operator):
         if not self.keys:
             row.enabled = False
         row.prop(self, 'fake_user')
+        layout.label(icon='INFO', text="Target is regardless of selection")
     
 
 # ------------------------------------------------------------------------
