@@ -1281,7 +1281,7 @@ class TRANSFORM_OT_keyframes_markers(bpy.types.Operator):
             row.enabled = False
         row.prop(self, 'fake_user')
         layout.separator(factor=0.5)
-        layout.label(icon='INFO', text="Target is regardless of selection")
+        layout.label(icon='INFO', text="Target is regardless of selection or visibility")
     
 
 # ------------------------------------------------------------------------
