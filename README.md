@@ -7,7 +7,7 @@ _Fuzzy Tools is specifically created for a fast EEVEE Legacy pipeline, but many 
 Some unique features that come with Fuzzy Tools:
 - Set up lights, camera, world and floor (shadow only) with just one or a few buttons
 - Use markers to enable/disable Motion Blur and change shutter time
-- Alt+M to move keyframes and markers from the current frame, regardless of selection
+- Alt+M to [Move Keyframes and Markers](https://github.com/sagotoons/fuzzytools/wiki/Operator-‐-Move-Keyframes-and-Markers) from the current frame, regardless of selection
 
 ## Panels
 
