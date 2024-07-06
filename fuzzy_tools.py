@@ -1272,13 +1272,15 @@ class TRANSFORM_OT_keyframes_markers(bpy.types.Operator):
         layout.use_property_split = True
         layout.prop(self, 'frame_shift')
         layout.prop(self, 'before_current')
-        row = layout.row(heading="Move")
+        layout.separator(factor=0.5)
+        row = layout.row(heading="Target")
         row.prop(self, 'keys')
         row.prop(self, 'markers')
         row = layout.row()
         if not self.keys:
             row.enabled = False
         row.prop(self, 'fake_user')
+        layout.separator(factor=0.5)
         layout.label(icon='INFO', text="Target is regardless of selection")
     
 
