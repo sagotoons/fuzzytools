@@ -1196,7 +1196,7 @@ class OBJECT_OT_rename_camera_alphabet(Operator):
 # ------------------------------------------------------------------------
 
 class TRANSFORM_OT_keyframes_markers(bpy.types.Operator):
-    """Move keyframes and markers from current frame, regardless of selection"""
+    """Move keyframes and markers from current frame, regardless of selection or visibility"""
     bl_idname = "transform.keyframes_markers"
     bl_label = "Move Keyframes and Markers"
     bl_options = {'REGISTER', 'UNDO'}
