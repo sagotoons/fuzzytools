@@ -388,7 +388,7 @@ Delete the default cube"""
         nodes.remove(nodes.get('Principled BSDF'))
 
         matoutput = nodes.get("Material Output")
-        matoutput.location = (400, 80)
+        matoutput.location = (600, 80)
         matoutput.target = 'EEVEE'
 
         mixshader = nodes.new("ShaderNodeMixShader")
@@ -406,7 +406,7 @@ Delete the default cube"""
 
         mix_AO = nodes.new("ShaderNodeMixRGB")
         mix_AO.location = (-570, 100)
-        mix_AO.inputs[0].default_value = 1
+        mix_AO.inputs[0].default_value = 0.7
         mix_AO.blend_type = 'MULTIPLY'
         mix_AO.mute = True
 
@@ -503,6 +503,33 @@ Delete the default cube"""
 #        space.shading.show_backface_culling = True
         space.overlay.show_relationship_lines = False
 
+        # 4.2 or above
+        version = bpy.app.version_string
+        v = float(version[:3])
+        if v >= 4.2:
+            
+            mix_AO.mute = False
+            
+            AO = nodes.new("ShaderNodeAmbientOcclusion")
+            AO.location = (-770, 230)
+            AO.inputs[1].default_value = 1.6
+            link(AO.outputs[1], mix_AO.inputs[2])
+            
+            mixshader2 = nodes.new("ShaderNodeMixShader")
+            mixshader2.location = (400, 60)
+            link(mixshader.outputs[0], mixshader2.inputs[1])
+            link(mixshader2.outputs[0], matoutput.inputs[0])
+            
+            lightpath = nodes.new("ShaderNodeLightPath")
+            lightpath.location = (200, 140)
+            for output in lightpath.outputs:
+                output.hide = True
+            link(lightpath.outputs[1], mixshader2.inputs[0])
+            
+            transp = nodes.new("ShaderNodeBsdfTransparent")
+            transp.location = (200, -80)
+            link(transp.outputs[0], mixshader2.inputs[2])   
+ 
         return {'FINISHED'}
 
 
