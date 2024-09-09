@@ -3,7 +3,7 @@
 bl_info = {
     "name" : "Fuzzy Tools",
     "author" : "Sacha Goedegebure",
-    "version" : (2,0),
+    "version" : (2,0,1),
     "blender" : (3,6,0),
     "location" : "View3d > Sidebar > Fuzzy. Alt+M to move keyframes and markers",
     "description" : "Tools for an efficient 1-person pipeline and multi-camera workflow",
@@ -931,7 +931,9 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         space = context.space_data
 
         # EEVEE RENDER PROPERTIES
-        if bpy.app.version_string.startswith('4.2'):
+        version = bpy.app.version_string
+        v = float(version[:3])
+        if v >= 4.2:
             render.engine = 'BLENDER_EEVEE_NEXT'
             version = render
         else:
