@@ -997,6 +997,11 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         # overlay
         space.shading.use_scene_world = True
         space.overlay.show_look_dev = True
+        
+        # version 4.2+
+        if version == render:
+            eevee.use_shadows = True
+            eevee.use_raytracing = True
                
         return {'FINISHED'}
 
