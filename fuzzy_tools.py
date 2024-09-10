@@ -509,8 +509,10 @@ Delete the default cube"""
         if v >= 4.2:
             
             mix_AO.mute = False
+            mix_AO.name = "AO Factor"
             
             AO = nodes.new("ShaderNodeAmbientOcclusion")
+            AO.name = "AO"
             AO.location = (-770, 230)
             AO.inputs[1].default_value = 1.6
             link(AO.outputs[1], mix_AO.inputs[2])
