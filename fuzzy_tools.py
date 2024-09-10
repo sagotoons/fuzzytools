@@ -1486,13 +1486,26 @@ class FloorPanel(BuildSceneChild, Panel):
         scene = context.scene
 
         try:
-            nodes = bpy.data.materials['floor_shadow'].node_tree.nodes
+            mat = bpy.data.materials['floor_shadow']
+            nodes = mat.node_tree.nodes
             val = 'default_value'
             
             layout = self.layout
             layout.use_property_split = True
             layout.use_property_decorate = False
-            
+
+            # 4.2 or above
+            version = bpy.app.version_string
+            v = float(version[:3])
+            if v >= 4.2:
+                col = layout.column(align=True)
+                col.prop(nodes['AO'].inputs[1], val, text="AO Distance")
+                col.prop(nodes['AO Factor'].inputs[0], val, text="AO Factor")
+                col.separator(factor=0.5)
+                col.prop(mat, 'surface_render_method', text = "Method")
+                if mat.surface_render_method == 'DITHERED':
+                    col.prop(mat, 'use_raytrace_refraction')
+
             col = layout.column(align=True)
             col.prop(nodes['Clamp Value'].inputs[0], val, text="Clamp Dark")
             col.prop(nodes['Dodge Value'].inputs[0], val, text="Dodge Bright") 
