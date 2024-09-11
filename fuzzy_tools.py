@@ -1501,7 +1501,6 @@ class FloorPanel(BuildSceneChild, Panel):
                 col = layout.column(align=True)
                 col.prop(nodes['AO'].inputs[1], val, text="AO Distance")
                 col.prop(nodes['AO Factor'].inputs[0], val, text="AO Factor")
-                col.separator(factor=0.5)
                 col.prop(mat, 'surface_render_method', text = "Method")
                 if mat.surface_render_method == 'DITHERED':
                     col.prop(mat, 'use_raytrace_refraction')
