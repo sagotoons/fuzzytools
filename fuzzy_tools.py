@@ -149,7 +149,7 @@ def check_scene(self, context):
 class FuzzyProperties(PropertyGroup):
 
     scene_animate: BoolProperty(
-        name='Scene Animation',
+        name='Update Motion Blur',
         description="""Update animated motion blur properties in viewport.
 Enables automatically during rendering""",
         default=False,
