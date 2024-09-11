@@ -510,7 +510,7 @@ Delete the default cube"""
         space.overlay.show_relationship_lines = False
 
         # 4.2 or above
-        if is_next_version:
+        if is_next_version():
             mix_AO.mute = False
             mix_AO.name = "AO Factor"
             
@@ -963,7 +963,7 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         space = context.space_data
 
         # EEVEE RENDER PROPERTIES
-        if is_next_version:
+        if is_next_version():
             render.engine = 'BLENDER_EEVEE_NEXT'
             version = render
         else:
@@ -1496,7 +1496,7 @@ class FloorPanel(BuildSceneChild, Panel):
             layout.use_property_decorate = False
 
             # 4.2 or above
-            if is_next_version:
+            if is_next_version():
                 col = layout.column(align=True)
                 col.prop(nodes['AO'].inputs[1], val, text="AO Distance")
                 col.prop(nodes['AO Factor'].inputs[0], val, text="AO Factor")
