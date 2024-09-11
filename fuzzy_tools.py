@@ -33,6 +33,12 @@ from math import radians, degrees
 from bpy.app.handlers import persistent
 
 
+# check blender version for Eevee Next
+def is_next_version(min_version=(4, 2, 0)):
+    current_version = bpy.app.version
+    return current_version >= min_version
+
+
 # find 'sunset.exr' when used in World shader nodes during start up
 @persistent
 def reload_image(dummy):
@@ -504,10 +510,7 @@ Delete the default cube"""
         space.overlay.show_relationship_lines = False
 
         # 4.2 or above
-        bl_version = bpy.app.version_string
-        v = float(bl_version[:3])
-        if v >= 4.2:
-            
+        if is_next_version:
             mix_AO.mute = False
             mix_AO.name = "AO Factor"
             
@@ -960,9 +963,7 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         space = context.space_data
 
         # EEVEE RENDER PROPERTIES
-        bl_version = bpy.app.version_string
-        v = float(bl_version[:3])
-        if v >= 4.2:
+        if is_next_version:
             render.engine = 'BLENDER_EEVEE_NEXT'
             version = render
         else:
@@ -1495,9 +1496,7 @@ class FloorPanel(BuildSceneChild, Panel):
             layout.use_property_decorate = False
 
             # 4.2 or above
-            bl_version = bpy.app.version_string
-            v = float(bl_version[:3])
-            if v >= 4.2:
+            if is_next_version:
                 col = layout.column(align=True)
                 col.prop(nodes['AO'].inputs[1], val, text="AO Distance")
                 col.prop(nodes['AO Factor'].inputs[0], val, text="AO Factor")
