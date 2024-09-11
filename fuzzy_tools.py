@@ -990,8 +990,9 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         eevee.use_ssr_refraction = True
         eevee.use_ssr_halfres = False
         eevee.ssr_quality = 1
-        # motion blur
-        version.motion_blur_position = 'START'
+        # motion blur (blender 4.1 or older)
+        if version == eevee:
+            version.motion_blur_position = 'START'
         # hair
         render.hair_type = 'STRIP'
         # shadow
