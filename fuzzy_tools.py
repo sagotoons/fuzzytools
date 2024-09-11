@@ -974,31 +974,13 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         else:
             render.engine = 'BLENDER_EEVEE'
             version = eevee
-        # ambient occlusion
-        eevee.use_gtao = True
-        eevee.gtao_distance = 1.6
-        eevee.gtao_factor = 0.7
-        eevee.use_gtao_bent_normals = False
-        # bloom
-        eevee.use_bloom = True
-        eevee.bloom_threshold = 1.0
-        eevee.bloom_radius = 5
+            
+        ## GENERAL
         # depth of field
         eevee.bokeh_max_size = 3
         eevee.use_bokeh_jittered = True
-        # screen space reflection
-        eevee.use_ssr_refraction = True
-        eevee.use_ssr_halfres = False
-        eevee.ssr_quality = 1
-        # motion blur (blender 4.1 or older)
-        if version == eevee:
-            version.motion_blur_position = 'START'
         # hair
         render.hair_type = 'STRIP'
-        # shadow
-        eevee.shadow_cascade_size = '4096'
-        eevee.shadow_cube_size = '2048'
-        eevee.use_soft_shadows = True
         # color management
         view.view_transform = 'Filmic'
         view.exposure = 2.0
@@ -1007,7 +989,29 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         space.shading.use_scene_world = True
         space.overlay.show_look_dev = True
         
-        # version 4.2+
+        ## EEVEE LEGACY
+        if version == eevee:
+            # ambient occlusion
+            eevee.use_gtao = True
+            eevee.gtao_distance = 1.6
+            eevee.gtao_factor = 0.7
+            eevee.use_gtao_bent_normals = False
+            # bloom
+            eevee.use_bloom = True
+            eevee.bloom_threshold = 1.0
+            eevee.bloom_radius = 5
+            # screen space reflection
+            eevee.use_ssr_refraction = True
+            eevee.use_ssr_halfres = False
+            eevee.ssr_quality = 1
+            # motion blur
+            version.motion_blur_position = 'START' # other options will crash blender with animated motion blur
+            # shadow
+            eevee.shadow_cascade_size = '4096'
+            eevee.shadow_cube_size = '2048'
+            eevee.use_soft_shadows = True
+        
+        # EEVEE NEXT
         if version == render:
             eevee.use_shadows = True
             eevee.use_raytracing = True
