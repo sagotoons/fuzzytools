@@ -504,8 +504,8 @@ Delete the default cube"""
         space.overlay.show_relationship_lines = False
 
         # 4.2 or above
-        version = bpy.app.version_string
-        v = float(version[:3])
+        bl_version = bpy.app.version_string
+        v = float(bl_version[:3])
         if v >= 4.2:
             
             mix_AO.mute = False
@@ -960,8 +960,8 @@ Enable and adjust settings for ambient occlussion, bloom and color management"""
         space = context.space_data
 
         # EEVEE RENDER PROPERTIES
-        version = bpy.app.version_string
-        v = float(version[:3])
+        bl_version = bpy.app.version_string
+        v = float(bl_version[:3])
         if v >= 4.2:
             render.engine = 'BLENDER_EEVEE_NEXT'
             version = render
@@ -1495,8 +1495,8 @@ class FloorPanel(BuildSceneChild, Panel):
             layout.use_property_decorate = False
 
             # 4.2 or above
-            version = bpy.app.version_string
-            v = float(version[:3])
+            bl_version = bpy.app.version_string
+            v = float(bl_version[:3])
             if v >= 4.2:
                 col = layout.column(align=True)
                 col.prop(nodes['AO'].inputs[1], val, text="AO Distance")
