@@ -1076,6 +1076,11 @@ class MARKER_OT_add_motionblur_marker(Operator):
         scene = context.scene
         fr = scene.frame_current
         marker = scene.timeline_markers
+
+        if is_next_version():
+            version = scene.render
+        else:
+            version = scene.eevee
        
         for m in marker:
             if m.frame == fr and m.name.startswith("mblur"):
@@ -1084,10 +1089,10 @@ class MARKER_OT_add_motionblur_marker(Operator):
 
         if self.blur == 'on':
             marker.new('mblur_on', frame=fr)
-            scene.eevee.use_motion_blur = True
+            version.use_motion_blur = True
         elif self.blur == 'off':
             marker.new('mblur_off', frame=fr)
-            scene.eevee.use_motion_blur = False
+            version.use_motion_blur = False
 
         return {'FINISHED'}
 
@@ -1107,10 +1112,15 @@ class MARKER_OT_shutter_to_markers(Operator):
         markers = scene.timeline_markers
         count = 0
 
+        if is_next_version():
+            version = scene.render
+        else:
+            version = scene.eevee
+
         for marker in markers:
             if marker.select and marker.name.startswith("mblur_on"):
                 base_name = marker.name[:8]
-                v = round(scene.eevee.motion_blur_shutter, 2)
+                v = round(version.motion_blur_shutter, 2)
                 marker.name = f"{base_name} {v}"
                 count += 1
 
@@ -1714,26 +1724,27 @@ class VIEW3D_PT_camera_scene(Panel):
         col.use_property_decorate = False
         col.prop(version, 'use_motion_blur', text="")
         col.prop(version, 'motion_blur_shutter')
-        if context.engine == 'BLENDER_EEVEE':
-            col.separator(factor=0.5)
-            split = col.split(factor=0.4)
-            split.scale_y = 1.2
-            row = split.row()
-            row.scale_x = 1.1
-            row.alignment = 'RIGHT'
-            row.label(text="Marker")
-            # check for 'mblur' marker
-            markers = scene.timeline_markers
-            if markers is not None:
-                for m in markers:
-                    if m.name.startswith('mblur'):
-                        fuzzyprops = scene.fuzzy_props
-                        row.prop(fuzzyprops, 'scene_animate', text="", icon='ACTION')
-                        break
-            row = split.row(align=True)
-            row.operator('marker.add_motionblur_marker', text="On", icon='KEYFRAME_HLT').blur = 'on'
-            row.operator('marker.add_motionblur_marker', text="Off", icon='KEYFRAME').blur = 'off'
-            row.operator('marker.shutter_to_markers', text='', icon='MARKER_HLT')
+
+        # Motion Blur Markers
+        col.separator(factor=0.5)
+        split = col.split(factor=0.4)
+        split.scale_y = 1.2
+        row = split.row()
+        row.scale_x = 1.1
+        row.alignment = 'RIGHT'
+        row.label(text="Marker")
+        # check for 'mblur' marker
+        markers = scene.timeline_markers
+        if markers is not None:
+            for m in markers:
+                if m.name.startswith('mblur'):
+                    fuzzyprops = scene.fuzzy_props
+                    row.prop(fuzzyprops, 'scene_animate', text="", icon='ACTION')
+                    break
+        row = split.row(align=True)
+        row.operator('marker.add_motionblur_marker', text="On", icon='KEYFRAME_HLT').blur = 'on'
+        row.operator('marker.add_motionblur_marker', text="Off", icon='KEYFRAME').blur = 'off'
+        row.operator('marker.shutter_to_markers', text='', icon='MARKER_HLT')
         
         
 class VIEW3D_PT_camera_selected(Panel):
