@@ -100,37 +100,42 @@ def check(self):
     scene = bpy.context.scene
     frame = scene.frame_current
     markers = scene.timeline_markers
+
+    if is_next_version():
+        version = scene.render
+    else:
+        version = scene.eevee
    
     if any(marker.name.startswith('mblur') for marker in markers):
         mblur = False
         # check mblur markers in reversed order
         for k, v in reversed(sorted(markers.items(), key=lambda it: it[1].frame)):
             if v.frame <= frame and v.name.startswith('mblur_on'):
-                scene.eevee.use_motion_blur = True
+                version.use_motion_blur = True
                 val = v.name.strip('mblur_on')
                 try:
-                    scene.eevee.motion_blur_shutter = float(val)
+                    version.motion_blur_shutter = float(val)
                 except ValueError:
                     pass
                 mblur = True
                 break
             elif v.frame <= frame and v.name == 'mblur_off':
-                scene.eevee.use_motion_blur = False
+                version.use_motion_blur = False
                 mblur = True
                 break
         # check for first mblur marker
         if not mblur:
             for k, v in sorted(markers.items(), key=lambda it: it[1].frame):
                 if v.frame >= frame and v.name.startswith('mblur_on'):
-                    scene.eevee.use_motion_blur = True
+                    version.use_motion_blur = True
                     val = v.name.strip('mblur_on')
                     try:
-                        scene.eevee.motion_blur_shutter = float(val)
+                        version.motion_blur_shutter = float(val)
                     except ValueError:
                         pass
                     break
                 elif v.frame >= frame and v.name == 'mblur_off':
-                    scene.eevee.use_motion_blur = False
+                    version.use_motion_blur = False
                     break
 
 
