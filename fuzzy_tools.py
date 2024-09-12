@@ -43,9 +43,14 @@ def is_next_version(min_version=(4, 2, 0)):
 @persistent
 def reload_image(dummy):
     world = bpy.context.scene.world
+    nodes = world.node_tree.nodes
     if world.name != 'Fuzzy World':
         return 
-    node = world.node_tree.nodes['World HDRI']
+    try:
+        node = nodes['World HDRI']
+    except KeyError: ## for files created with Fuzzy Tools 2.0.0 or older
+        nodes['Environment Texture'].name = 'World HDRI'
+        node = nodes['World HDRI']
     # remove suffix
     name = node.image.name.rsplit('.', 1)[0]
     valid_names = {'city', 'courtyard', 'forest', 'interior', 'night', 'studio', 'sunrise', 'sunset'}
