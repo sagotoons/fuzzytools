@@ -43,16 +43,21 @@ def is_next_version(min_version=(4, 2, 0)):
 @persistent
 def reload_image(dummy):
     if bpy.context.scene.world.name != 'Fuzzy World':
+        return 
+    node = bpy.data.worlds['Fuzzy World'].node_tree.nodes['World HDRI']
+    # remove suffix
+    name = node.image.name.rsplit('.', 1)[0]
+    valid_names = {'city', 'courtyard', 'forest', 'interior', 'night', 'studio', 'sunrise', 'sunset'}
+    if name not in valid_names or node.image.file_format == 'OPEN_EXR':
         return
-    node = bpy.data.worlds['Fuzzy World'].node_tree.nodes['Environment Texture']   
-    if not node.image.name.startswith("sunset"):
-        return    
-    if node.image.file_format == 'OPEN_EXR':
-        return
-    node.image.name = "sunset_old"
-    hdri = bpy.data.images.load(
-        bpy.context.preferences.studio_lights['sunset.exr'].path, check_existing=True)
-    node.image = hdri
+    node.image.name = name + "_old"
+    try:
+        hdri = bpy.data.images.load(
+            bpy.context.preferences.studio_lights[name + '.exr'].path, check_existing=True
+        )
+        node.image = hdri
+    except Exception as e:
+        print(f"Error loading HDRI: {e}")
 
 
 # handler initialized during render
@@ -578,61 +583,57 @@ class WORLD_OT_fuzzy_sky(Operator):
         # HDR nodes
         worldoutput = nodes.get("World Output")
         worldoutput.location = (400, 50)
-
-        mixshader = nodes.new("ShaderNodeMixShader")
-        mixshader.location = (200, 60)
-
-        BG1 = nodes.new("ShaderNodeBackground")
-        BG1.location = (0, 160)
-        BG1.inputs[1].default_value = (1.0)
-        BG1.name = 'HDRI Strength'
-        BG1.label = 'HDRI Strength'
-
-        BG2 = nodes.new("ShaderNodeBackground")
-        BG2.location = (0, -100)
-
-        skyclamp = nodes.new("ShaderNodeMixRGB")
-        skyclamp.location = (-180, 260)
-        skyclamp.blend_type = 'DARKEN'
-        skyclamp.inputs[2].default_value = (10,10,10, 1)
         
-        lightpath = nodes.new("ShaderNodeLightPath")
-        lightpath.location = (-400, 100)
-        for output in lightpath.outputs:
+        # dictionary
+        ref = {}
+        # list with ref_name, name, type, locx, locy
+        node_list = [
+            ('texcoord1', "Texture  Coordinate", "TexCoord", -1080, 440), # row 1
+            ('mapskytex2',"Mapping", "Mapping", -880, 440), # row 2
+            ('mapskytex',"HDRI Rotation", "Mapping", -680, 440), # row 3
+            ('skytex', "World HDRI", "TexEnvironment", -480, 400), # row 4
+            ('lightpath', "Light Path", "LightPath", -400, 100),
+            ('skyclamp', "Mix", "MixRGB", -180, 260), #row5
+            ('BG1', "HDRI Strength", "Background", 0, 160), #row6
+            ('BG2', "Background", "Background", 0, -100),
+            ('mixshader',"Mix Shader", "MixShader", 200, 60), #row7
+        ]
+
+        # create nodes
+        for ref_name, name, type, locx, locy in node_list:
+            node = nodes.new("ShaderNode"+type)
+            node.location = (locx, locy)
+            node.label = name
+            node.name = name
+        
+            # Save ref_name in dictionary
+            ref[ref_name] = node
+     
+        # extra node properties    
+        ref['mapskytex2'].inputs[2].default_value[2] = radians(90)
+        for output in ref['lightpath'].outputs:
             output.hide = True
-
-        skytex = nodes.new("ShaderNodeTexEnvironment")
-        skytex.location = (-480, 400)
-
-        mapskytex = nodes.new("ShaderNodeMapping")
-        mapskytex.location = (-680, 440)
-        mapskytex.name = "HDRI Rotation"
-        mapskytex.label = "HDRI Rotation"
-
-        mapskytex2 = nodes.new("ShaderNodeMapping")
-        mapskytex2.location = (-880, 440)
-        mapskytex2.inputs[2].default_value[2] = radians(90)
-
-        texcoord1 = nodes.new("ShaderNodeTexCoord")
-        texcoord1.location = (-1080, 440)        
+        ref['skyclamp'].blend_type = 'DARKEN'
+        ref['skyclamp'].inputs[2].default_value = (10,10,10, 1)
+        ref['BG1'].inputs[1].default_value = (1.0)
 
         # connect nodes
         link = scene.world.node_tree.links.new
-        link(mixshader.outputs[0], worldoutput.inputs[0])
-        link(BG1.outputs[0], mixshader.inputs[1])
-        link(BG2.outputs[0], mixshader.inputs[2])
-        link(lightpath.outputs[0], mixshader.inputs[0])
-        link(lightpath.outputs[5], skyclamp.inputs[0])
-        link(skytex.outputs[0], skyclamp.inputs[1])
-        link(skyclamp.outputs[0], BG1.inputs[0])
-        link(mapskytex.outputs[0], skytex.inputs[0])
-        link(mapskytex2.outputs[0], mapskytex.inputs[0])
-        link(texcoord1.outputs[0], mapskytex2.inputs[0])
+        link(ref['mixshader'].outputs[0], worldoutput.inputs[0])
+        link(ref['BG1'].outputs[0], ref['mixshader'].inputs[1])
+        link(ref['BG2'].outputs[0], ref['mixshader'].inputs[2])
+        link(ref['lightpath'].outputs[0], ref['mixshader'].inputs[0])
+        link(ref['lightpath'].outputs[5], ref['skyclamp'].inputs[0])
+        link(ref['skytex'].outputs[0], ref['skyclamp'].inputs[1])
+        link(ref['skyclamp'].outputs[0], ref['BG1'].inputs[0])
+        link(ref['mapskytex'].outputs[0], ref['skytex'].inputs[0])
+        link(ref['mapskytex2'].outputs[0], ref['mapskytex'].inputs[0])
+        link(ref['texcoord1'].outputs[0], ref['mapskytex2'].inputs[0])
 
         # load the texture from Blender data folder
         hdri = bpy.data.images.load(
             context.preferences.studio_lights['sunset.exr'].path, check_existing=True)
-        skytex.image = hdri
+        ref['skytex'].image = hdri
 
         # check for Fuzzy BG node group and remove
         BG = 'Fuzzy BG'
@@ -743,7 +744,7 @@ class WORLD_OT_fuzzy_sky(Operator):
                 input.hide = True
             
         # connect nodes
-        link(group.outputs[0], BG2.inputs[0])
+        link(group.outputs[0], scene.world.node_tree.nodes['Background'].inputs[0])
         # connect group nodes
         link = BG_group.links.new
         node_links = {
