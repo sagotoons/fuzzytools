@@ -42,9 +42,10 @@ def is_next_version(min_version=(4, 2, 0)):
 # find 'sunset.exr' when used in World shader nodes during start up
 @persistent
 def reload_image(dummy):
-    if bpy.context.scene.world.name != 'Fuzzy World':
+    world = bpy.context.scene.world
+    if world.name != 'Fuzzy World':
         return 
-    node = bpy.data.worlds['Fuzzy World'].node_tree.nodes['World HDRI']
+    node = world.node_tree.nodes['World HDRI']
     # remove suffix
     name = node.image.name.rsplit('.', 1)[0]
     valid_names = {'city', 'courtyard', 'forest', 'interior', 'night', 'studio', 'sunrise', 'sunset'}
