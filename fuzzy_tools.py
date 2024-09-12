@@ -588,9 +588,9 @@ class WORLD_OT_fuzzy_sky(Operator):
         ref = {}
         # list with ref_name, name, type, locx, locy
         node_list = [
-            ('texcoord1', "Texture  Coordinate", "TexCoord", -1080, 440), # row 1
-            ('mapskytex2',"Mapping", "Mapping", -880, 440), # row 2
-            ('mapskytex',"HDRI Rotation", "Mapping", -680, 440), # row 3
+            ('texcoord1', "Texture Coordinate", "TexCoord", -1080, 440), # row 1
+            ('mapskytex1',"Mapping", "Mapping", -880, 440), # row 2
+            ('mapskytex2',"HDRI Rotation", "Mapping", -680, 440), # row 3
             ('skytex', "World HDRI", "TexEnvironment", -480, 400), # row 4
             ('lightpath', "Light Path", "LightPath", -400, 100),
             ('skyclamp', "Mix", "MixRGB", -180, 260), #row5
@@ -610,7 +610,7 @@ class WORLD_OT_fuzzy_sky(Operator):
             ref[ref_name] = node
      
         # extra node properties    
-        ref['mapskytex2'].inputs[2].default_value[2] = radians(90)
+        ref['mapskytex1'].inputs[2].default_value[2] = radians(90)
         for output in ref['lightpath'].outputs:
             output.hide = True
         ref['skyclamp'].blend_type = 'DARKEN'
@@ -626,9 +626,9 @@ class WORLD_OT_fuzzy_sky(Operator):
         link(ref['lightpath'].outputs[5], ref['skyclamp'].inputs[0])
         link(ref['skytex'].outputs[0], ref['skyclamp'].inputs[1])
         link(ref['skyclamp'].outputs[0], ref['BG1'].inputs[0])
-        link(ref['mapskytex'].outputs[0], ref['skytex'].inputs[0])
-        link(ref['mapskytex2'].outputs[0], ref['mapskytex'].inputs[0])
-        link(ref['texcoord1'].outputs[0], ref['mapskytex2'].inputs[0])
+        link(ref['mapskytex2'].outputs[0], ref['skytex'].inputs[0])
+        link(ref['mapskytex1'].outputs[0], ref['mapskytex2'].inputs[0])
+        link(ref['texcoord1'].outputs[0], ref['mapskytex1'].inputs[0])
 
         # load the texture from Blender data folder
         hdri = bpy.data.images.load(
