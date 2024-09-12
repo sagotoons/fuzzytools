@@ -39,7 +39,7 @@ def is_next_version(min_version=(4, 2, 0)):
     return current_version >= min_version
 
 
-# find 'sunset.exr' when used in World shader nodes during start up
+# find HDRI studio light when used in Fuzzy World shader during start up
 @persistent
 def reload_image(dummy):
     world = bpy.context.scene.world
