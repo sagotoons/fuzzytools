@@ -1487,6 +1487,12 @@ class HDRIPanel(BuildSceneChild, Panel):
         col = layout.column(align=True)
         col.use_property_split = True
         col.use_property_decorate = False
+
+        HDRI_node = nodes.get("World HDRI")
+        if HDRI_node:
+            col.template_ID_preview(HDRI_node, 'image', open='image.open',
+                                    rows=3, cols=2, hide_buttons=True)
+            col.separator()
         
         properties = [
             (nodes.get("HDRI Rotation", None), 2, 2, 'Rotation'),
