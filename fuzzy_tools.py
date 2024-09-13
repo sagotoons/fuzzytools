@@ -1512,49 +1512,62 @@ class FloorPanel(BuildSceneChild, Panel):
 
     def draw(self, context):
         scene = context.scene
+        layout = self.layout
+        layout.use_property_split = True
+        layout.use_property_decorate = False
 
-        try:
-            floor = bpy.data.objects['Fuzzy floor']
-            mod = floor.modifiers['Normal Direction']
-            mat = bpy.data.materials['floor_shadow']
-            nodes = mat.node_tree.nodes
-            val = 'default_value'
-            
-            layout = self.layout
-            layout.use_property_split = True
-            layout.use_property_decorate = False
+        floor = bpy.data.objects.get('Fuzzy floor')
+        if floor:
+            mod = floor.modifiers.get('Normal Direction')
+            mat = bpy.data.materials.get('floor_shadow')
+            if mat and mat.node_tree:
+                nodes = mat.node_tree.nodes
+                val = 'default_value'
 
-            # 4.2 or above
-            if is_next_version():
+                # Check Blender version 4.2 or above
+                if is_next_version():
+                    col = layout.column(align=True)
+                    ao_node = nodes.get('AO')
+                    ao_factor_node = nodes.get('AO Factor')
+                    if ao_node:
+                        col.prop(ao_node.inputs[1], val, text="AO Distance")
+                    if ao_factor_node:
+                        col.prop(ao_factor_node.inputs[0], val, text="AO Factor")
+                    col.prop(mat, 'surface_render_method', text="Method")
+                    if mat.surface_render_method == 'DITHERED':
+                        col.prop(mat, 'use_raytrace_refraction')
+
+                clamp_node = nodes.get('Clamp Value')
+                dodge_node = nodes.get('Dodge Value')
+                shadow_node = nodes.get('Shadow Value')
                 col = layout.column(align=True)
-                col.prop(nodes['AO'].inputs[1], val, text="AO Distance")
-                col.prop(nodes['AO Factor'].inputs[0], val, text="AO Factor")
-                col.prop(mat, 'surface_render_method', text = "Method")
-                if mat.surface_render_method == 'DITHERED':
-                    col.prop(mat, 'use_raytrace_refraction')
 
-            col = layout.column(align=True)
-            col.prop(nodes['Clamp Value'].inputs[0], val, text="Clamp Dark")
-            col.prop(nodes['Dodge Value'].inputs[0], val, text="Dodge Bright") 
-            layout.prop(nodes['Shadow Value'].inputs[0], val, text="Value Fix")
-            
-            if 'Fuzzy BG' in bpy.data.node_groups:
-                col = layout.column(heading="Floor", align=True)
-                col.prop(nodes['Floor Alpha'], 'mute', text="Holdout")
-                col = col.column(heading="Film")
-                col.prop(scene.render, "film_transparent")
-                col.ui_units_y = 0.9
-                
-            split = layout.split(factor=0.4)
-            split.alignment='RIGHT'
-            split.label(text='Normal Edit')
-            row = split.row(align=True)
-            row.scale_x = 1.3
-            row.prop(mod, 'show_viewport', text="")  
-            row.prop(mod, 'show_render', text="")
-                
-        except KeyError:
-            pass
+                if clamp_node:
+                    col.prop(clamp_node.inputs[0], val, text="Clamp Dark")
+                if dodge_node:
+                    col.prop(dodge_node.inputs[0], val, text="Dodge Bright")
+                if shadow_node:
+                    layout.prop(shadow_node.inputs[0], val, text="Value Fix")
+
+                fuzzy_bg = bpy.data.node_groups.get('Fuzzy BG')
+                if fuzzy_bg:
+                    col = layout.column(heading="Floor", align=True)
+                    floor_alpha_node = nodes.get('Floor Alpha')
+                    if floor_alpha_node:
+                        col.prop(floor_alpha_node, 'mute', text="Holdout")
+
+                    col = col.column(heading="Film")
+                    col.prop(scene.render, "film_transparent")
+                    col.ui_units_y = 0.9
+
+            if mod:
+                split = layout.split(factor=0.4)
+                split.alignment = 'RIGHT'
+                split.label(text='Normal Edit')
+                row = split.row(align=True)
+                row.scale_x = 1.3
+                row.prop(mod, 'show_viewport', text="")
+                row.prop(mod, 'show_render', text="")
 
 
 # ------------------------------------------------------------------------
