@@ -1514,6 +1514,8 @@ class FloorPanel(BuildSceneChild, Panel):
         scene = context.scene
 
         try:
+            floor = bpy.data.objects['Fuzzy floor']
+            mod = floor.modifiers['Normal Direction']
             mat = bpy.data.materials['floor_shadow']
             nodes = mat.node_tree.nodes
             val = 'default_value'
@@ -1541,6 +1543,15 @@ class FloorPanel(BuildSceneChild, Panel):
                 col.prop(nodes['Floor Alpha'], 'mute', text="Holdout")
                 col = col.column(heading="Film")
                 col.prop(scene.render, "film_transparent")
+                col.ui_units_y = 0.9
+                
+            split = layout.split(factor=0.4)
+            split.alignment='RIGHT'
+            split.label(text='Normal Edit')
+            row = split.row(align=True)
+            row.scale_x = 1.3
+            row.prop(mod, 'show_viewport', text="")  
+            row.prop(mod, 'show_render', text="")
                 
         except KeyError:
             pass
