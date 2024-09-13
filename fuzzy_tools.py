@@ -1490,8 +1490,7 @@ class HDRIPanel(BuildSceneChild, Panel):
 
         HDRI_node = nodes.get("World HDRI")
         if HDRI_node:
-            col.template_ID_preview(HDRI_node, 'image', open='image.open',
-                                    rows=3, cols=2, hide_buttons=True)
+            col.template_ID(HDRI_node, 'image', open='image.open', live_icon=True, unlink='image.reload')
             col.separator()
         
         properties = [
