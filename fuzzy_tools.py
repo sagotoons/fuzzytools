@@ -1526,7 +1526,7 @@ class HDRIPanel(BuildSceneChild, Panel):
         clamp_node = nodes.get("Clamp Reflection")
         if clamp_node:
             col.separator()
-            if is_next_version():
+            if context.engine == 'BLENDER_EEVEE_NEXT':
                 text = "Clamp"
             else:
                 text = "Clamp Glossy"
