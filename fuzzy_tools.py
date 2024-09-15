@@ -597,12 +597,18 @@ class WORLD_OT_fuzzy_sky(Operator):
             ('texcoord1', "Texture Coordinate", "TexCoord", -1080, 440), # row 1
             ('mapskytex1',"Mapping", "Mapping", -880, 440), # row 2
             ('mapskytex2',"HDRI Rotation", "Mapping", -680, 440), # row 3
+            ('clamprefl', "Clamp Reflection", "Value", -680, 60),
+            ('multiply', "Multiply", "Math", -680, -40),
             ('skytex', "World HDRI", "TexEnvironment", -480, 400), # row 4
-            ('lightpath', "Light Path", "LightPath", -400, 100),
-            ('skyclamp', "Mix", "MixRGB", -180, 260), #row5
+            ('greater', "Greater Than", "Math", -480, 160),
+            ('lightpath', "Light Path", "LightPath", -480, -40),
+            ('sepHSV', "Separate Color", "SeparateColor", -180, 400), # row 5
+            ('comHSV', "Combine Color", "CombineColor", 0, 400),
+            ('darken', "Darken", "MixRGB", -180, 240),
             ('BG1', "HDRI Strength", "Background", 0, 160), #row6
             ('BG2', "Background", "Background", 0, -100),
-            ('mixshader',"Mix Shader", "MixShader", 200, 60), #row7
+            ('mixcompare', "Mix Compare", "MixRGB", 200, 400), #row7
+            ('mixshader',"Mix Shader", "MixShader", 200, 60),
         ]
 
         # create nodes
@@ -617,24 +623,39 @@ class WORLD_OT_fuzzy_sky(Operator):
      
         # extra node properties    
         ref['mapskytex1'].inputs[2].default_value[2] = radians(90)
+        ref['clamprefl'].outputs[0].default_value = 2
+        ref['multiply'].operation = 'MULTIPLY'
+        ref['multiply'].inputs[1].default_value = 10
+        ref['greater'].operation = 'GREATER_THAN'
+        ref['greater'].inputs[1].default_value = 0
         for output in ref['lightpath'].outputs:
             output.hide = True
-        ref['skyclamp'].blend_type = 'DARKEN'
-        ref['skyclamp'].inputs[2].default_value = (10,10,10, 1)
-        ref['BG1'].inputs[1].default_value = (1.0)
+        ref['sepHSV'].mode = 'HSV'
+        ref['comHSV'].mode = 'HSV'
+        ref['darken'].blend_type = 'DARKEN'
 
         # connect nodes
         link = scene.world.node_tree.links.new
-        link(ref['mixshader'].outputs[0], worldoutput.inputs[0])
+        link(ref['texcoord1'].outputs[0], ref['mapskytex1'].inputs[0])
+        link(ref['mapskytex1'].outputs[0], ref['mapskytex2'].inputs[0])
+        link(ref['mapskytex2'].outputs[0], ref['skytex'].inputs[0])
+        link(ref['clamprefl'].outputs[0], ref['multiply'].inputs[0])
+        link(ref['clamprefl'].outputs[0], ref['greater'].inputs[0])
+        link(ref['multiply'].outputs[0], ref['darken'].inputs[2])
+        link(ref['skytex'].outputs[0], ref['sepHSV'].inputs[0])
+        link(ref['skytex'].outputs[0], ref['mixcompare'].inputs[1])
+        link(ref['greater'].outputs[0], ref['mixcompare'].inputs[0])
+        link(ref['lightpath'].outputs[5], ref['darken'].inputs[0])
+        link(ref['lightpath'].outputs[0], ref['mixshader'].inputs[0])
+        for i in range(2):
+            link(ref['sepHSV'].outputs[i], ref['comHSV'].inputs[i])
+        link(ref['sepHSV'].outputs[2], ref['darken'].inputs[1])
+        link(ref['darken'].outputs[0], ref['comHSV'].inputs[2])
+        link(ref['comHSV'].outputs[0], ref['mixcompare'].inputs[2])
         link(ref['BG1'].outputs[0], ref['mixshader'].inputs[1])
         link(ref['BG2'].outputs[0], ref['mixshader'].inputs[2])
-        link(ref['lightpath'].outputs[0], ref['mixshader'].inputs[0])
-        link(ref['lightpath'].outputs[5], ref['skyclamp'].inputs[0])
-        link(ref['skytex'].outputs[0], ref['skyclamp'].inputs[1])
-        link(ref['skyclamp'].outputs[0], ref['BG1'].inputs[0])
-        link(ref['mapskytex2'].outputs[0], ref['skytex'].inputs[0])
-        link(ref['mapskytex1'].outputs[0], ref['mapskytex2'].inputs[0])
-        link(ref['texcoord1'].outputs[0], ref['mapskytex1'].inputs[0])
+        link(ref['mixcompare'].outputs[0], ref['BG1'].inputs[0])
+        link(ref['mixshader'].outputs[0], worldoutput.inputs[0])
 
         # load the texture from Blender data folder
         hdri = bpy.data.images.load(
@@ -657,7 +678,7 @@ class WORLD_OT_fuzzy_sky(Operator):
 
         # create empty group node and apply Fuzzy BG
         group = nodes.new("ShaderNodeGroup")
-        group.location = (-300, -200)
+        group.location = (-180, -100)
         group.name = "BG Group"
         group.node_tree = BG_group
         
