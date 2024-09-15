@@ -1729,6 +1729,16 @@ class VIEW3D_PT_cameras(Panel):
     bl_options = {'DEFAULT_CLOSED'}
     bl_order = 3
 
+    def draw_header_preset(self, context):
+        layout = self.layout
+        scene = context.scene
+        object = context.active_object
+        layout.scale_x = 1.2        
+        if object != scene.camera and scene.camera != None and context.mode == 'OBJECT':
+            if scene.camera.name not in context.view_layer.objects:
+                layout.enabled = False
+            layout.operator("object.select_camera", text="", icon='RESTRICT_SELECT_OFF')
+
     def draw(self, context):
         pass
 
@@ -1739,16 +1749,6 @@ class VIEW3D_PT_camera_scene(Panel):
     bl_region_type = 'UI'
     bl_parent_id = 'VIEW3D_PT_cameras'
     bl_options = {'DEFAULT_CLOSED'}
-
-    def draw_header_preset(self, context):
-        layout = self.layout
-        scene = context.scene
-        object = context.active_object
-        layout.scale_x = 1.2        
-        if object != scene.camera and scene.camera != None and context.mode == 'OBJECT':
-            if scene.camera.name not in context.view_layer.objects:
-                layout.enabled = False
-            layout.operator("object.select_camera", text="", icon='RESTRICT_SELECT_OFF')
         
     def draw(self, context):
         scene = context.scene
