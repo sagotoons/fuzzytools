@@ -645,7 +645,7 @@ class WORLD_OT_fuzzy_sky(Operator):
         link(ref['skytex'].outputs[0], ref['sepHSV'].inputs[0])
         link(ref['skytex'].outputs[0], ref['mixcompare'].inputs[1])
         link(ref['greater'].outputs[0], ref['mixcompare'].inputs[0])
-        link(ref['lightpath'].outputs[5], ref['darken'].inputs[0])
+        link(ref['lightpath'].outputs[3], ref['darken'].inputs[0])
         link(ref['lightpath'].outputs[0], ref['mixshader'].inputs[0])
         for i in range(2):
             link(ref['sepHSV'].outputs[i], ref['comHSV'].inputs[i])
@@ -1529,7 +1529,7 @@ class HDRIPanel(BuildSceneChild, Panel):
             if is_next_version():
                 text = "Clamp"
             else:
-                text = "Clamp Reflection"
+                text = "Clamp Glossy"
             col.prop(clamp_node.outputs[0], 'default_value', text=text)
                 
 
