@@ -1522,6 +1522,15 @@ class HDRIPanel(BuildSceneChild, Panel):
         for node, index1, index2, label in properties:
             if node is not None:
                 col.prop(node.inputs[index1], 'default_value', index=index2, text=label)
+
+        clamp_node = nodes.get("Clamp Reflection")
+        if clamp_node:
+            col.separator()
+            if is_next_version():
+                text = "Clamp"
+            else:
+                text = "Clamp Reflection"
+            col.prop(clamp_node.outputs[0], 'default_value', text=text)
                 
 
 class FloorPanel(BuildSceneChild, Panel):
