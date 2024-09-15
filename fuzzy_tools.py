@@ -588,27 +588,27 @@ class WORLD_OT_fuzzy_sky(Operator):
 
         # HDR nodes
         worldoutput = nodes.get("World Output")
-        worldoutput.location = (400, 50)
+        worldoutput.location = (900, 50)
         
         # dictionary
         ref = {}
         # list with ref_name, name, type, locx, locy
         node_list = [
-            ('texcoord1', "Texture Coordinate", "TexCoord", -1080, 440), # row 1
-            ('mapskytex1',"Mapping", "Mapping", -880, 440), # row 2
-            ('mapskytex2',"HDRI Rotation", "Mapping", -680, 440), # row 3
-            ('clamprefl', "Clamp Reflection", "Value", -680, 60),
-            ('multiply', "Multiply", "Math", -680, -40),
-            ('skytex', "World HDRI", "TexEnvironment", -480, 400), # row 4
-            ('greater', "Greater Than", "Math", -480, 160),
-            ('lightpath', "Light Path", "LightPath", -480, -40),
-            ('sepHSV', "Separate Color", "SeparateColor", -180, 400), # row 5
-            ('comHSV', "Combine Color", "CombineColor", 0, 400),
-            ('darken', "Darken", "MixRGB", -180, 240),
-            ('BG1', "HDRI Strength", "Background", 0, 160), #row6
-            ('BG2', "Background", "Background", 0, -100),
-            ('mixcompare', "Mix Compare", "MixRGB", 200, 400), #row7
-            ('mixshader',"Mix Shader", "MixShader", 200, 60),
+            ('texcoord1', "Texture Coordinate", "TexCoord", -1000, 440), # row 1
+            ('mapskytex1',"Mapping", "Mapping", -800, 440), # row 2
+            ('mapskytex2',"HDRI Rotation", "Mapping", -600, 440), # row 3
+            ('clamprefl', "Clamp Reflection", "Value", -600, 60),
+            ('multiply', "Multiply", "Math", -600, -40),
+            ('skytex', "World HDRI", "TexEnvironment", -400, 400), # row 4
+            ('greater', "Greater Than", "Math", -400, 160),
+            ('lightpath', "Light Path", "LightPath", -400, -40),
+            ('sepHSV', "Separate Color", "SeparateColor", -100, 400), # row 5
+            ('darken', "Darken", "MixRGB", -100, 240),
+            ('mixrefl', "Mix Reflection", "MixRGB", 100, 400), #row6
+            ('comHSV', "Combine Color", "CombineColor", 300, 400), #row7
+            ('BG1', "HDRI Strength", "Background", 500, 160), #row8
+            ('BG2', "Background", "Background", 500, -100),
+            ('mixshader',"Mix Shader", "MixShader", 700, 60), #row9
         ]
 
         # create nodes
@@ -631,8 +631,8 @@ class WORLD_OT_fuzzy_sky(Operator):
         for output in ref['lightpath'].outputs:
             output.hide = True
         ref['sepHSV'].mode = 'HSV'
-        ref['comHSV'].mode = 'HSV'
         ref['darken'].blend_type = 'DARKEN'
+        ref['comHSV'].mode = 'HSV'
 
         # connect nodes
         link = scene.world.node_tree.links.new
@@ -643,18 +643,18 @@ class WORLD_OT_fuzzy_sky(Operator):
         link(ref['clamprefl'].outputs[0], ref['greater'].inputs[0])
         link(ref['multiply'].outputs[0], ref['darken'].inputs[2])
         link(ref['skytex'].outputs[0], ref['sepHSV'].inputs[0])
-        link(ref['skytex'].outputs[0], ref['mixcompare'].inputs[1])
-        link(ref['greater'].outputs[0], ref['mixcompare'].inputs[0])
+        link(ref['greater'].outputs[0], ref['mixrefl'].inputs[0])
         link(ref['lightpath'].outputs[3], ref['darken'].inputs[0])
         link(ref['lightpath'].outputs[0], ref['mixshader'].inputs[0])
         for i in range(2):
             link(ref['sepHSV'].outputs[i], ref['comHSV'].inputs[i])
         link(ref['sepHSV'].outputs[2], ref['darken'].inputs[1])
-        link(ref['darken'].outputs[0], ref['comHSV'].inputs[2])
-        link(ref['comHSV'].outputs[0], ref['mixcompare'].inputs[2])
+        link(ref['sepHSV'].outputs[2], ref['mixrefl'].inputs[1])
+        link(ref['darken'].outputs[0], ref['mixrefl'].inputs[2])
+        link(ref['mixrefl'].outputs[0], ref['comHSV'].inputs[2])
+        link(ref['comHSV'].outputs[0], ref['BG1'].inputs[0])
         link(ref['BG1'].outputs[0], ref['mixshader'].inputs[1])
         link(ref['BG2'].outputs[0], ref['mixshader'].inputs[2])
-        link(ref['mixcompare'].outputs[0], ref['BG1'].inputs[0])
         link(ref['mixshader'].outputs[0], worldoutput.inputs[0])
 
         # load the texture from Blender data folder
@@ -678,7 +678,7 @@ class WORLD_OT_fuzzy_sky(Operator):
 
         # create empty group node and apply Fuzzy BG
         group = nodes.new("ShaderNodeGroup")
-        group.location = (-180, -100)
+        group.location = (300, -100)
         group.name = "BG Group"
         group.node_tree = BG_group
         
