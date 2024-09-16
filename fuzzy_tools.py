@@ -1534,7 +1534,7 @@ class HDRIPanel(BuildSceneChild, Panel):
                 
 
 class FloorPanel(BuildSceneChild, Panel):
-    bl_label = "Floor Shadow"
+    bl_label = "Fuzzy Floor"
     bl_idname = "VIEW3D_PT_floor"
     bl_options = {'DEFAULT_CLOSED'}
 
