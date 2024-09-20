@@ -1731,13 +1731,10 @@ class VIEW3D_PT_cameras(Panel):
 
     def draw_header_preset(self, context):
         layout = self.layout
-        scene = context.scene
-        object = context.active_object
-        layout.scale_x = 1.2        
-        if object != scene.camera and scene.camera != None and context.mode == 'OBJECT':
-            if scene.camera.name not in context.view_layer.objects:
-                layout.enabled = False
-            layout.operator("object.select_camera", text="", icon='RESTRICT_SELECT_OFF')
+        coll = context.view_layer.layer_collection
+        cam_coll = coll.children.get('Cameras')
+        if cam_coll:
+            layout.prop(cam_coll, 'exclude', text="", icon='HIDE_OFF', emboss=False)
 
     def draw(self, context):
         pass
@@ -1749,6 +1746,17 @@ class VIEW3D_PT_camera_scene(Panel):
     bl_region_type = 'UI'
     bl_parent_id = 'VIEW3D_PT_cameras'
     bl_options = {'DEFAULT_CLOSED'}
+
+    def draw_header_preset(self, context):
+        layout = self.layout
+        scene = context.scene
+        active_obj = context.view_layer.objects.active
+           
+        if scene.camera and active_obj != scene.camera and context.mode == 'OBJECT':
+            if scene.camera.name not in context.view_layer.objects:
+                layout.enabled = False
+            layout.operator("object.select_camera", text="", 
+                                icon='RESTRICT_SELECT_OFF', emboss=False)
         
     def draw(self, context):
         scene = context.scene
@@ -1845,16 +1853,14 @@ class VIEW3D_PT_camera_selected(Panel):
     
     @classmethod
     def poll(cls, context):
-        scene = context.scene
-        objects = scene.objects
-        return context.active_object is not None and context.object.type == 'CAMERA'
+        return context.view_layer.objects.active is not None and context.object.type == 'CAMERA'
 
     def draw_header(self, context):
-        object = context.active_object
-        if object != context.scene.camera:
-            self.layout.operator('view3d.set_active_camera', text=object.name, icon="CAMERA_DATA")
+        active_obj = context.view_layer.objects.active
+        if active_obj and active_obj != context.scene.camera:
+            self.layout.operator('view3d.set_active_camera', text=active_obj.name, icon="CAMERA_DATA")
         else:
-            self.layout.prop(object, "name", text='', emboss=False, icon="VIEW_CAMERA")
+            self.layout.prop(active_obj, "name", text='', emboss=False, icon="VIEW_CAMERA")
     
     def draw(self, context):
         layout = self.layout
