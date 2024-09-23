@@ -1731,10 +1731,10 @@ class VIEW3D_PT_cameras(Panel):
 
     def draw_header_preset(self, context):
         layout = self.layout
-        coll = context.view_layer.layer_collection
-        cam_coll = coll.children.get('Cameras')
+        colls = bpy.data.collections
+        cam_coll = colls.get('Cameras')
         if cam_coll:
-            layout.prop(cam_coll, 'exclude', text="", icon='HIDE_OFF', emboss=False)
+            layout.prop(cam_coll, 'hide_viewport', text="", icon='HIDE_OFF', emboss=False)
 
     def draw(self, context):
         pass
