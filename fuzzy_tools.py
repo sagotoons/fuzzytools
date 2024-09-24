@@ -1767,38 +1767,37 @@ class VIEW3D_PT_camera_scene(Panel):
             col.scale_y = 1.3
             col.operator("object.fuzzy_camera", text="Build", icon='CAMERA_DATA')
 
-        # subpanel for blender 4.1 or higher
-        bl_version = bpy.app.version_string
-        v = float(bl_version[:3])
-        if v >= 4.1:
+        # subpanel for blender 4.1 or higher, else box
+        bl_version = bpy.app.version
+        if bl_version >= (4, 1, 0):
             header, panel = layout.panel("VIEW3D_PT_camera_scene", default_closed=True)
-            header.label(text="Active Camera")
+            row = header.row(align=True)
             sub = panel
         else:
             box = layout.box()
             col = box.column(align=True)
             col.label(text='Active:')
-            sub = box
-        if sub:
-            if 'panel' in locals():
-                col = sub.column(align=True)
             row = col.row(align=True)
-            row.prop(scene, "camera", text="", icon='CAMERA_DATA')
-            col.separator()
-            row.operator('view3d.view_camera', text='', icon='VIEWZOOM')
-            row.operator('view3d.camera_to_view', text='', icon='DECORATE_OVERRIDE')
+            sub = box
 
-            if scene.camera is not None:
-                cam = scene.camera.data
-                row = col.row(align=True)
-                row.prop(cam, 'lens')
-                row = col.row(align=True)
-                row.prop(cam, 'clip_start', text="Start")
-                row.prop(cam, 'clip_end', text="End")
-                col.separator()
-                row = col.row(align=True)
-                row.prop(cam, 'passepartout_alpha', text="Passepartout")
-                row.operator('object.copy_passepartout', text='', icon='DUPLICATE')
+        row.prop(scene, "camera", text="", icon='CAMERA_DATA')
+        row.operator('view3d.view_camera', text='', icon='VIEWZOOM')
+        row.operator('view3d.camera_to_view', text='', icon='DECORATE_OVERRIDE')
+
+        if sub and scene.camera is not None:
+            container = panel if bl_version >= (4, 1, 0) else box
+            col = container.column(align=True)
+            # camera properties
+            cam = scene.camera.data
+            row = col.row(align=True)
+            row.prop(cam, 'lens')
+            row = col.row(align=True)
+            row.prop(cam, 'clip_start', text="Start")
+            row.prop(cam, 'clip_end', text="End")
+            col.separator()
+            row = col.row(align=True)
+            row.prop(cam, 'passepartout_alpha', text="Passepartout")
+            row.operator('object.copy_passepartout', text='', icon='DUPLICATE')
 
         if context.space_data.lock_camera == True:
             icon = 'LOCKED'
