@@ -1464,13 +1464,10 @@ class BackgroundPanel(BuildSceneChild, Panel):
         row.prop(BG_node['BG Color 2' if swap else 'BG Color 1'].outputs[0], 'default_value', text='')
 
         row.separator()
-        row.prop(BG_node['Color Swap'], 'clamp_factor', icon='FILE_REFRESH', 
-                                            icon_only=True, emboss=False)
+        row.prop(BG_node['Color Swap'], 'clamp_factor', icon='FILE_REFRESH', icon_only=True, emboss=False)
+        
         col = layout.column(align=True)
-        row = col.row(align=True)
-        row.prop(BG_node['Flat Gradient'], 'clamp_factor', text='Gradient')
-
-        col.separator(factor=0.2)
+        col.prop(BG_node['Flat Gradient'], 'clamp_factor', text='Gradient')
         row = col.row(align=True)
         r1 = row.row(align=True)
         r2 = row.row(align=True)
@@ -1480,13 +1477,16 @@ class BackgroundPanel(BuildSceneChild, Panel):
         r2.enabled = BG_node['Flat Gradient'].clamp_factor and BG_node['Radial Linear'].clamp_factor
         r2.prop(BG_node['Window Global'], 'clamp_factor', text='', icon='WORLD')
 
-        col = layout.column(align=True)
+        col = col.column(align=True)
         node1 = BG_node['Window Global']
         node2 = BG_node['Flat Gradient']
         node3 = BG_node['Radial Linear']
         col.enabled = node1.clamp_factor and node2.clamp_factor and node3.clamp_factor
-        if node1.clamp_factor == True:
+        if node1.clamp_factor:
+            col.separator(factor=0.2)
             col.prop(BG_node['Scale Gradient'].inputs[0], "default_value", text='Scale from Horizon')
+
+        layout.prop(scene.render, "film_transparent")
 
 
 class HDRIPanel(BuildSceneChild, Panel):
@@ -1586,14 +1586,10 @@ class FloorPanel(BuildSceneChild, Panel):
 
                 fuzzy_bg = bpy.data.node_groups.get('Fuzzy BG')
                 if fuzzy_bg:
-                    col = layout.column(heading="Floor", align=True)
+                    col = layout.column(heading="Floor")
                     floor_alpha_node = nodes.get('Floor Alpha')
                     if floor_alpha_node:
                         col.prop(floor_alpha_node, 'mute', text="Holdout")
-
-                    col = col.column(heading="Film")
-                    col.prop(scene.render, "film_transparent")
-                    col.ui_units_y = 0.9
 
             if mod:
                 split = layout.split(factor=0.4)
