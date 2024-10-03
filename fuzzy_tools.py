@@ -1765,7 +1765,7 @@ class VIEW3D_PT_camera_scene(Panel):
 
         if context.mode == 'OBJECT':
             col = layout.column()
-            col.scale_y = 1.3
+            col.scale_y = 1.2
             col.operator("object.fuzzy_camera", text="Build", icon='CAMERA_DATA')
 
         # subpanel for blender 4.1 or higher, else box
@@ -1805,8 +1805,8 @@ class VIEW3D_PT_camera_scene(Panel):
         else:
             icon = 'UNLOCKED'
         row = layout.row(align=True)
-        row.scale_x = 1.3
-        row.scale_y = 1.1
+        row.scale_x = 1.2
+        row.scale_y = 1.2
         row.prop(context.space_data, 'lock_camera', text='', icon=icon)
         row.label(text=' Lock to View')
 
@@ -1869,7 +1869,7 @@ class VIEW3D_PT_camera_selected(Panel):
         layout.use_property_decorate = False
         
         row = layout.row(align=True)
-        row.scale_y = 1.3
+        row.scale_y = 1.2
         row.operator('marker.camera_bind_new', text="Bind to Marker", icon='KEYFRAME_HLT')
         row.separator(factor=0.5)
         row.scale_x = 1.2
