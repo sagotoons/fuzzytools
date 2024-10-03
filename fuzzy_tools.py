@@ -1932,8 +1932,8 @@ classes = [
     BuildAllPanel,
     BuildPartsPanel,
     BackgroundPanel,
-    HDRIPanel,
     FloorPanel,
+    HDRIPanel,
 
     VIEW3D_PT_viewport,
     VIEW3D_PT_simplify,
