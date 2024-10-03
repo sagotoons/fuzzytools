@@ -327,7 +327,12 @@ Delete the default cube"""
         # delete objects
         for name in ["Cube", "Fuzzy floor", "floor normal"]:
             if name in objects:
-                bpy.data.objects.remove(bpy.data.objects[name])
+                obj = bpy.data.objects[name]
+                if name == "Cube":
+                    if hasattr(obj.data, 'polygons') and len(obj.data.polygons) == 6:
+                        bpy.data.objects.remove(obj)
+                else:
+                    bpy.data.objects.remove(obj)
 
         # add floor
         bpy.ops.mesh.primitive_plane_add(size=60, location=(0, 0, 0))
