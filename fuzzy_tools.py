@@ -529,7 +529,6 @@ Delete the default cube"""
 
         # viewport settings
         space = context.space_data
-#        space.shading.show_backface_culling = True
         space.overlay.show_relationship_lines = False
 
         # 4.2 or above
@@ -699,7 +698,9 @@ class WORLD_OT_fuzzy_sky(Operator):
         node_list = [
             ('texcoord2', "Tex Coord", "TexCoord", -1860, -100), # row 1
             ('gradscale', "Scale Gradient", "Mix", -1860, -500),
-            ('vectrans', "", "VectorTransform", -1650, -300), # row 2
+            ('radialloc', "Radial Location", "VectorMath", -1650, 220), # row 2
+            ('radialscale', "Radial Scale", "VectorMath", -1650, -40),
+            ('vectrans', "", "VectorTransform", -1650, -300),
             ('power', "", "Math", -1650, -480),
             ('mapsphere', "", "Mapping", -1450, 50), # row 3
             ('divide', "", "MixRGB", -1450, -350),
@@ -732,6 +733,10 @@ class WORLD_OT_fuzzy_sky(Operator):
             ref[ref_name] = node
      
         # extra node properties    
+        ref['radialloc'].inputs[1].default_value = (0.5, 0.5, 0)
+        ref['radialscale'].operation = 'MULTIPLY'
+        ref['radialscale'].inputs[0].default_value = (1, 1, 0)
+        ref['radialscale'].inputs[1].default_value = (0.71, 0.71, 1)
         ref['divide'].blend_type = 'DIVIDE'
         ref['divide'].inputs[0].default_value = 1
         ref['gradscale'].inputs[2].default_value = 0.001
@@ -742,8 +747,6 @@ class WORLD_OT_fuzzy_sky(Operator):
         ref['maplinear3d'].inputs[1].default_value[2] = -0.5
         ref['maplinear3d'].inputs[2].default_value[1] = -1.5708
         ref['maplinear3d'].vector_type = 'TEXTURE'
-        ref['mapsphere'].inputs[1].default_value = (0.5, 0.5, 0)
-        ref['mapsphere'].inputs[3].default_value = (0.71, 0.71, 1)
         ref['mapsphere'].vector_type = 'TEXTURE'
         ref['power'].inputs[1].default_value = 2
         ref['power'].operation = 'POWER'
@@ -783,6 +786,8 @@ class WORLD_OT_fuzzy_sky(Operator):
         # connect group nodes
         link = BG_group.links.new
         node_links = {
+            'radialloc': [('mapsphere', 1)],
+            'radialscale': [('mapsphere', 3)],
             'colgradient': [('flat2gradient', 2)],
             'divide': [('maplinear3d', 0)],
             'gradlinear': [('ramplinear', 0), ('linear2ease', 2)],
@@ -1494,26 +1499,37 @@ class BackgroundPanel(BuildSceneChild, Panel):
         
         col = layout.column(align=True)
         col.prop(BG_node['Flat Gradient'], 'clamp_factor', text='Gradient')
+        
+        col = col.column(align=True)
+        node1 = BG_node['Flat Gradient']
+        node2 = BG_node['Radial Linear']
+        node3 = BG_node['Window Global']
+        col.enabled = node1.clamp_factor
         row = col.row(align=True)
-        r1 = row.row(align=True)
-        r2 = row.row(align=True)
-        r1.enabled = BG_node['Flat Gradient'].clamp_factor
-        r1.prop(BG_node['Radial Linear'], 'clamp_factor', text='Radial', toggle=1, invert_checkbox=True)
-        r1.prop(BG_node['Radial Linear'], 'clamp_factor', text='Linear', toggle=1)
-        r2.enabled = BG_node['Flat Gradient'].clamp_factor and BG_node['Radial Linear'].clamp_factor
-        r2.prop(BG_node['Window Global'], 'clamp_factor', text='', icon='WORLD')
+        row.prop(BG_node['Radial Linear'], 'clamp_factor', text='Radial', toggle=1, invert_checkbox=True)
+        row.prop(BG_node['Radial Linear'], 'clamp_factor', text='Linear', toggle=1)
+        row = row.row(align=True)
+        row.enabled = node2.clamp_factor
+        row.prop(BG_node['Window Global'], 'clamp_factor', text='', icon='WORLD')
 
         col = col.column(align=True)
-        node1 = BG_node['Window Global']
-        node2 = BG_node['Flat Gradient']
-        node3 = BG_node['Radial Linear']
-        col.enabled = node1.clamp_factor and node2.clamp_factor and node3.clamp_factor
-        if node1.clamp_factor:
-            col.separator(factor=0.2)
+        col.separator(factor=0.5)
+        if node2.clamp_factor:
+            if not node3.clamp_factor:
+                col.enabled = False
             col.prop(BG_node['Scale Gradient'].inputs[0], "default_value", text='Scale from Horizon')
-
+        elif not node2.clamp_factor:
+            col.use_property_split = True
+            col.use_property_decorate = False
+            row = col.row(align=True)
+            row.prop(BG_node['Radial Location'].inputs[0], "default_value", text="Loc XY", index=0)
+            row.prop(BG_node['Radial Location'].inputs[0], "default_value", text="", index=1)
+            row = col.row(align=True)
+            row.prop(BG_node['Radial Scale'].inputs[0], "default_value", text="Scale XY", index=0)
+            row.prop(BG_node['Radial Scale'].inputs[0], "default_value", text="", index=1)
+        
         layout.prop(scene.render, "film_transparent")
-
+        
 
 class HDRIPanel(BuildSceneChild, Panel):
     bl_label = "HDRI"
