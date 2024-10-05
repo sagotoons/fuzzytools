@@ -984,7 +984,7 @@ class OBJECT_OT_fuzzy_rimlight(Operator):
 
 class SCENE_OT_fuzzy_eevee(Operator):
     """Set the render engine to EEVEE and optimize render settings.
-Enable and adjust settings for ambient occlussion, bloom and color management"""
+AO and Bloom for Legacy, Raytracing for Next, Color Management for both, and more"""
     bl_idname = "scene.fuzzy_eevee"
     bl_label = "Optimize Eevee"
     bl_options = {'UNDO'}
