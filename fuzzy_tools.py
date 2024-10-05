@@ -1046,8 +1046,15 @@ AO and Bloom for Legacy, Raytracing for Next, Color Management for both, and mor
         
         # EEVEE NEXT
         if version == render:
+            # shadows
             eevee.use_shadows = True
+            eevee.use_shadow_jitter_viewport = True
+            # ray tracing
             eevee.use_raytracing = True
+            eevee.ray_tracing_options.resolution_scale = '1'
+            eevee.ray_tracing_options.trace_max_roughness = 0.5
+            # fast GI
+            eevee.fast_gi_resolution = '1'
                
         return {'FINISHED'}
 
