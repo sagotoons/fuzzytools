@@ -206,7 +206,8 @@ Delete the default cube, camera, and light"""
         ops.object.fuzzy_sun()
         ops.object.fuzzy_rimlight()
         ops.scene.fuzzy_eevee()
-
+        
+        self.report({'INFO'}, "POP!")
         return {'FINISHED'}
 
 
@@ -302,6 +303,7 @@ Delete the default camera"""
         except RuntimeError:
             pass
 
+        self.report({'INFO'}, f"Camera '{ob.name}' added to scene")
         return {'FINISHED'}
 
 
@@ -555,7 +557,8 @@ Delete the default cube"""
             transp = nodes.new("ShaderNodeBsdfTransparent")
             transp.location = (200, -80)
             link(transp.outputs[0], mixshader2.inputs[2])   
- 
+
+        self.report({'INFO'}, f"'{floor.name}' and '{empty.name}' added to scene")
         return {'FINISHED'}
 
 
@@ -831,7 +834,8 @@ class WORLD_OT_fuzzy_sky(Operator):
             floor_group.node_tree = BG_group
             tree.links.new(floor_group.outputs[0], floor_alpha.inputs[2])
             floor_alpha.inputs[0].default_value = 1.0
-
+            
+        self.report({'INFO'}, "World 'Fuzzy World' created")
         return {'FINISHED'}
 
 
@@ -908,7 +912,8 @@ Delete the default light"""
                 objects.active = ob
         except RuntimeError:
             pass
-        
+
+        self.report({'INFO'}, f"'{ob.name}' added to scene")
         return {'FINISHED'}
 
 
@@ -981,7 +986,8 @@ class OBJECT_OT_fuzzy_rimlight(Operator):
                 objects.active = ob
         except RuntimeError:
             pass
-        
+
+        self.report({'INFO'}, f"'{ob.name}' added to scene")
         return {'FINISHED'}
 
 
@@ -1062,7 +1068,8 @@ AO and Bloom for Legacy, Raytracing for Next, Color Management for both, and mor
             eevee.ray_tracing_options.trace_max_roughness = 0.5
             # fast GI
             eevee.fast_gi_resolution = '1'
-               
+
+        self.report({'INFO'}, "EEVEE settings optimized")
         return {'FINISHED'}
 
 
