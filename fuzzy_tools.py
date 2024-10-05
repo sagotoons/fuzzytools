@@ -1513,10 +1513,11 @@ class BackgroundPanel(BuildSceneChild, Panel):
         row.prop(BG_node['Window Global'], 'clamp_factor', text='', icon='WORLD')
 
         col = col.column(align=True)
-        col.separator(factor=0.5)
         if node2.clamp_factor and node3.clamp_factor:
+            col.separator(factor=0.5)
             col.prop(BG_node['Scale Gradient'].inputs[0], "default_value", text='Scale from Horizon')
         elif not node2.clamp_factor:
+            col.separator(factor=0.5)
             col.use_property_split = True
             col.use_property_decorate = False
             row = col.row(align=True)
