@@ -1,7 +1,7 @@
 ![Fuzzy Tools banner](https://github.com/sagotoons/fuzzytools/blob/5aabad83324189747782a9c5326fe3565c223e19/images/fuzzytools_banner.png)
 The Fuzzy Tools add-on is a collection of tools, heavily focused on efficiency and a quick workflow with a multi-camera scene in mind. Some of Fuzzy Tools was demonstrated during my presentation 'Journey Towards an Efficient 1-Person Pipeline' at BCON23, which you can see here: www.youtube.com/watch?v=W01lQrcCz9s
 
-_Fuzzy Tools is specifically created for a fast EEVEE Legacy pipeline, but many aspects still work in Cycles. Full support for EEVEE Next will be added in a future release._
+_Fuzzy Tools is specifically created for a fast EEVEE pipeline, but many aspects still work in Cycles._
 
 # Features
 Some unique features that come with Fuzzy Tools:
@@ -19,7 +19,7 @@ Quickly set up your scene, including:
 - Floor with shadow only
 - World shader with stylized background
 - Sunlight and rim light
-- Optimize EEVEE settings like AO, Shadows and Bloom
+- Optimize EEVEE settings like AO, Shadows and Bloom in Legacy, or Ray Tracing in Next
 
 ### [2. Fuzzy View](https://github.com/sagotoons/fuzzytools/wiki/Fuzzy-View)
 Quick access to different viewport and hair settings, including:
@@ -35,7 +35,7 @@ Quick access to different camera settings and operators, including:
 - Bind Camera to Markers
 
 #
-_Fuzzy Tools should work in blender 3.6, 4.0 and 4.1_
+_Fuzzy Tools is supported for blender 3.6 up to 4.2_
 
 #
 If you enjoy Fuzzy Tools, please consider supporting me on PayPal:
