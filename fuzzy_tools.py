@@ -896,6 +896,10 @@ Delete the default light"""
         ob.data.energy = 1.5
         ob.data.angle = radians(15)
         ob.data.use_contact_shadow = True
+
+        ## EEVEE NEXT
+        if is_next_version():
+            ob.data.use_shadow_jitter = True
         
         # make new Sun active
         objects = context.view_layer.objects
@@ -966,6 +970,10 @@ class OBJECT_OT_fuzzy_rimlight(Operator):
 
         ob.data.angle = radians(10)
         ob.data.use_contact_shadow = True
+
+        ## EEVEE NEXT
+        if is_next_version():
+            ob.data.use_shadow_jitter = True
 
         # make new Rim Light active
         objects = context.view_layer.objects
@@ -1044,7 +1052,7 @@ AO and Bloom for Legacy, Raytracing for Next, Color Management for both, and mor
             eevee.shadow_cube_size = '2048'
             eevee.use_soft_shadows = True
         
-        # EEVEE NEXT
+        ## EEVEE NEXT
         if version == render:
             # shadows
             eevee.use_shadows = True
