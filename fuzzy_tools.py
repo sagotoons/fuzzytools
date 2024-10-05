@@ -1514,9 +1514,7 @@ class BackgroundPanel(BuildSceneChild, Panel):
 
         col = col.column(align=True)
         col.separator(factor=0.5)
-        if node2.clamp_factor:
-            if not node3.clamp_factor:
-                col.enabled = False
+        if node2.clamp_factor and node3.clamp_factor:
             col.prop(BG_node['Scale Gradient'].inputs[0], "default_value", text='Scale from Horizon')
         elif not node2.clamp_factor:
             col.use_property_split = True
