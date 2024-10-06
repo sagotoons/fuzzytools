@@ -35,8 +35,9 @@ Quick access to different camera settings and operators, including:
 - Bind Camera to Markers
 
 #
-_Fuzzy Tools is supported for blender 3.6 up to 4.2_
+_WARNING: Fuzzy Tools 3.0 will break elements created with older versions of Fuzzy Tools. Specifically, 'Fuzzy floor' and 'Fuzzy World'. These elements would have to be recreated for optimal results._
 
+_Fuzzy Tools is supported for blender 3.6 up to 4.2._  
 #
 If you enjoy Fuzzy Tools, please consider supporting me on PayPal:
 
