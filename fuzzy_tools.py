@@ -1268,9 +1268,10 @@ class OBJECT_OT_rename_camera_alphabet(Operator):
     bl_idname = "object.rename_camera_alphabet"
     bl_label = "Rename as Variant"
     bl_options = {'UNDO'}
- 
+
     @classmethod
     def poll(cls, context):
+        # Ensure at least two cameras are selected and they are all of type 'CAMERA'
         if len(context.selected_objects) < 2:
             return False
         cameras_selected = all(obj.type == 'CAMERA' for obj in context.selected_objects)
@@ -1278,7 +1279,6 @@ class OBJECT_OT_rename_camera_alphabet(Operator):
 
     def execute(self, context):
         scene = context.scene
-        objects = scene.objects
         objs = bpy.data.objects
 
         active_cam = context.active_object
@@ -1287,20 +1287,34 @@ class OBJECT_OT_rename_camera_alphabet(Operator):
         # Use ord and chr to generate alphabet dynamically
         ABC = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
 
-        # List all objects with "CAM." prefix
-        cams = [obj for obj in objs if obj.name.startswith("CAM.")]
+        # Get all objects of type 'CAMERA'
+        cams = [obj for obj in objs if obj.type == 'CAMERA']
+
+        # Detect if active camera name ends with a capital letter and has no numbers before it
+        if active_cam.name[-1:].isupper():
+            if len(active_cam.name) > 1:
+                # Check the second last character
+                second_last_char = active_cam.name[-2]
+                if second_last_char.isupper() and not any(char.isdigit() for char in active_cam.name[:-1]):
+                    # If second last character is uppercase and no digits, trigger the error
+                    self.report({'ERROR'}, 
+                            'Naming convention not valid. Use number or single upper case as suffix')
+                    return {'CANCELLED'}
 
         if active_cam in cams:
+            base_name = active_cam.name.rstrip('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+            last_char = active_cam.name[len(base_name):]
+
+            # If the last character is alphabetic, we will increment from that point
+            if last_char and last_char[-1:].isalpha():
+                base_name = active_cam.name[:-1]
+
             for cam in selected_cams:
                 if cam != active_cam:
                     for letter in ABC:
-                        if active_cam.name[-1:].isalpha():
-                            remove_ABC = active_cam.name[:-1]
-                            name_ABC = f"{remove_ABC}{letter}"
-                        else:
-                            name_ABC = f"{active_cam.name}{letter}"
-                        
-                        if name_ABC not in str(cams):
+                        name_ABC = f"{base_name}{letter}"
+                        # Check if the new name already exists among cameras
+                        if not any(existing_cam.name == name_ABC for existing_cam in cams):
                             cam.name = name_ABC
                             break  
 
