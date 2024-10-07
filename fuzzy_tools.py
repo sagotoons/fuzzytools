@@ -9,7 +9,7 @@ bl_info = {
     "description" : "Tools for an efficient 1-person pipeline and multi-camera workflow",
     "doc_url" : "https://github.com/sagotoons/fuzzytools/wiki",
     "tracker_url" : "https://github.com/sagotoons/fuzzytools/issues",
-    "category" : "User Interface",
+    "category" : "Interface",
 }
 
 
