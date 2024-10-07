@@ -1491,8 +1491,8 @@ class BackgroundPanel(BuildSceneChild, Panel):
     def draw(self, context):
         scene = context.scene
         fuzzyprops = scene.fuzzy_props
-        node = scene.world.node_tree.nodes
-        BG_node = node['BG Group'].node_tree.nodes
+        group_node = scene.world.node_tree.nodes
+        node = group_node['BG Group'].node_tree.nodes
 
         layout = self.layout
         col = layout.column()
@@ -1504,42 +1504,51 @@ class BackgroundPanel(BuildSceneChild, Panel):
         row.separator()
         row.label(icon='BLANK1')
         row = col.row(align=True)
-        swap = BG_node['Color Swap'].clamp_factor
-        row.prop(BG_node['BG Color 1' if swap else 'BG Color 2'].outputs[0], 'default_value', text='Sky Colors')
-        row.prop(BG_node['BG Color 2' if swap else 'BG Color 1'].outputs[0], 'default_value', text='')
-
-        row.separator()
-        row.prop(BG_node['Color Swap'], 'clamp_factor', icon='FILE_REFRESH', icon_only=True, emboss=False)
+        swap = node.get('Color Swap')
+        if swap:
+            row.prop(node['BG Color 1' if swap else 'BG Color 2'].outputs[0], 'default_value', text='Sky Colors')
+            row.prop(node['BG Color 2' if swap else 'BG Color 1'].outputs[0], 'default_value', text='')
+            row.separator()
+            row.prop(swap, 'clamp_factor', icon='FILE_REFRESH', icon_only=True, emboss=False)
         
-        col = layout.column(align=True)
-        col.prop(BG_node['Flat Gradient'], 'clamp_factor', text='Gradient')
-        
-        col = col.column(align=True)
-        node1 = BG_node['Flat Gradient']
-        node2 = BG_node['Radial Linear']
-        node3 = BG_node['Window Global']
-        col.enabled = node1.clamp_factor
-        row = col.row(align=True)
-        row.prop(BG_node['Radial Linear'], 'clamp_factor', text='Radial', toggle=1, invert_checkbox=True)
-        row.prop(BG_node['Radial Linear'], 'clamp_factor', text='Linear', toggle=1)
-        row = row.row(align=True)
-        row.enabled = node2.clamp_factor
-        row.prop(BG_node['Window Global'], 'clamp_factor', text='', icon='WORLD')
+        flat_grad = node.get('Flat Gradient')
+        rad_lin = node.get('Radial Linear')
+        win_glob = node.get('Window Global')
+        if flat_grad and rad_lin and win_glob:
+            col = layout.column(align=True)
+            col.prop(flat_grad, 'clamp_factor', text='Gradient')
+            
+            col = col.column(align=True)
+            col.enabled = flat_grad.clamp_factor
+            row = col.row(align=True)
+            row.prop(rad_lin, 'clamp_factor', text='Radial', toggle=1, invert_checkbox=True)
+            row.prop(rad_lin, 'clamp_factor', text='Linear', toggle=1)
+            row = row.row(align=True)
+            row.enabled = rad_lin.clamp_factor
+            row.prop(win_glob, 'clamp_factor', text='', icon='WORLD')
 
-        col = col.column(align=True)
-        if node2.clamp_factor and node3.clamp_factor:
-            col.separator(factor=0.5)
-            col.prop(BG_node['Scale Gradient'].inputs[0], "default_value", text='Scale from Horizon')
-        elif not node2.clamp_factor:
-            col.separator(factor=0.5)
-            col.use_property_split = True
-            col.use_property_decorate = False
-            row = col.row(align=True)
-            row.prop(BG_node['Radial Location'].inputs[0], "default_value", text="Loc XY", index=0)
-            row.prop(BG_node['Radial Location'].inputs[0], "default_value", text="", index=1)
-            row = col.row(align=True)
-            row.prop(BG_node['Radial Scale'].inputs[0], "default_value", text="Scale XY", index=0)
-            row.prop(BG_node['Radial Scale'].inputs[0], "default_value", text="", index=1)
+            col = col.column(align=True)
+            if rad_lin.clamp_factor and win_glob.clamp_factor:
+                scale_grad = node.get('Scale Gradient')
+                if scale_grad:
+                    col.separator(factor=0.5)
+                    col.prop(scale_grad.inputs[0], "default_value", text='Scale from Horizon')
+            elif not rad_lin.clamp_factor:
+                col.separator(factor=0.5)
+                col.use_property_split = True
+                col.use_property_decorate = False
+                
+                rad_loc = node.get('Radial Location')
+                if rad_loc:
+                    row = col.row(align=True)
+                    row.prop(rad_loc.inputs[0], "default_value", text="Loc XY", index=0)
+                    row.prop(rad_loc.inputs[0], "default_value", text="", index=1)
+                
+                rad_scale = node.get('Radial Scale')
+                if rad_scale:
+                    row = col.row(align=True)
+                    row.prop(rad_scale.inputs[0], "default_value", text="Scale XY", index=0)
+                    row.prop(rad_scale.inputs[0], "default_value", text="", index=1)
         
         layout.prop(scene.render, "film_transparent")
         
