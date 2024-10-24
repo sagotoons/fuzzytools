@@ -1,5 +1,7 @@
 ![Fuzzy Tools banner](https://github.com/sagotoons/fuzzytools/blob/5aabad83324189747782a9c5326fe3565c223e19/images/fuzzytools_banner.png)
-The Fuzzy Tools add-on is a collection of tools, heavily focused on efficiency and a quick workflow with a multi-camera scene in mind. Some of Fuzzy Tools was demonstrated during my presentation 'Journey Towards an Efficient 1-Person Pipeline' at BCON23, which you can see here: www.youtube.com/watch?v=W01lQrcCz9s
+The Fuzzy Tools add-on is a collection of tools, heavily focused on efficiency and a quick workflow with a multi-camera scene in mind. Some of Fuzzy Tools was demonstrated during my BCON presentations:  
+- BCON23 - 'Journey Towards an Efficient 1-Person Pipeline': www.youtube.com/watch?v=W01lQrcCz9s  
+- BCON24 - 'Fast Content Creation with Code and Creativity': www.youtube.com/watch?v=sb91eRKxN4s  
 
 _Fuzzy Tools is specifically created for a fast EEVEE pipeline, but many aspects still work in Cycles._
 
