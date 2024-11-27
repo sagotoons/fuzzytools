@@ -3,7 +3,7 @@
 bl_info = {
     "name" : "Fuzzy Tools",
     "author" : "Sacha Goedegebure",
-    "version" : (3,0,0),
+    "version" : (3,0,1),
     "blender" : (3,6,0),
     "location" : "View3d > Sidebar > Fuzzy. Alt+M to move keyframes and markers",
     "description" : "Tools for an efficient 1-person pipeline and multi-camera workflow",
@@ -514,7 +514,6 @@ Delete the default cube"""
         # material settings
         mat.use_backface_culling = True
         mat.blend_method = 'BLEND'
-        mat.shadow_method = 'NONE'
 
         # cycles material nodes
         matoutput2 = nodes.new("ShaderNodeOutputMaterial")
@@ -555,7 +554,9 @@ Delete the default cube"""
             
             transp = nodes.new("ShaderNodeBsdfTransparent")
             transp.location = (200, -80)
-            link(transp.outputs[0], mixshader2.inputs[2])   
+            link(transp.outputs[0], mixshader2.inputs[2])
+        else:
+            mat.shadow_method = 'NONE'
 
         self.report({'INFO'}, f"'{floor.name}' and '{empty.name}' added to scene")
         return {'FINISHED'}
@@ -904,11 +905,12 @@ Delete the default light"""
         # light settings
         ob.data.energy = 1.5
         ob.data.angle = radians(15)
-        ob.data.use_contact_shadow = True
 
         ## EEVEE NEXT
         if is_next_version():
             ob.data.use_shadow_jitter = True
+        else:
+            ob.data.use_contact_shadow = True
         
         # make new Sun active
         objects = context.view_layer.objects
@@ -978,11 +980,12 @@ class OBJECT_OT_fuzzy_rimlight(Operator):
         ob.data.energy = 5
         ob.data.specular_factor = 0.1
         ob.data.angle = radians(10)
-        ob.data.use_contact_shadow = True
 
         ## EEVEE NEXT
         if is_next_version():
             ob.data.use_shadow_jitter = True
+        else:
+            ob.data.use_contact_shadow = True
 
         # make new Rim Light active
         objects = context.view_layer.objects
