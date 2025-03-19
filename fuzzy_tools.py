@@ -3,7 +3,7 @@
 bl_info = {
     "name" : "Fuzzy Tools",
     "author" : "Sacha Goedegebure",
-    "version" : (3,0,1),
+    "version" : (3,0,2),
     "blender" : (3,6,0),
     "location" : "View3d > Sidebar > Fuzzy. Alt+M to move keyframes and markers",
     "description" : "Tools for an efficient 1-person pipeline and multi-camera workflow",
@@ -39,12 +39,12 @@ def is_next_version(min_version=(4, 2, 0)):
     return current_version >= min_version
 
 
-# find HDRI studio light when used in Fuzzy World shader during start up
+# find HDRI studio light when used in FuzzyWorld shader during start up
 @persistent
 def reload_image(dummy):
     world = bpy.context.scene.world
     nodes = world.node_tree.nodes
-    if world.name != 'Fuzzy World':
+    if world.name != 'FuzzyWorld':
         return 
     try:
         node = nodes['World HDRI']
@@ -187,7 +187,7 @@ Enables automatically during rendering""",
 # ------------------------------------------------------------------------
 
 class SCENE_OT_build_all(Operator):
-    """Place a camera, floor, sun light and rim light. Create a new Fuzzy World. Optimize Eevee settings.
+    """Place a camera, floor, sun light and rim light. Create a new FuzzyWorld. Optimize Eevee settings.
 Replace existing floor and active world, if available.
 Delete the default cube, camera, and light"""
     bl_idname = "scene.build_all"
@@ -308,7 +308,7 @@ Delete the default camera"""
 
 
 # ------------------------------------------------------------------------
-#    OPERATOR - Fuzzy floor (shadow only)
+#    OPERATOR - Fuzzy Floor (shadow only)
 # ------------------------------------------------------------------------
 
 class MESH_OT_fuzzy_floor(Operator):
@@ -327,7 +327,7 @@ Delete the default cube"""
         objects = scene.objects
 
         # delete objects
-        for name in ["Cube", "Fuzzy floor", "floor normal"]:
+        for name in ["Cube", "FuzzyFloor", "FloorNormal"]:
             if name in objects:
                 obj = bpy.data.objects[name]
                 if name == "Cube":
@@ -339,9 +339,9 @@ Delete the default cube"""
         # add floor
         bpy.ops.mesh.primitive_plane_add(size=60, location=(0, 0, 0))
 
-        # name new Plane 'Fuzzy floor'
+        # name new Plane 'FuzzyFloor'
         floor = context.active_object
-        floor.name = "Fuzzy floor"
+        floor.name = "FuzzyFloor"
 
         # create collection 'Set' if it doesn't exist yet
         link_to_name = 'Set'
@@ -359,10 +359,10 @@ Delete the default cube"""
             oldcoll.objects.unlink(floor)        
         bpy.data.collections['Set'].objects.link(floor)
 
-        # create empty as Target for floor Normal Edit modifier
+        # create empty as Target for FloorNormal Edit modifier
         bpy.ops.object.empty_add(location=(15, -20, 20))
         empty = context.object
-        empty.name = "floor normal"
+        empty.name = "FloorNormal"
         empty.empty_display_size = 6
         empty.empty_display_type = 'SINGLE_ARROW'
         link_to_name = 'Set'
@@ -385,10 +385,10 @@ Delete the default cube"""
             pass
         
         # create modifier 'Normal Edit' and set empty as Target
-        normal = floor.modifiers.new("Normal Direction", 'NORMAL_EDIT')
+        normal = floor.modifiers.new("NormalDirection", 'NORMAL_EDIT')
         normal.mode = 'DIRECTIONAL'
         normal.use_direction_parallel = True
-        normal.target = bpy.data.objects["floor normal"]
+        normal.target = bpy.data.objects["FloorNormal"]
         normal.no_polynors_fix = True
 
         # object settings
@@ -581,15 +581,15 @@ class WORLD_OT_fuzzy_sky(Operator):
 
     def execute(self, context):
         scene = context.scene
-        # rename "Fuzzy World" if it exists
-        if "Fuzzy World" in bpy.data.worlds:
-            bpy.data.worlds['Fuzzy World'].name = 'Old World'
+        # rename "FuzzyWorld" if it exists
+        if "FuzzyWorld" in bpy.data.worlds:
+            bpy.data.worlds['FuzzyWorld'].name = 'World.old'
         else:
             pass
 
-        # create "Fuzzy World", make it scene world & enable Use Nodes
-        bpy.data.worlds.new("Fuzzy World")
-        scene.world = bpy.data.worlds['Fuzzy World']
+        # create "FuzzyWorld", make it scene world & enable Use Nodes
+        bpy.data.worlds.new("FuzzyWorld")
+        scene.world = bpy.data.worlds['FuzzyWorld']
         scene.world.use_nodes = True
 
         # build node shader
@@ -834,9 +834,9 @@ class WORLD_OT_fuzzy_sky(Operator):
             for target in targets:
                 link(nodes[name].outputs[0], ref[target].inputs[0])
         
-        # check for Fuzzy Floor and set Fuzzy BG node group
+        # check for FuzzyFloor and set Fuzzy BG node group
         obj = bpy.data.objects
-        if 'Fuzzy floor' in obj:
+        if 'FuzzyFloor' in obj:
             tree = bpy.data.materials['floor_shadow'].node_tree
             floor_group = tree.nodes['Floor Group']
             floor_alpha = tree.nodes['Floor Alpha']
@@ -844,7 +844,7 @@ class WORLD_OT_fuzzy_sky(Operator):
             tree.links.new(floor_group.outputs[0], floor_alpha.inputs[2])
             floor_alpha.inputs[0].default_value = 1.0
             
-        self.report({'INFO'}, "World 'Fuzzy World' created")
+        self.report({'INFO'}, "World 'FuzzyWorld' created")
         return {'FINISHED'}
 
 
@@ -1421,11 +1421,11 @@ class TRANSFORM_OT_keyframes_markers(Operator):
     
 
 # ------------------------------------------------------------------------
-#    OPERATOR - add light parent for Sun, Rimlight and floor normal
+#    OPERATOR - add light parent for Sun, Rimlight and FloorNormal
 # ------------------------------------------------------------------------
 
 class OBJECT_OT_light_parent(Operator):
-    """Add empty as parent for Sun, RimLight and floor normal"""
+    """Add empty as parent for Sun, RimLight and FloorNormal"""
     bl_idname = "object.light_parent"
     bl_label = "Add Light Parent"
     bl_options = {'UNDO'}
@@ -1433,13 +1433,13 @@ class OBJECT_OT_light_parent(Operator):
     @classmethod
     def poll(cls, context):
         objs = context.scene.objects
-        return context.mode == 'OBJECT' and 'light parent' not in objs
+        return context.mode == 'OBJECT' and 'LightParent' not in objs
     
     def execute(self, context):
         objs = bpy.data.objects
 
         # create empty
-        light_parent = objs.new('light parent', None)
+        light_parent = objs.new('LightParent', None)
         light_parent.empty_display_type = 'SPHERE'
         light_parent.empty_display_size = 3
         
@@ -1455,18 +1455,18 @@ class OBJECT_OT_light_parent(Operator):
 
         sun = objs.get('Sun')
         rim = objs.get('RimLight')
-        normal = objs.get('floor normal')
+        normal = objs.get('FloorNormal')
 
         for item in [sun, rim, normal]:
             if item:
                 item.parent = light_parent
         
-        self.report({'INFO'}, f"'light parent' added to collection {coll.name}")
+        self.report({'INFO'}, f"'LightParent' added to collection {coll.name}")
         return {'FINISHED'}
 
 
 # ------------------------------------------------------------------------
-#    OPERATOR - rotate light parent or HDRI according to Active Camera
+#    OPERATOR - rotate LightParent or HDRI according to Active Camera
 # ------------------------------------------------------------------------
 
 class OBJECT_OT_rotate_lighting(Operator):
@@ -1487,8 +1487,8 @@ class OBJECT_OT_rotate_lighting(Operator):
     )
     
     parent: BoolProperty(
-        name="Include light parent",
-        description="Rotate light parent",
+        name="Include LightParent",
+        description="Rotate LightParent",
         options={'SKIP_SAVE', 'HIDDEN'}
     )
     
@@ -1500,21 +1500,21 @@ class OBJECT_OT_rotate_lighting(Operator):
         cam_rot = scene.camera.rotation_euler[2]
 
         if self.parent:
-            # get light parent and apply Z rotation
-            parent = scene.objects.get('light parent')
+            # get LightParent and apply Z rotation
+            parent = scene.objects.get('LightParent')
             if parent:
                 parent.rotation_euler[2] = cam_rot
 
         if self.hdri:
             # find HDRI and apply Z rotation
-            if scene.world.name == 'Fuzzy World':
+            if scene.world.name == 'FuzzyWorld':
                 nodes = scene.world.node_tree.nodes
                 HDRI = nodes.get("HDRI Rotation")
                 if HDRI:
                     HDRI.inputs[2].default_value[2] = cam_rot * -1
         
         if self.parent:
-            target = "light parent"
+            target = "LightParent"
         elif self.hdri:
             target = "HDRI"
         self.report({'INFO'}, f"{target} rotated")
@@ -1591,7 +1591,7 @@ class BackgroundPanel(BuildSceneChild, Panel):
     def poll(cls, context):
         scene = context.scene.world
         if scene is not None:
-            return scene.name == "Fuzzy World"
+            return scene.name == "FuzzyWorld"
 
     def draw(self, context):
         scene = context.scene
@@ -1667,7 +1667,7 @@ class HDRIPanel(BuildSceneChild, Panel):
     def poll(cls, context):
         scene = context.scene.world
         if scene is not None:
-            return scene.name == "Fuzzy World"
+            return scene.name == "FuzzyWorld"
 
     def draw(self, context):
         scene = context.scene
@@ -1712,7 +1712,7 @@ class FloorPanel(BuildSceneChild, Panel):
         scene = context.scene
         objects = scene.objects
         engines = ['BLENDER_EEVEE', 'BLENDER_EEVEE_NEXT']
-        return 'Fuzzy floor' in objects and context.engine in engines
+        return 'FuzzyFloor' in objects and context.engine in engines
 
     def draw(self, context):
         scene = context.scene
@@ -1720,9 +1720,9 @@ class FloorPanel(BuildSceneChild, Panel):
         layout.use_property_split = True
         layout.use_property_decorate = False
 
-        floor = bpy.data.objects.get('Fuzzy floor')
+        floor = bpy.data.objects.get('FuzzyFloor')
         if floor:
-            mod = floor.modifiers.get('Normal Direction')
+            mod = floor.modifiers.get('NormalDirection')
             mat = bpy.data.materials.get('floor_shadow')
             if mat and mat.node_tree:
                 nodes = mat.node_tree.nodes
