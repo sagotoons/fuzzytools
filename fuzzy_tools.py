@@ -1466,7 +1466,7 @@ class OBJECT_OT_light_parent(Operator):
 
 
 # ------------------------------------------------------------------------
-#    OPERATOR - rotate light parent and HDRI according to Active Camera
+#    OPERATOR - rotate light parent or HDRI according to Active Camera
 # ------------------------------------------------------------------------
 
 class OBJECT_OT_rotate_lighting(Operator):
@@ -1483,15 +1483,13 @@ class OBJECT_OT_rotate_lighting(Operator):
     hdri: BoolProperty(
         name="Include HDRI",
         description="Rotate HDRI",
-        default=True,
-        options={'SKIP_SAVE'}
+        options={'SKIP_SAVE', 'HIDDEN'}
     )
     
     parent: BoolProperty(
         name="Include light parent",
         description="Rotate light parent",
-        default=True,
-        options={'SKIP_SAVE'}
+        options={'SKIP_SAVE', 'HIDDEN'}
     )
     
     def execute(self, context):
@@ -1515,7 +1513,11 @@ class OBJECT_OT_rotate_lighting(Operator):
                 if HDRI:
                     HDRI.inputs[2].default_value[2] = cam_rot * -1
         
-        self.report({'INFO'}, "light parent and/or HDRI rotated")
+        if self.parent:
+            target = "light parent"
+        elif self.hdri:
+            target = "HDRI"
+        self.report({'INFO'}, f"{target} rotated")
         return {'FINISHED'}
 
 
