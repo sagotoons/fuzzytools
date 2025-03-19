@@ -974,10 +974,10 @@ class OBJECT_OT_fuzzy_rimlight(Operator):
         bpy.data.collections['Set'].objects.link(ob)
         
         # light rotation
-        ob.rotation_euler = (radians(65), 0, radians(-155))
+        ob.rotation_euler = (radians(70), 0, radians(-150))
         
         # light settings
-        ob.data.energy = 5
+        ob.data.energy = 10
         ob.data.specular_factor = 0.1
         ob.data.angle = radians(10)
 
