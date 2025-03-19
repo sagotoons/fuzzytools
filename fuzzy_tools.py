@@ -1679,7 +1679,7 @@ class HDRIPanel(BuildSceneChild, Panel):
         col.label(text="Light Parent", icon='LIGHT')
         row = col.row(align=True)
         row.scale_y = 1.2
-        parent = objs.get('light parent')
+        parent = objs.get('LightParent')
         if not parent:
             row.operator('object.light_parent', text="Create", icon='SPHERE')
         else:
