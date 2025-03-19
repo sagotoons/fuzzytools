@@ -527,8 +527,11 @@ Delete the default cube"""
         floor.visible_transmission = False
 
         # viewport settings
-        space = context.space_data
-        space.overlay.show_relationship_lines = False
+        screens = bpy.data.screens
+        for scr in screens:
+            for area in scr.areas:
+                if area.type == 'VIEW_3D':
+                    area.spaces[0].overlay.show_relationship_lines = False
 
         # 4.2 or above
         if is_next_version():
