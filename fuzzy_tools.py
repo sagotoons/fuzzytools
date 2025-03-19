@@ -1576,10 +1576,8 @@ class BuildPartsPanel(BuildSceneChild, Panel):
         row = col.row(align=True)
         row.operator("world.fuzzy_sky", text="Sky", icon='MAT_SPHERE_SKY')
         row.operator("object.fuzzy_sun", text="Sun", icon='LIGHT_SUN')
-        row = col.row(align=True)
-        row.operator("object.fuzzy_rimlight", text="Rim Light", icon='LIGHT')
-        row = col.row(align=True)
-        row.operator("scene.fuzzy_eevee", text="Optimize EEVEE", icon='CAMERA_STEREO')
+        col.operator("object.fuzzy_rimlight", text="Rim Light", icon='LIGHT')
+        col.operator("scene.fuzzy_eevee", text="Optimize EEVEE", icon='CAMERA_STEREO')
 
 
 class BackgroundPanel(BuildSceneChild, Panel):
