@@ -1659,7 +1659,7 @@ class BackgroundPanel(BuildSceneChild, Panel):
         
 
 class HDRIPanel(BuildSceneChild, Panel):
-    bl_label = "HDRI"
+    bl_label = "Lighting"
     bl_idname = "VIEW3D_PT_hdri"
     bl_options = {'DEFAULT_CLOSED'}
 
@@ -1671,26 +1671,37 @@ class HDRIPanel(BuildSceneChild, Panel):
 
     def draw(self, context):
         scene = context.scene
+        objs = scene.objects
         nodes = scene.world.node_tree.nodes
 
         layout = self.layout
+        col = layout.column()
+        col.label(text="Light Parent", icon='LIGHT')
+        row = col.row(align=True)
+        row.scale_y = 1.2
+        parent = objs.get('light parent')
+        if not parent:
+            row.operator('object.light_parent', text="Create", icon='SPHERE')
+        else:
+            row.operator('object.rotate_lighting', text="Rotate", icon='CON_ROTLIMIT').parent = True
+        
         col = layout.column(align=True)
         col.use_property_split = True
         col.use_property_decorate = False
-
+        col.label(text="HDRI", icon='IMAGE_DATA')
         HDRI_node = nodes.get("World HDRI")
         if HDRI_node:
             col.template_ID(HDRI_node, 'image', open='image.open', live_icon=True)
             col.separator()
-        
-        properties = [
-            (nodes.get("HDRI Rotation", None), 2, 2, 'Rotation'),
-            (nodes.get("HDRI Strength", None), 1, -1, 'Strength')
-        ]
 
-        for node, index1, index2, label in properties:
-            if node is not None:
-                col.prop(node.inputs[index1], 'default_value', index=index2, text=label)
+        hdri_rot = nodes.get("HDRI Rotation")
+        hdri_str = nodes.get("HDRI Strength")
+        if hdri_rot:
+            row = col.row(align=True)
+            row.prop(hdri_rot.inputs[2], 'default_value', index=2, text='Rotation')
+            row.operator('object.rotate_lighting', text="", icon='CON_ROTLIMIT').hdri = True
+        if hdri_str:
+            col.prop(hdri_str.inputs[1], 'default_value', index=-1, text='Strength')
 
         clamp_node = nodes.get("Clamp Reflection")
         if clamp_node:
