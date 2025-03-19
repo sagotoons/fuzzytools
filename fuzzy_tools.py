@@ -1425,7 +1425,7 @@ class TRANSFORM_OT_keyframes_markers(Operator):
 # ------------------------------------------------------------------------
 
 class OBJECT_OT_light_parent(Operator):
-    """Add empty as parent for Sun, Rimlight and floor normal"""
+    """Add empty as parent for Sun, RimLight and floor normal"""
     bl_idname = "object.light_parent"
     bl_label = "Add Light Parent"
     bl_options = {'UNDO'}
@@ -1462,6 +1462,60 @@ class OBJECT_OT_light_parent(Operator):
                 item.parent = light_parent
         
         self.report({'INFO'}, f"'light parent' added to collection {coll.name}")
+        return {'FINISHED'}
+
+
+# ------------------------------------------------------------------------
+#    OPERATOR - rotate light parent and HDRI according to Active Camera
+# ------------------------------------------------------------------------
+
+class OBJECT_OT_rotate_lighting(Operator):
+    """Rotate lighting based on active camera rotation"""
+    bl_idname = "object.rotate_lighting"
+    bl_label = "Rotate Lighting"
+    bl_options = {'REGISTER', 'UNDO'}
+    
+    @classmethod
+    def poll(cls, context):
+        objs = context.scene.objects
+        return context.mode == 'OBJECT'
+    
+    hdri: BoolProperty(
+        name="Include HDRI",
+        description="Rotate HDRI",
+        default=True,
+        options={'SKIP_SAVE'}
+    )
+    
+    parent: BoolProperty(
+        name="Include light parent",
+        description="Rotate light parent",
+        default=True,
+        options={'SKIP_SAVE'}
+    )
+    
+    def execute(self, context):
+        scene = context.scene
+        fr = scene.frame_current
+
+        # active camera Z rotation
+        cam_rot = scene.camera.rotation_euler[2]
+
+        if self.parent:
+            # get light parent and apply Z rotation
+            parent = scene.objects.get('light parent')
+            if parent:
+                parent.rotation_euler[2] = cam_rot
+
+        if self.hdri:
+            # find HDRI and apply Z rotation
+            if scene.world.name == 'Fuzzy World':
+                nodes = scene.world.node_tree.nodes
+                HDRI = nodes.get("HDRI Rotation")
+                if HDRI:
+                    HDRI.inputs[2].default_value[2] = cam_rot * -1
+        
+        self.report({'INFO'}, "light parent and/or HDRI rotated")
         return {'FINISHED'}
 
 
@@ -2039,6 +2093,7 @@ classes = [
     TRANSFORM_OT_keyframes_markers,
 
     OBJECT_OT_light_parent,
+    OBJECT_OT_rotate_lighting,
 
     # panels
     BuildScenePanel,
