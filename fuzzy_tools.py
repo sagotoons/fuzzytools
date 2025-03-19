@@ -1331,7 +1331,7 @@ class OBJECT_OT_rename_camera_alphabet(Operator):
 #    OPERATOR - Move Keyframes and Markers
 # ------------------------------------------------------------------------
 
-class TRANSFORM_OT_keyframes_markers(bpy.types.Operator):
+class TRANSFORM_OT_keyframes_markers(Operator):
     """Move keyframes and markers from current frame, regardless of selection or visibility"""
     bl_idname = "transform.keyframes_markers"
     bl_label = "Move Keyframes and Markers"
@@ -1419,6 +1419,51 @@ class TRANSFORM_OT_keyframes_markers(bpy.types.Operator):
         layout.separator(factor=0.5)
         layout.label(icon='INFO', text="Target is regardless of selection or visibility")
     
+
+# ------------------------------------------------------------------------
+#    OPERATOR - add light parent for Sun, Rimlight and floor normal
+# ------------------------------------------------------------------------
+
+class OBJECT_OT_light_parent(Operator):
+    """Add empty as parent for Sun, Rimlight and floor normal"""
+    bl_idname = "object.light_parent"
+    bl_label = "Add Light Parent"
+    bl_options = {'UNDO'}
+    
+    @classmethod
+    def poll(cls, context):
+        objs = context.scene.objects
+        return context.mode == 'OBJECT' and 'light parent' not in objs
+    
+    def execute(self, context):
+        objs = bpy.data.objects
+
+        # create empty
+        light_parent = objs.new('light parent', None)
+        light_parent.empty_display_type = 'SPHERE'
+        light_parent.empty_display_size = 3
+        
+        # add empty to collection 'Set'
+        colls = bpy.data.collections
+        set = colls.get('Set')
+        if set:
+            coll = set
+        else:
+            coll = context.scene.collection
+        
+        coll.objects.link(light_parent)
+
+        sun = objs.get('Sun')
+        rim = objs.get('RimLight')
+        normal = objs.get('floor normal')
+
+        for item in [sun, rim, normal]:
+            if item:
+                item.parent = light_parent
+        
+        self.report({'INFO'}, f"'light parent' added to collection {coll.name}")
+        return {'FINISHED'}
+
 
 # ------------------------------------------------------------------------
 #    PANELS - Scene Builder
@@ -1992,6 +2037,8 @@ classes = [
     OBJECT_OT_rename_camera_alphabet,
     
     TRANSFORM_OT_keyframes_markers,
+
+    OBJECT_OT_light_parent,
 
     # panels
     BuildScenePanel,
