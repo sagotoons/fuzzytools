@@ -1698,6 +1698,8 @@ class HDRIPanel(BuildSceneChild, Panel):
             row.operator('object.light_parent', text="Create", icon='SPHERE')
         else:
             row.operator('object.rotate_lighting', text="Rotate", icon='CON_ROTLIMIT').parent = True
+            row.separator(factor=0.5)
+            row.prop(parent, 'hide_viewport', text='', emboss=False)
         
         col = layout.column(align=True)
         col.use_property_split = True
@@ -1924,7 +1926,7 @@ class VIEW3D_PT_cameras(Panel):
         colls = bpy.data.collections
         cam_coll = colls.get('Cameras')
         if cam_coll:
-            layout.prop(cam_coll, 'hide_viewport', text="", icon='HIDE_OFF', emboss=False)
+            layout.prop(cam_coll, 'hide_viewport', text="", icon='RESTRICT_VIEW_OFF', emboss=False)
 
     def draw(self, context):
         pass
