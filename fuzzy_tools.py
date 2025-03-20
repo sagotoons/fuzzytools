@@ -39,12 +39,12 @@ def is_next_version(min_version=(4, 2, 0)):
     return current_version >= min_version
 
 
-# find HDRI studio light when used in FuzzyWorld shader during start up
+# find HDRI studio light when used in Fuzzy World shader during start up
 @persistent
 def reload_image(dummy):
     world = bpy.context.scene.world
     nodes = world.node_tree.nodes
-    if world.name != 'FuzzyWorld':
+    if world.name != 'Fuzzy World':
         return 
     try:
         node = nodes['World HDRI']
@@ -187,7 +187,7 @@ Enables automatically during rendering""",
 # ------------------------------------------------------------------------
 
 class SCENE_OT_build_all(Operator):
-    """Place a camera, floor, sun light and rim light. Create a new FuzzyWorld. Optimize Eevee settings.
+    """Place a camera, floor, sun light and rim light. Create a new Fuzzy World. Optimize Eevee settings.
 Replace existing floor and active world, if available.
 Delete the default cube, camera, and light"""
     bl_idname = "scene.build_all"
@@ -581,15 +581,15 @@ class WORLD_OT_fuzzy_sky(Operator):
 
     def execute(self, context):
         scene = context.scene
-        # rename "FuzzyWorld" if it exists
-        if "FuzzyWorld" in bpy.data.worlds:
-            bpy.data.worlds['FuzzyWorld'].name = 'World.old'
+        # rename "Fuzzy World" if it exists
+        if "Fuzzy World" in bpy.data.worlds:
+            bpy.data.worlds['Fuzzy World'].name = 'World_old'
         else:
             pass
 
-        # create "FuzzyWorld", make it scene world & enable Use Nodes
-        bpy.data.worlds.new("FuzzyWorld")
-        scene.world = bpy.data.worlds['FuzzyWorld']
+        # create "Fuzzy World", make it scene world & enable Use Nodes
+        bpy.data.worlds.new("Fuzzy World")
+        scene.world = bpy.data.worlds['Fuzzy World']
         scene.world.use_nodes = True
 
         # build node shader
@@ -844,7 +844,7 @@ class WORLD_OT_fuzzy_sky(Operator):
             tree.links.new(floor_group.outputs[0], floor_alpha.inputs[2])
             floor_alpha.inputs[0].default_value = 1.0
             
-        self.report({'INFO'}, "World 'FuzzyWorld' created")
+        self.report({'INFO'}, "World 'Fuzzy World' created")
         return {'FINISHED'}
 
 
@@ -1507,7 +1507,7 @@ class OBJECT_OT_rotate_lighting(Operator):
 
         if self.hdri:
             # find HDRI and apply Z rotation
-            if scene.world.name == 'FuzzyWorld':
+            if scene.world.name == 'Fuzzy World':
                 nodes = scene.world.node_tree.nodes
                 HDRI = nodes.get("HDRI Rotation")
                 if HDRI:
@@ -1591,7 +1591,7 @@ class BackgroundPanel(BuildSceneChild, Panel):
     def poll(cls, context):
         scene = context.scene.world
         if scene is not None:
-            return scene.name == "FuzzyWorld"
+            return scene.name == "Fuzzy World"
 
     def draw(self, context):
         scene = context.scene
@@ -1667,7 +1667,7 @@ class HDRIPanel(BuildSceneChild, Panel):
     def poll(cls, context):
         scene = context.scene.world
         if scene is not None:
-            return scene.name == "FuzzyWorld"
+            return scene.name == "Fuzzy World"
 
     def draw(self, context):
         scene = context.scene
