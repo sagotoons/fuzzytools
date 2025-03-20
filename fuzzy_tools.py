@@ -41,7 +41,7 @@ def is_next_version(min_version=(4, 2, 0)):
 
 # find HDRI studio light when used in Fuzzy World shader during start up
 @persistent
-def reload_image(dummy):
+def reload_image(_):
     world = bpy.context.scene.world
     nodes = world.node_tree.nodes
     if world.name != 'Fuzzy World':
@@ -101,7 +101,21 @@ character_list = {
     'Bobi': 'COLORSET_05_VEC'
 }
 
- 
+
+# fix naming after upgrades in v3.0.2
+@persistent
+def name_fix(_):
+    objs = bpy.data.objects
+    if 'Fuzzy floor' in objs:
+        floor = objs['Fuzzy floor']
+        floor.name = 'FuzzyFloor'
+        mods = floor.modifiers
+        if 'Normal Direction' in mods:
+            mods['Normal Direction'].name = 'NormalDirection'
+    if 'floor normal' in objs:
+        objs['floor normal'].name = 'FloorNormal'
+
+
 # ------------------------------------------------------------------------
 #    SCENE PROPERTIES
 # ------------------------------------------------------------------------
@@ -2134,6 +2148,7 @@ def register():
     bpy.app.handlers.load_post.append(reload_image)
     bpy.app.handlers.load_post.append(auto_animate_scene)
     bpy.app.handlers.load_post.append(disable_animate_scene)
+    bpy.app.handlers.load_post.append(name_fix)
     
    # Add hotkey Alt+M for 'Move Keyframes and Markers'
     wm = bpy.context.window_manager
@@ -2153,6 +2168,7 @@ def unregister():
     bpy.app.handlers.load_post.remove(reload_image)
     bpy.app.handlers.load_post.remove(auto_animate_scene)
     bpy.app.handlers.load_post.remove(disable_animate_scene)
+    bpy.app.handlers.load_post.remove(name_fix)
 
     # Remove hotkey Alt+M
     for km, kmi in addon_keymaps:
