@@ -550,6 +550,7 @@ Delete the default cube"""
                 elif area.type == 'OUTLINER':
                     area.spaces[0].show_restrict_column_viewport = True
                     area.spaces[0].show_restrict_column_select = True
+        
         # 4.2 or above
         if is_next_version():
             mix_AO.mute = False
