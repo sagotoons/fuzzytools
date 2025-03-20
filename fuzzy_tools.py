@@ -91,17 +91,6 @@ bpy.app.handlers.render_cancel.append(disable_animate_scene)
 bpy.app.handlers.render_complete.append(disable_animate_scene)
 
 
-# LIST CHARACTERS 
-## can ignore when not working with 'Project Fuzzy' characters
-## to avoid Error, do not remove list. Optional to replace or remove content of list
-character_list = {
-    'B': 'COLORSET_04_VEC',
-    'Bo': 'COLORSET_03_VEC',
-    'Bob': 'COLORSET_11_VEC',
-    'Bobi': 'COLORSET_05_VEC'
-}
-
-
 # fix naming after upgrades in v3.0.2
 @persistent
 def name_fix(_):
@@ -1873,21 +1862,6 @@ class VIEW3D_PT_hair(ViewportChild, Panel):
         row.operator("object.hair_viewport", text="Show All", icon='HIDE_OFF').hide = False
         row.operator("object.hair_viewport", text="Hide All", icon='HIDE_ON').hide = True
         
-        hair = bpy.data.objects
-        col = layout.grid_flow(row_major=True, columns=2)
-        
-        # reference to LIST CHARACTERS
-        for char, icon in character_list.items():
-            char_hair = char + "_hair"
-            if char_hair in hair:
-                try:        
-                    row = col.row(align=True)
-                    row.label(icon=icon)
-                    row.prop(hair[char_hair].modifiers[char_hair], "show_viewport", 
-                            text="", icon='HIDE_ON', emboss=False)
-                except KeyError:
-                    pass
-
 
 class VIEW3D_PT_miscellaneous(ViewportChild, Panel):
     bl_label = "Viewport Display"
