@@ -1904,11 +1904,22 @@ class VIEW3D_PT_cameras(Panel):
 
     def draw_header_preset(self, context):
         layout = self.layout
+        if context.space_data.lock_camera:
+            icon = 'LOCKED'
+        else:
+            icon = 'UNLOCKED'
+        row = layout.row(align=True)
+        if context.space_data.lock_camera == True:
+            row.alert = True
+        row.prop(context.space_data, 'lock_camera', text='', icon=icon, emboss=False)
+        
         colls = bpy.data.collections
         cam_coll = colls.get('Cameras')
         if cam_coll:
-            layout.prop(cam_coll, 'hide_viewport', text="", icon='RESTRICT_VIEW_OFF', emboss=False)
-
+            row.separator(factor=0.5)
+            row.alert = False
+            row.prop(cam_coll, 'hide_viewport', text="", icon='RESTRICT_VIEW_OFF', emboss=False)
+            
     def draw(self, context):
         pass
 
@@ -1971,16 +1982,6 @@ class VIEW3D_PT_camera_scene(Panel):
             row = col.row(align=True)
             row.prop(cam, 'passepartout_alpha', text="Passepartout")
             row.operator('object.copy_passepartout', text='', icon='DUPLICATE')
-
-        if context.space_data.lock_camera == True:
-            icon = 'LOCKED'
-        else:
-            icon = 'UNLOCKED'
-        row = layout.row(align=True)
-        row.scale_x = 1.2
-        row.scale_y = 1.2
-        row.prop(context.space_data, 'lock_camera', text='', icon=icon)
-        row.label(text=' Lock to View')
 
         # Motion Blur - check render engine
         if context.engine == 'BLENDER_EEVEE_NEXT' or context.engine == 'CYCLES':
