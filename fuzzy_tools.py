@@ -613,7 +613,7 @@ class WORLD_OT_fuzzy_sky(Operator):
         # list with ref_name, name, type, locx, locy
         node_list = [
             ('texcoord1', "Texture Coordinate", "TexCoord", -1000, 440), # row 1
-            ('mapskytex1',"Mapping", "Mapping", -800, 440), # row 2
+            ('mapskytex1',"HDRI Delta Rot", "Mapping", -800, 440), # row 2
             ('mapskytex2',"HDRI Rotation", "Mapping", -600, 440), # row 3
             ('clamprefl', "Clamp Reflection", "Value", -600, 60),
             ('multiply', "Multiply", "Math", -600, -40),
@@ -1477,7 +1477,8 @@ class OBJECT_OT_light_parent(Operator):
 # ------------------------------------------------------------------------
 
 class OBJECT_OT_rotate_lighting(Operator):
-    """Rotate lighting based on active camera rotation"""
+    """Match Z-rotation of lighting to active camera.
+If target is HDRI, rotation is applied to secondary rotation"""
     bl_idname = "object.rotate_lighting"
     bl_label = "Rotate Lighting"
     bl_options = {'REGISTER', 'UNDO'}
@@ -1496,7 +1497,7 @@ class OBJECT_OT_rotate_lighting(Operator):
     parent: BoolProperty(
         name="Include LightParent",
         description="Rotate LightParent",
-        options={'SKIP_SAVE', 'HIDDEN'}
+        options={'SKIP_SAVE', 'HIDDEN', 'INTERNAL'}
     )
     
     def execute(self, context):
@@ -1516,15 +1517,15 @@ class OBJECT_OT_rotate_lighting(Operator):
             # find HDRI and apply Z rotation
             if scene.world.name == 'Fuzzy World':
                 nodes = scene.world.node_tree.nodes
-                HDRI = nodes.get("HDRI Rotation")
+                HDRI = nodes.get("HDRI Delta Rot")
                 if HDRI:
-                    HDRI.inputs[2].default_value[2] = cam_rot * -1
+                    HDRI.inputs[2].default_value[2] = cam_rot * -1 + radians(90)
         
         if self.parent:
             target = "LightParent"
         elif self.hdri:
             target = "HDRI"
-        self.report({'INFO'}, f"{target} rotated")
+        self.report({'INFO'}, f"{target} rotated on Z-axis")
         return {'FINISHED'}
 
 
