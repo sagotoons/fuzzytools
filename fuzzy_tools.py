@@ -1705,11 +1705,13 @@ class HDRIPanel(BuildSceneChild, Panel):
             col.separator()
 
         hdri_rot = nodes.get("HDRI Rotation")
+        hdri_delta_rot = nodes.get("HDRI Delta Rot")
         hdri_str = nodes.get("HDRI Strength")
         if hdri_rot:
             row = col.row(align=True)
             row.prop(hdri_rot.inputs[2], 'default_value', index=2, text='Rotation')
-            row.operator('object.rotate_lighting', text="", icon='CON_ROTLIMIT').hdri = True
+            if hdri_delta_rot:
+                row.operator('object.rotate_lighting', text="", icon='CON_ROTLIMIT').hdri = True
         if hdri_str:
             col.prop(hdri_str.inputs[1], 'default_value', index=-1, text='Strength')
 
