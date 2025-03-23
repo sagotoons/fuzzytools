@@ -1481,7 +1481,7 @@ class OBJECT_OT_rotate_lighting(Operator):
 If target is HDRI, rotation is applied to secondary rotation"""
     bl_idname = "object.rotate_lighting"
     bl_label = "Rotate Lighting"
-    bl_options = {'REGISTER', 'UNDO'}
+    bl_options = {'REGISTER', 'UNDO', 'INTERNAL'}
     
     @classmethod
     def poll(cls, context):
@@ -1497,7 +1497,7 @@ If target is HDRI, rotation is applied to secondary rotation"""
     parent: BoolProperty(
         name="Include LightParent",
         description="Rotate LightParent",
-        options={'SKIP_SAVE', 'HIDDEN', 'INTERNAL'}
+        options={'SKIP_SAVE', 'HIDDEN'}
     )
     
     def execute(self, context):
