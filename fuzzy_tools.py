@@ -536,9 +536,9 @@ Delete the default cube"""
                 if area.type == 'VIEW_3D':
                     area.spaces[0].overlay.show_relationship_lines = False
                     area.spaces[0].clip_start = 0.1
-                elif area.type == 'OUTLINER':
-                    area.spaces[0].show_restrict_column_viewport = True
-                    area.spaces[0].show_restrict_column_select = True
+                # elif area.type == 'OUTLINER':
+                #     area.spaces[0].show_restrict_column_viewport = True
+                #     area.spaces[0].show_restrict_column_select = True
         
         # 4.2 or above
         if is_next_version():
