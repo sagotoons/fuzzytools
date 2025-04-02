@@ -1619,8 +1619,8 @@ class BackgroundPanel(BuildSceneChild, Panel):
         row = col.row(align=True)
         swap = node.get('Color Swap')
         if swap:
-            row.prop(node['BG Color 1' if swap else 'BG Color 2'].outputs[0], 'default_value', text='Sky Colors')
-            row.prop(node['BG Color 2' if swap else 'BG Color 1'].outputs[0], 'default_value', text='')
+            row.prop(node['BG Color 1' if swap.clamp_factor else 'BG Color 2'].outputs[0], 'default_value', text='Sky Colors')
+            row.prop(node['BG Color 2' if swap.clamp_factor else 'BG Color 1'].outputs[0], 'default_value', text='')
             row.separator()
             row.prop(swap, 'clamp_factor', icon='FILE_REFRESH', icon_only=True, emboss=False)
         
