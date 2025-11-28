@@ -1033,8 +1033,11 @@ AO and Bloom for Legacy, Raytracing for Next, Color Management for both, and mor
 
         # EEVEE RENDER PROPERTIES
         if is_next_version():
-            render.engine = 'BLENDER_EEVEE_NEXT'
             version = render
+            if bpy.app.version >= (5, 0, 0):
+                render.engine = 'BLENDER_EEVEE'
+            else:
+                render.engine = 'BLENDER_EEVEE_NEXT'
         else:
             render.engine = 'BLENDER_EEVEE'
             version = eevee
