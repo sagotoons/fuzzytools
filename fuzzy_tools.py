@@ -1986,11 +1986,12 @@ class VIEW3D_PT_camera_scene(Panel):
             row.prop(cam, 'passepartout_alpha', text="Passepartout")
             row.operator('object.copy_passepartout', text='', icon='DUPLICATE')
 
-        # Motion Blur - check render engine
-        if context.engine == 'BLENDER_EEVEE_NEXT' or context.engine == 'CYCLES':
-            version = scene.render
-        elif context.engine == 'BLENDER_EEVEE':
+        # Motion Blur - check render engine & blender version
+        if context.engine == 'BLENDER_EEVEE' and bpy.app.version < (5, 0, 0):
             version = scene.eevee
+        else:
+            version = scene.render
+
         col = layout.column(align=True, heading="Motion Blur")
         col.use_property_split = True
         col.use_property_decorate = False
