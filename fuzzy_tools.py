@@ -52,7 +52,7 @@ def reload_image(_):
         nodes['Environment Texture'].name = 'World HDRI'
         node = nodes['World HDRI']
     # remove suffix
-    name = node.image.name.rsplit('.', 1)[0]
+    name = node.image.name.rsplit('.')[0]
     valid_names = {'city', 'courtyard', 'forest', 'interior', 'night', 'studio', 'sunrise', 'sunset'}
     if name not in valid_names or node.image.file_format == 'OPEN_EXR':
         return
